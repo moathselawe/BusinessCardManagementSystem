@@ -1,0 +1,70 @@
+<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;">Manage Business Cards</h2>
+</div>
+
+<app-template-table [title]="'Business Cards List'"
+                    [data]="data"
+                    [columns]="columns"
+                    [totalRecords]="totalCount"
+                    [actionsModel]="actionsModel"
+                    (onEdit)="edit($event)"
+                    (onPreview)="preview($event)"
+                    (onGeneratePdf)="generatePdf($event)"
+                    (onExport)="export($event)"
+                    (onDelete)="openConfirmationDialog($event)"
+                    (onFilePreview)="handleFilePreview($event)"
+                    (onImageClick)="showImageDialog($event.item.arabicName, $event.item.englishName, $event.item.logo)"
+                    (onLazyLoad)="search($event)"
+                    (onToggleActive)="toggleActive($event)"
+                    (onAdd)="Add()"
+                    (onSearch)="searchFromTable($event)">
+</app-template-table>
+
+
+
+<app-template-image-dialog [(visible)]="visibleImage"
+                           [title]="nameImageDialog || ''"
+                           [image]="imageDialog"
+                           (onClose)="closeImageDialog()">
+</app-template-image-dialog>
+
+
+
+<app-template-confirmation-dialog [(visible)]="visibleConfirmation"
+                                  [message]="'Are you sure you want to delete the Business Card?'"
+                                  (onCancel)="closeConfirmationDialog()"
+                                  (onConfirm)="deleteEntity(deleteId)">
+</app-template-confirmation-dialog>
+
+<p-dialog header="Export File" [modal]="true" [(visible)]="visibleEportFile" (onHide)="onCloseEportFile()"
+          [style]="{ width: '25rem' }">
+
+  <div class="card-body">
+    <span class="block mb-8">Please Choose the file type to be exported :</span>
+
+    <div class="text-danger" *ngIf="errorExportdialog">
+      <small>Select at least one Business Card to export.</small>
+    </div>
+  </div>
+
+
+  <p-selectbutton [options]="fileTypeOptions"
+                  [(ngModel)]="selectedfiletype"
+                  optionLabel="label"
+                  optionValue="value">
+
+    <ng-template let-option pTemplate="item">
+      <i [class]="option.icon" style="margin-right:1px;"></i>
+      {{ option.label }}
+    </ng-template>
+
+  </p-selectbutton>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" [text]="true" severity="secondary" (click)="onCloseEportFile()" />
+    <p-button label="Generate File" [outlined]="true" severity="danger" (click)="exportGeneratur()" />
+  </ng-template>
+
+</p-dialog>
+
+
