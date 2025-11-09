@@ -1,0 +1,7 @@
+<p-dialog header="Confirmation" [modal]="true" [(visible)]="visible" (onHide)="onCancelClicked()" [style]="{ width: '25rem' }">
+  <span class="block mb-8">{{ message }}</span>
+  <ng-template #footer>
+    <p-button label="Cancel" [text]="true" severity="secondary" (click)="onCancelClicked()" />
+    <p-button label="Confirm" [outlined]="true" severity="danger" (click)="onConfirmClicked()" />
+  </ng-template>
+</p-dialog>

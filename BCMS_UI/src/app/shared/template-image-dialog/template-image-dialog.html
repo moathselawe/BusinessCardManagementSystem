@@ -1,0 +1,15 @@
+<p-dialog [modal]="true"
+          [header]="title"
+          [(visible)]="visible"
+          (onHide)="close()"
+          [style]="{ width: '34rem' }">
+  <div class="flex justify-center mb-4">
+    <img [src]="image"
+         alt="Preview"
+         style="max-width: 100%; max-height: 80vh; object-fit: contain;" />
+  </div>
+
+  <div class="flex justify-end gap-2">
+    <p-button label="Close" severity="secondary" (click)="close()" />
+  </div>
+</p-dialog>
