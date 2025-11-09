@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  height: 100%; 
+}
+
+p-menu.flex-1 {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
