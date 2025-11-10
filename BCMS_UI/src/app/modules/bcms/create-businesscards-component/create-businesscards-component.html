@@ -107,6 +107,7 @@
                               placeholder="Select date of birth"
                               style="width: 100%;"
                               required
+                              [maxDate]="today"
                               #dob="ngModel">
                 </p-datepicker>
                 <div class="text-danger" *ngIf="dob.invalid && (dob.touched|| isEdit)">

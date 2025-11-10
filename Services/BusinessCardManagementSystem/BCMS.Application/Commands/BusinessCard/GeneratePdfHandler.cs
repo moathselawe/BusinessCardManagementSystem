@@ -7,7 +7,13 @@ namespace BCMS.Application.Commands.BusinessCard;
 
 public record GeneratePdfCommand(Guid Id) : IRequest<GeneratePdfResult>;
 public record GeneratePdfResult(byte[] FileBytes, string FileName);
-
+public class GeneratePdfHandlerValidator : AbstractValidator<GeneratePdfCommand>
+{
+    public GeneratePdfHandlerValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
+    }
+}
 public class GeneratePdfHandler : IRequestHandler<GeneratePdfCommand, GeneratePdfResult>
 {
     private readonly IBusinessCardRepository _businessCardRepository;

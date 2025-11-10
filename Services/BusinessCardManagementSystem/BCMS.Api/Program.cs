@@ -1,13 +1,3 @@
-using BCMS.Application.Interfaces;
-using BCMS.Application.Services;
-using BCMS.Domain;
-using BCMS.Domain.IRepositories;
-using BCMS.Infrastructure;
-using BCMS.Infrastructure.Repositories;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add CORS
@@ -19,30 +9,34 @@ builder.Services.AddCors(options =>
             policy.WithOrigins("http://localhost:62882")  // Angular app URL
                   .AllowAnyHeader()
                   .AllowAnyMethod()
-                  .AllowCredentials();  
+                  .AllowCredentials();
         });
 });
 
 // Add DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add UnitOfWork
+// Add UnitOfWork and Repositories
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-// Add Repositories
 builder.Services.AddScoped<IBusinessCardRepository, BusinessCardRepository>();
 
-// Add MediatR and FluentValidation
+// Add MediatR and scan all assemblies for handlers
 builder.Services.AddMediatR(cfg =>
 {
-    cfg.RegisterServicesFromAssembly(typeof(CreateBusinessCardHandler).Assembly);
+    cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 });
 
+// Add FluentValidation: scan all assemblies for validators
+builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+
+// Add FluentValidation pipeline for MediatR
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+// Other services
 builder.Services.AddScoped<IFileParserService, FileParserService>();
 
-builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
-// Add controllers
+// Controllers
 builder.Services.AddControllers();
 
 // Swagger
@@ -51,22 +45,19 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Swagger UI
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "BCMS API V1");
-        c.RoutePrefix = string.Empty; // Swagger at root: https://localhost:7294/
+        c.RoutePrefix = string.Empty; // Swagger at root
     });
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors("AllowAngular");
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

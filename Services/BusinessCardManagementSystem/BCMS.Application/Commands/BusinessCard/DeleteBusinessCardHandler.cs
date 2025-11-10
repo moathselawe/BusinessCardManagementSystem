@@ -1,6 +1,13 @@
 ﻿namespace BCMS.Application.Commands.BusinessCard;
 public record DeleteBusinessCardCommand(Guid Id) : IRequest<DeleteBusinessCardResult>;
 public record DeleteBusinessCardResult(bool IsSuccess);
+public class DeleteBusinessCardHandlerValidator : AbstractValidator<DeleteBusinessCardCommand>
+{
+    public DeleteBusinessCardHandlerValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
+    }
+}
 public class DeleteBusinessCardHandler : IRequestHandler<DeleteBusinessCardCommand, DeleteBusinessCardResult>
 {
     private readonly IBusinessCardRepository _businessCardRepository;

@@ -7,6 +7,8 @@ public class UpdateBusinessCardValidator : AbstractValidator<UpdateBusinessCardC
 {
     public UpdateBusinessCardValidator()
     {
+        RuleFor(x => x.Request.Id).NotEmpty().WithMessage("Id is required.");
+
         RuleFor(x => x.Request.ArabicName)
             .NotEmpty().WithMessage("Id is required.");
 

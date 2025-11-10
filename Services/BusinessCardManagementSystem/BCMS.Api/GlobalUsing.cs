@@ -3,4 +3,12 @@ global using MediatR;
 global using BCMS.Domain.Dtos;
 global using BCMS.Application.Commands.BusinessCard;
 global using BCMS.Application.Queries.BusinessCard;
-
+global using BCMS.Application.Behaviors;
+global using BCMS.Application.Interfaces;
+global using BCMS.Application.Services;
+global using BCMS.Domain;
+global using BCMS.Domain.IRepositories;
+global using BCMS.Infrastructure;
+global using BCMS.Infrastructure.Repositories;
+global using FluentValidation;
+global using Microsoft.EntityFrameworkCore;

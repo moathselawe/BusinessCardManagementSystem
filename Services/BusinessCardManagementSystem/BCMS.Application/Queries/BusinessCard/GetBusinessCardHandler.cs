@@ -1,6 +1,13 @@
 ﻿namespace BCMS.Application.Queries.BusinessCard;
 public record GetBusinessCardByIdQuery(Guid Id) : IRequest<GetBusinessCardByIdResult>;
 public record GetBusinessCardByIdResult(BusinessCardDto response);
+public class GetBusinessCardByIdHandlerValidator : AbstractValidator<GetBusinessCardByIdQuery>
+{
+    public GetBusinessCardByIdHandlerValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
+    }
+}
 internal class GetBusinessCardByIdHandler : IRequestHandler<GetBusinessCardByIdQuery, GetBusinessCardByIdResult>
 {
     private readonly IBusinessCardRepository _businessCardRepository;

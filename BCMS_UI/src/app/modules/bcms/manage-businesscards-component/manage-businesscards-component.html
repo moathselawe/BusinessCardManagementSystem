@@ -51,7 +51,8 @@
   <p-selectbutton [options]="fileTypeOptions"
                   [(ngModel)]="selectedfiletype"
                   optionLabel="label"
-                  optionValue="value">
+                  optionValue="value"
+                  [disabled]="errorExportdialog">
 
     <ng-template let-option pTemplate="item">
       <i [class]="option.icon" style="margin-right:1px;"></i>
@@ -62,7 +63,7 @@
 
   <ng-template pTemplate="footer">
     <p-button label="Cancel" [text]="true" severity="secondary" (click)="onCloseEportFile()" />
-    <p-button label="Generate File" [outlined]="true" severity="danger" (click)="exportGeneratur()" />
+    <p-button label="Generate File" [outlined]="true" severity="danger" [disabled]="errorExportdialog" (click)="exportGeneratur()" />
   </ng-template>
 
 </p-dialog>

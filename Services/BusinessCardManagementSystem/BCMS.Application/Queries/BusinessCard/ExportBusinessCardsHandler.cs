@@ -9,7 +9,20 @@ namespace BCMS.Application.Queries.BusinessCard;
 public record ExportBusinessCardsQuery(ExportRequestDto request) : IRequest<ExportBusinessCardsResult>;
 
 public record ExportBusinessCardsResult(byte[] FileContent, string ContentType, string FileName);
+public class ExportRequestDtoValidator : AbstractValidator<ExportRequestDto>
+{
+    public ExportRequestDtoValidator()
+    {
+        RuleFor(x => x.FileType)
+            .NotEmpty().WithMessage("File type is required.")
+            .Must(ft => ft.Equals("csv", StringComparison.OrdinalIgnoreCase) || ft.Equals("xml", StringComparison.OrdinalIgnoreCase))
+            .WithMessage("File type must be either 'csv' or 'xml'.");
 
+        RuleFor(x => x.Ids)
+            .Must(ids => ids == null || ids.All(id => id != Guid.Empty))
+            .WithMessage("All Ids must be valid GUIDs.");
+    }
+}
 public class ExportBusinessCardsHandler : IRequestHandler<ExportBusinessCardsQuery, ExportBusinessCardsResult>
 {
     private readonly IBusinessCardRepository _businessCardRepository;

@@ -326,6 +326,8 @@ export class CreateBusinesscardsComponent {
     this.cards.push(new BusinessCard());
     this.selectedCardIndex = this.cards.length - 1;
   }
+
+  today: Date = new Date();
 }
 
 
