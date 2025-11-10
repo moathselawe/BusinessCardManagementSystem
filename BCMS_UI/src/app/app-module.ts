@@ -13,23 +13,23 @@ import { BadgeModule } from 'primeng/badge';
 import { MenuModule } from 'primeng/menu';
 import { RippleModule } from 'primeng/ripple';
 import { MainLayout } from './main-layout/main-layout';
+import { ReusableModule } from './reusable/reusable.module';
 
 @NgModule({
   declarations: [
     App,
     AppSideMenu,
-    MainLayout,
-
+    MainLayout
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-
     MenuModule,
     BadgeModule,
     AvatarModule,
-    RippleModule
+    RippleModule,
+    ReusableModule
   ],
   providers: [
     provideHttpClient(),

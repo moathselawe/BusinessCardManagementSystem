@@ -3,6 +3,7 @@ import { BusinessCard } from '../../../models/businessCard';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BusinessCardService } from '../../../services/businessCard.service';
 import { NgForm } from '@angular/forms';
+import { ToastMessageService } from '../../../services/shared/toast-message.service';
 interface Theme {
   name: string;
   background: string;
@@ -27,7 +28,8 @@ export class CreateBusinesscardsComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: BusinessCardService
+    private service: BusinessCardService,
+    private toastService: ToastMessageService
   ) { }
 
   isEdit: boolean = false;
@@ -121,14 +123,39 @@ export class CreateBusinesscardsComponent {
       this.service.Update(this.card).subscribe(
         {
           next: () => {
+            this.toastService.showMessage({
+              messageType: 'success',
+              messageTitle: 'Updated',
+              messageBody: 'Business card updated successfully.'
+            });
             this.router.navigate(['/BCMS/ManageBusinesscards']);
-          }, error: (err) => console.error('Update failed', err),
+          } ,error: (err) => {
+            this.toastService.showMessage({
+              messageType: 'error',
+              messageTitle: 'Error',
+              messageBody: 'Failed to update business card.'
+            });
+            console.error('Update failed', err);
+          },
         });
     } else {
       this.service.Add(this.card).subscribe({
         next: () => {
+          this.toastService.showMessage({
+            messageType: 'success',
+            messageTitle: 'Created',
+            messageBody: 'Business card created successfully.'
+          });
           this.router.navigate(['/BCMS/ManageBusinesscards']);
-        }, error: (err) => console.error('Creation failed', err),
+        },
+        error: (err) => {
+          this.toastService.showMessage({
+            messageType: 'error',
+            messageTitle: 'Error',
+            messageBody: 'Failed to create business card.'
+          });
+          console.error('Creation failed', err);
+        },
       });
     }
   }
@@ -152,9 +179,21 @@ export class CreateBusinesscardsComponent {
 
     this.service.CreateMany(payload).subscribe({
       next: () => {
+        this.toastService.showMessage({
+          messageType: 'success',
+          messageTitle: 'Created',
+          messageBody: 'All business cards were created successfully.'
+        });
         this.router.navigate(['/BCMS/ManageBusinesscards']);
       },
-      error: (err) => console.error('Creation failed', err),
+      error: (err) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Error',
+          messageBody: 'Failed to create business cards.'
+        });
+        console.error('Creation failed', err);
+      },
     });
   }
 

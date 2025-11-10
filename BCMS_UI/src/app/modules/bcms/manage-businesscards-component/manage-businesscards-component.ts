@@ -4,6 +4,7 @@ import { BusinessCard } from '../../../models/businessCard';
 import { BusinessCardService } from '../../../services/businessCard.service';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
+import { ToastMessageService } from '../../../services/shared/toast-message.service';
 
 @Component({
   selector: 'app-manage-businesscards-component',
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 })
 
 export class ManageBusinesscardsComponent extends BasePageComponent<BusinessCard> {
-  constructor(public override service: BusinessCardService, private router: Router) {
+  constructor(public override service: BusinessCardService, private router: Router, public override toastService: ToastMessageService) {
     super();
     this.entity = this.createNewEntity();
   }
@@ -61,6 +62,11 @@ export class ManageBusinesscardsComponent extends BasePageComponent<BusinessCard
         this.router.navigate(['/BCMS/CreateMulipleBusinesscards'], { state: { previewCards: cards } });
       },
       error: (err) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Preview Failed',
+          messageBody: 'Error previewing file.'
+        });
         console.error('Error previewing file', err);
       }
     });
@@ -103,8 +109,19 @@ export class ManageBusinesscardsComponent extends BasePageComponent<BusinessCard
         window.URL.revokeObjectURL(fileURL);
 
         this.visibleEportFile = false;
-      },
-      error: (error) => console.error('Export failed:', error)
+        this.toastService.showMessage({
+          messageType: 'success',
+          messageTitle: 'Exported',
+          messageBody: `Business cards exported as ${this.selectedfiletype.toUpperCase()}.`
+        });
+      },      error: (error) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Export Failed',
+          messageBody: 'Failed to export business cards.'
+        });
+        console.error('Export failed:', error);
+      }
     });
   }
    

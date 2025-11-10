@@ -1,5 +1,6 @@
 import { Directive, OnInit } from '@angular/core';
 import { SearchFilters } from '../models/Shared/searchFilters';
+import { ToastMessageService } from '../services/shared/toast-message.service';
 
 @Directive()
 export abstract class BasePageComponent<T> implements OnInit {
@@ -24,6 +25,8 @@ export abstract class BasePageComponent<T> implements OnInit {
   abstract columns: any[];
   abstract entityName: string;
   abstract createNewEntity(): T;
+  abstract toastService: ToastMessageService;
+
 
   ngOnInit(): void {
   //  this.loadData();
@@ -35,17 +38,35 @@ export abstract class BasePageComponent<T> implements OnInit {
       pageNumber: page,
       pageSize: event.rows
     };
-    this.service.GetAll().subscribe((res: any) => {
-      this.data = res.response;
-      this.totalCount = res.response.length;
-      console.log('First row:', this.data[0]); 
-
+    this.service.GetAll().subscribe({
+      next: (res: any) => {
+        this.data = res.response;
+        this.totalCount = res.response.length;
+      },
+      error: (err: any) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Load Failed',
+          messageBody: `Failed to load ${this.entityName} data.`
+        });
+        console.error('Load data failed', err);
+      }
     });
   }
 
   getById(id: any) {
-    this.service.GetById(id).subscribe((res: any) => {
-      this.entity = res.response;
+    this.service.GetById(id).subscribe({
+      next: (res: any) => {
+        this.entity = res.response;
+      },
+      error: (err: any) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Fetch Failed',
+          messageBody: `Failed to fetch ${this.entityName}.`
+        });
+        console.error('Get by id failed', err);
+      }
     });
   }
 
@@ -55,8 +76,20 @@ export abstract class BasePageComponent<T> implements OnInit {
       next: () => {
         this.clearDialog();
         this.loadData();
+        this.toastService.showMessage({
+          messageType: 'success',
+          messageTitle: 'Added',
+          messageBody: `${this.entityName} added successfully.`
+        });
       },
-      error: (err: any) => console.error('Add failed', err)
+      error: (err: any) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Add Failed',
+          messageBody: `Failed to add ${this.entityName}.`
+        });
+        console.error('Add failed', err);
+      }
     });
   }
 
@@ -66,8 +99,20 @@ export abstract class BasePageComponent<T> implements OnInit {
       next: () => {
         this.clearDialog();
         this.loadData();
+        this.toastService.showMessage({
+          messageType: 'success',
+          messageTitle: 'Updated',
+          messageBody: `${this.entityName} updated successfully.`
+        });
       },
-      error: (err: any) => console.error('Update failed', err)
+      error: (err: any) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Update Failed',
+          messageBody: `Failed to update ${this.entityName}.`
+        });
+        console.error('Update failed', err);
+      }
     });
   }
 
@@ -76,8 +121,20 @@ export abstract class BasePageComponent<T> implements OnInit {
       next: () => {
         this.closeConfirmationDialog();
         this.loadData();
+        this.toastService.showMessage({
+          messageType: 'success',
+          messageTitle: 'Deleted',
+          messageBody: `${this.entityName} deleted successfully.`
+        });
       },
-      error: (err: any) => console.error('Delete failed', err)
+      error: (err: any) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Delete Failed',
+          messageBody: `Failed to delete ${this.entityName}.`
+        });
+        console.error('Delete failed', err);
+      }
     });
   }
 
@@ -134,9 +191,19 @@ export abstract class BasePageComponent<T> implements OnInit {
       filter.dateSearch = utcDate;
     }
 
-    this.service.Search(filter).subscribe((res: any) => {
-      this.data = res.items;
-      this.totalCount = res.totalCount || res.items.length;
+    this.service.Search(filter).subscribe({
+      next: (res: any) => {
+        this.data = res.items;
+        this.totalCount = res.totalCount || res.items.length;
+      },
+      error: (err: any) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Search Failed',
+          messageBody: `Failed to search ${this.entityName}.`
+        });
+        console.error('Search failed', err);
+      }
     });
   }
 
@@ -166,12 +233,23 @@ export abstract class BasePageComponent<T> implements OnInit {
   }
 
   editEntity(item: T) {
-    this.service.GetById((item as any).id).subscribe((res: any) => {
-      this.entity = res;
-      this.imagePreview = res?.image || null;
-      this.openDetailsDialog();
+    this.service.GetById((item as any).id).subscribe({
+      next: (res: any) => {
+        this.entity = res;
+        this.imagePreview = res?.image || null;
+        this.openDetailsDialog();
+      },
+      error: (err: any) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Fetch Failed',
+          messageBody: `Failed to fetch ${this.entityName}.`
+        });
+        console.error('Edit entity failed', err);
+      }
     });
   }
+
 
 
   showImageDialog(...args: any[]) {
