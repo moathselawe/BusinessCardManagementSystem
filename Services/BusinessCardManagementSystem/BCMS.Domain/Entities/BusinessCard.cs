@@ -20,8 +20,9 @@ public class BusinessCard: BaseAuditableEntity
             Email = email,
             Phone = phone,
             Logo = logo,
-            Address = address
-            
+            Address = address,
+            CreatedDate = DateTime.Now
+
         };
     }
 
@@ -36,8 +37,8 @@ public class BusinessCard: BaseAuditableEntity
             Email = email,
             Phone = phone,
             Logo = logo,
-            Address = address
-
+            Address = address,
+            LastModifiedDate = DateTime.Now
         };
     }
 }

@@ -11,6 +11,12 @@ public class BusinessCardRepository : BaseRepository<BusinessCard>, IBusinessCar
         return await GetQuery().ToListAsync(cancellationToken);
     }
 
+    public async Task<BusinessCard?> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Set<BusinessCard>()
+            .FirstOrDefaultAsync(b => b.Email == email && b.IsDeleted == false, cancellationToken);
+    }
+
     public Task<Guid> AddAsync(BusinessCard businessCard, CancellationToken cancellationToken)
     {
         Add(businessCard); 
