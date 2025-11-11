@@ -50,6 +50,7 @@ export class TemplateTable {
   @Input() columns: { field: string, header: string, isImage?: boolean, isColor?: boolean }[] = []; // 👈 أضف isColor هنا
   @Input() totalRecords: number = 0;
   @Input() title!: string;
+  @Input() isLoading: boolean = false; 
 
   @Output() onEdit = new EventEmitter<any>();
   @Output() onExport = new EventEmitter<any>();

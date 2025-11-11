@@ -12,7 +12,8 @@
            [totalRecords]="totalRecords"
            [responsiveLayout]="'scroll'"
            [tableStyle]="{ 'min-width': '65rem' , 'background-color': '#fcf8f8d9'}"
-           [(selection)]="selectedRows">
+           [(selection)]="selectedRows"
+           [loading]="isLoading">
 
     <ng-template #caption>
       <div class="row align-items-center w-100" style="display: flex; justify-content: space-between; align-items: center; overflow: hidden;">

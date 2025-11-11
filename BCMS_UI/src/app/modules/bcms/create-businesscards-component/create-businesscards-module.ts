@@ -12,6 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { TabsModule } from 'primeng/tabs';
 import { PaginatorModule } from 'primeng/paginator';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [CreateBusinesscardsComponent],
@@ -27,7 +28,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     ToastModule,
     TabsModule,
     PaginatorModule,
-    SelectButtonModule 
+    SelectButtonModule,
+    ProgressSpinnerModule 
   ]
 })
 export class CreateBusinesscardsModule { }

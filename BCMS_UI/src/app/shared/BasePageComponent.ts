@@ -179,7 +179,9 @@ export abstract class BasePageComponent<T> implements OnInit {
     this.nameImageDialog = null;
   }
 
+  isLoading: boolean = false;
   search(event: any = { first: 0, rows: 5 }) {
+    this.isLoading = true;
     const filter = new SearchFilters();
     filter.pageNumber = event.first / event.rows + 1;
     filter.pageSize = event.rows;
@@ -195,8 +197,10 @@ export abstract class BasePageComponent<T> implements OnInit {
       next: (res: any) => {
         this.data = res.items;
         this.totalCount = res.totalCount || res.items.length;
+        this.isLoading = false; 
       },
       error: (err: any) => {
+        this.isLoading = false;
         this.toastService.showMessage({
           messageType: 'error',
           messageTitle: 'Search Failed',

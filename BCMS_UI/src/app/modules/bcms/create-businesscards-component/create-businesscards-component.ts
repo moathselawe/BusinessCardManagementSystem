@@ -24,6 +24,7 @@ export class CreateBusinesscardsComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   readonly: boolean = false;
+  isLoadingEditPage: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -72,14 +73,25 @@ export class CreateBusinesscardsComponent {
   }
 
   loadCard(id: string) {
+    this.isLoadingEditPage = true; 
+
     this.service.GetById(id).subscribe({
       next: (res: any) => {
         this.cards = [res.response];
         if (this.cards[0].dateOfBirth) {
           this.cards[0].dateOfBirth = new Date(this.cards[0].dateOfBirth);
         }
+        this.isLoadingEditPage = false; 
       },
-      error: (err) => console.error('Failed to load card', err),
+      error: (err: any) => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Load Failed',
+          messageBody: 'Failed to load business card.'
+        });
+        console.error('Load failed', err);
+        this.isLoadingEditPage = false; 
+      }
     });
   }
 
