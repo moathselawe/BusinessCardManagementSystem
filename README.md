@@ -3,10 +3,12 @@
 ## Table of Contents
 - [Overview](#overview)
 - [Tech Stack](#tech-stack)
+- [Backend Architecture & Technologies](#backend-architecture-technologies)
 - [Features](#features)
 - [GitHub](#github)
 - [Quick Start](#quick-start)
   - [Setup Backend](#setup-backend)
+  - [Docker Setup Backend Only](#docker_setup)
   - [Setup Frontend](#setup-frontend)
   - [Setup Database](#setup-database)
 - [Business Card Model](#business-card-model)
@@ -26,6 +28,20 @@ Backend is built with .NET 9.0 Web API (C#), Frontend with Angular 20, and the d
 - Frontend: Angular 20
 - Database: SQL Server
 - Photo Encoding: Base64
+
+## Backend Architecture & Technologies
+- MediatR for CQRS-style request handling
+- FluentValidation for validating commands and DTOs
+- ValidationBehavior pipeline for automatic request validation
+- EF Core for database access
+- Repository Pattern implemented through BusinessCardRepository
+- UnitOfWork for managing transactions
+- FileParserService for CSV/XML parsing
+- Controllers exposing REST APIs
+- Swagger / OpenAPI for documentation
+- FluentValidation auto-discovery for all validators
+- CORS configuration to allow Angular frontend
+
 
 ## Features
 - Add new business cards (with optional photo)
@@ -49,6 +65,11 @@ Backend is built with .NET 9.0 Web API (C#), Frontend with Angular 20, and the d
 4. Update connection string in appsettings.json
 5. Run migrations : `dotnet ef database update`
 6. Run the API: `dotnet run`
+
+### Docker Setup Backend Only
+From inside the backend folder (BCMS.Api), You can run the backend using Docker without installing the .NET SDK locally.
+1. Build Docker Image 'docker build -t bcms-api'
+2. Run Container 'docker run -d -p 8080:80 --name bcms-api-container bcms-api'
 
 ### Setup Frontend
 1. Navigate to frontend: `cd BCMS_UI`
