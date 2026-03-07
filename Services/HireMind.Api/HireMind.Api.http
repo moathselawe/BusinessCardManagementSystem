@@ -1,0 +1,6 @@
+@HireMind.Api_HostAddress = http://localhost:5177
+
+GET {{HireMind.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,6 +1,0 @@
-@BCMS.Api_HostAddress = http://localhost:5177
-
-GET {{BCMS.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

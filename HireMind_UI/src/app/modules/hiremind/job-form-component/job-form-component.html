@@ -1,0 +1,585 @@
+<div class="sticky-header">
+  <h2 style="color:#2196f3;">
+    {{ readonly ? 'Preview Job' : (isEditMode ? 'Edit Job' : 'Create Job') }}
+  </h2>
+
+  <button pButton
+          type="button"
+          label="Back"
+          icon="pi pi-arrow-left"
+          severity="info"
+          (click)="goBack()">
+  </button>
+</div>
+<div *ngIf="loading" class="form-container">
+
+  <div class="section-card">
+
+    <p-skeleton width="200px" height="30px" styleClass="mb-3"></p-skeleton>
+
+    <div class="grid">
+
+      <div class="col-3">
+        <p-skeleton height="40px"></p-skeleton>
+      </div>
+
+      <div class="col-3">
+        <p-skeleton height="40px"></p-skeleton>
+      </div>
+
+      <div class="col-3">
+        <p-skeleton height="40px"></p-skeleton>
+      </div>
+
+      <div class="col-3">
+        <p-skeleton height="40px"></p-skeleton>
+      </div>
+
+      <div class="col-10">
+        <p-skeleton height="80px"></p-skeleton>
+      </div>
+
+      <div class="col-4">
+        <p-skeleton height="40px"></p-skeleton>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="section-card">
+
+    <p-skeleton width="180px" height="30px" styleClass="mb-3"></p-skeleton>
+
+    <div *ngFor="let i of [1,2,3]">
+
+      <p-skeleton width="120px" height="20px" styleClass="mb-2"></p-skeleton>
+
+      <p-skeleton height="80px" styleClass="mb-3"></p-skeleton>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="!loading" class="form-container">
+  <form #f="ngForm" (ngSubmit)="submit(f)">
+
+    <div class="section-card">
+      <h4 class="section-title">Job Details</h4>
+
+      <div class="col-2 form-group" *ngIf="readonly">
+        <h4 style="color:green;">The Job is Active</h4>
+      </div>
+
+      <div class="grid">
+        <div class="row col-12">
+          <!--Company-->
+          <div class="col-3 form-group">
+            <label class="col-form-label dark-label">Company</label>
+            <p-select [options]="companies"
+                      optionLabel="name"
+                      optionValue="id"
+                      [(ngModel)]="job.companyId"
+                      name="companyId"
+                      required
+                      placeholder="Select Company"
+                      class="w-100"
+                      #companyCtrl="ngModel"
+                      [disabled]="readonly">
+            </p-select>
+            <div class="text-danger mt-1" *ngIf="companyCtrl.invalid && (companyCtrl.touched || f.submitted)">
+              <small *ngIf="companyCtrl.errors?.['required']">Company is required.</small>
+            </div>
+          </div>
+          <!--Job Title-->
+          <div class="col-3 form-group">
+            <label class="col-form-label dark-label">Job Title</label>
+            <input pInputText
+                   class="form-control"
+                   [(ngModel)]="job.title"
+                   name="title"
+                   required
+                   maxlength="40"
+                   minlength="5"
+                   placeholder="Enter Job Title"
+                   [disabled]="readonly"
+                   #titleCtrl="ngModel" />
+            <div class="text-danger mt-1" *ngIf="titleCtrl.invalid && (titleCtrl.touched || f.submitted)">
+              <small *ngIf="titleCtrl.errors?.['required']">Job title is required.</small>
+              <small *ngIf="titleCtrl.errors?.['maxlength']">Max 20 characters allowed.</small>
+              <small *ngIf="titleCtrl.errors?.['minlength']">Min 5 characters allowed.</small>
+            </div>
+          </div>
+          <!--Job Type-->
+          <div class="col-3 form-group">
+            <label class="col-form-label dark-label">Job Type</label>
+            <p-select [options]="jobTypes"
+                      optionLabel="name"
+                      optionValue="id"
+                      [(ngModel)]="job.jobTypeId"
+                      name="jobTypeId"
+                      required
+                      placeholder="Select Job Type"
+                      class="w-100"
+                      [disabled]="readonly"
+                      #jobTypeCtrl="ngModel">
+            </p-select>
+            <div class="text-danger mt-1" *ngIf="jobTypeCtrl.invalid && (jobTypeCtrl.touched || f.submitted)">
+              <small *ngIf="jobTypeCtrl.errors?.['required']">Job type is required.</small>
+            </div>
+          </div>
+
+          <!-- Work Place -->
+          <div class="col-3 form-group">
+            <label class="col-form-label dark-label">Work Place</label>
+            <p-select [options]="workPlaces"
+                      optionLabel="name"
+                      optionValue="id"
+                      [(ngModel)]="job.workPlaceId"
+                      name="workPlaceId"
+                      required
+                      placeholder="Select Work Place"
+                      class="w-100"
+                      [disabled]="readonly"
+                      #workPlaceCtrl="ngModel">
+            </p-select>
+            <div class="text-danger mt-1" *ngIf="workPlaceCtrl.invalid && (workPlaceCtrl.touched || f.submitted)">
+              <small *ngIf="workPlaceCtrl.errors?.['required']">Work place is required.</small>
+            </div>
+          </div>
+
+          <!-- Contract Type -->
+          <div class="col-3 form-group">
+            <label class="col-form-label dark-label">Contract Type</label>
+            <p-select [options]="contractTypes"
+                      optionLabel="name"
+                      optionValue="id"
+                      [(ngModel)]="job.contractTypeId"
+                      name="contractTypeId"
+                      required
+                      placeholder="Select Contract Type"
+                      class="w-100"
+                      [disabled]="readonly"
+                      #contractTypeCtrl="ngModel">
+            </p-select>
+            <div class="text-danger mt-1" *ngIf="contractTypeCtrl.invalid && (contractTypeCtrl.touched || f.submitted)">
+              <small *ngIf="contractTypeCtrl.errors?.['required']">Contract type is required.</small>
+            </div>
+          </div>
+
+          <!-- Organization Type -->
+          <div class="col-3 form-group">
+            <label class="col-form-label dark-label">Organization Type</label>
+            <p-select [options]="organizationTypes"
+                      optionLabel="name"
+                      optionValue="id"
+                      [(ngModel)]="job.organizationTypeId"
+                      name="organizationTypeId"
+                      required
+                      placeholder="Select Organization Type"
+                      class="w-100"
+                      [disabled]="readonly"
+                      #organizationTypeCtrl="ngModel">
+            </p-select>
+            <div class="text-danger mt-1" *ngIf="organizationTypeCtrl.invalid && (organizationTypeCtrl.touched || f.submitted)">
+              <small *ngIf="organizationTypeCtrl.errors?.['required']">Organization type is required.</small>
+            </div>
+          </div>
+
+          <!-- Industry Sector -->
+          <div class="col-3 form-group">
+            <label class="col-form-label dark-label">Industry Sector</label>
+            <p-select [options]="industrySectors"
+                      optionLabel="name"
+                      optionValue="id"
+                      [(ngModel)]="job.industrySectorId"
+                      name="industrySectorId"
+                      required
+                      placeholder="Select Industry Sector"
+                      class="w-100"
+                      [disabled]="readonly"
+                      #industrySectorCtrl="ngModel">
+            </p-select>
+            <div class="text-danger mt-1" *ngIf="industrySectorCtrl.invalid && (industrySectorCtrl.touched || f.submitted)">
+              <small *ngIf="industrySectorCtrl.errors?.['required']">Industry sector is required.</small>
+            </div>
+          </div>
+
+          <!--Location-->
+          <div class="col-3 form-group">
+            <label class="col-form-label dark-label">Location</label>
+            <p-select [options]="locations"
+                      optionLabel="name"
+                      optionValue="id"
+                      [(ngModel)]="job.locationId"
+                      name="locationId"
+                      required
+                      placeholder="Select Location"
+                      class="w-100"
+                      [disabled]="readonly"
+                      #locationCtrl="ngModel">
+            </p-select>
+            <div class="text-danger mt-1" *ngIf="locationCtrl.invalid && (locationCtrl.touched || f.submitted)">
+              <small *ngIf="locationCtrl.errors?.['required']">Location is required.</small>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="col-10 form-group">
+            <label class="col-form-label dark-label">Description</label>
+            <p-editor [(ngModel)]="job.description"
+                      rows="3"
+                      name="description"
+                      [readonly]="readonly"
+                      [style]="{ height: '250px' }"
+                      placeholder="Enter Job Description"
+                      #descriptionCtrl="ngModel"
+                      required
+                      maxlength="10000"
+                      minlength="5">
+            </p-editor>
+            <!--class="form-control"-->
+
+            <div class="text-danger mt-1" *ngIf="descriptionCtrl.invalid && (descriptionCtrl.touched || f.submitted)">
+              <small *ngIf="descriptionCtrl.errors?.['required']">Description is required.</small>
+              <small *ngIf="descriptionCtrl.errors?.['maxlength']">Max 5000 characters allowed.</small>
+              <small *ngIf="descriptionCtrl.errors?.['minlength']">Min 5 characters allowed.</small>
+            </div>
+          </div>
+
+          <!--Description-->
+          <!--<div class="col-10 form-group">
+            <label class="col-form-label dark-label">Description</label>
+            <textarea pTextarea
+                      rows="3"
+                      class="form-control"
+                      [(ngModel)]="job.description"
+                      [disabled]="readonly"
+                      name="description"
+                      required
+                      maxlength="5000"
+                      minlength="5"
+                      placeholder="Enter Job Description"
+                      #descriptionCtrl="ngModel">
+            </textarea>
+            <div class="text-danger mt-1" *ngIf="descriptionCtrl.invalid && (descriptionCtrl.touched || f.submitted)">
+              <small *ngIf="descriptionCtrl.errors?.['required']">Description is required.</small>
+              <small *ngIf="descriptionCtrl.errors?.['maxlength']">Max 5000 characters allowed.</small>
+              <small *ngIf="descriptionCtrl.errors?.['minlength']">Min 5 characters allowed.</small>
+            </div>
+          </div>-->
+          <!--Start & End Date-->
+          <div class="col-4 form-group">
+            <label class="col-form-label dark-label">Start & End Date</label>
+
+            <div class="flex gap-2 mt-2" style="display:flex; flex-wrap: nowrap; width:100%;">
+
+              <div style="flex:1; min-width:0;">
+                <p-datepicker [(ngModel)]="job.startDate"
+                              name="startDate"
+                              required
+                              placeholder="Start Date"
+                              dateFormat="yy-mm-dd"
+                              [showTime]="false"
+                              style="width:100%;"
+                              [minDate]="today"
+                              [disabled]="readonly"
+                              #startDateCtrl="ngModel">
+                </p-datepicker>
+                <div class="text-danger mt-1" *ngIf="startDateCtrl.invalid && (startDateCtrl.touched || f.submitted)">
+                  <small *ngIf="startDateCtrl.errors?.['required']">Start date is required.</small>
+                </div>
+              </div>
+
+              <div style="flex:1; min-width:0;">
+                <p-datepicker [(ngModel)]="job.endDate"
+                              name="endDate"
+                              required
+                              placeholder="End Date"
+                              dateFormat="yy-mm-dd"
+                              [showTime]="false"
+                              style="width:100%;"
+                              [minDate]="tomorrow"
+                              [disabled]="readonly || !job.startDate"
+                              #endDateCtrl="ngModel">
+                </p-datepicker>
+
+                <div class="text-danger mt-1"
+                     *ngIf="(endDateCtrl.touched || f.submitted)">
+
+                  <small *ngIf="endDateCtrl.errors?.['required']">
+                    End date is required.
+                  </small>
+
+                  <small *ngIf="job.startDate && job.endDate && job.endDate <= job.startDate">
+                    End date must be greater than start date.
+                  </small>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!--Active Job-->
+          <div class="col-2 form-group" *ngIf="!readonly">
+            <label class="col-form-label dark-label">Active Job</label>
+            <br />
+            <p-toggleswitch [(ngModel)]="job.isActive"
+                            name="isActive"
+                            [disabled]="readonly">
+            </p-toggleswitch>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="section-card" *ngIf="readonly">
+      <h5>No questions added to this job.</h5>
+    </div>
+
+
+    <!--QUESTIONS-->
+    <div class="section-card" *ngIf="!readonly">
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h4 class="section-title">Job Questions</h4>
+
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <h5 class="dark-label">Questions Count #</h5>
+          <input pInputText
+                 type="number"
+                 min="0"
+                 max="15"
+                 [(ngModel)]="questionsCount"
+                 (ngModelChange)="onQuestionsCountChange($event)"
+                 name="questionsCount"
+                 style="width: 80px; margin-bottom:10px;"
+                 [disabled]="readonly" />
+        </div>
+      </div>
+
+      <div *ngFor="let question of job.questions; let i = index" class="question-card">
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h5 style="color:#2196f3;">Question #{{ i + 1 }}</h5>
+
+          <ng-container *ngIf="!readonly">
+            <p-button icon="pi pi-trash"
+                      [rounded]="true"
+                      severity="danger"
+                      [outlined]="true"
+                      (click)="removeQuestion(i)">
+            </p-button>
+          </ng-container>
+        </div>
+
+        <div class="grid">
+          <div class="row col-12">
+
+            <div class="col-1 form-group">
+              <label class="col-form-label dark-label">Required</label>
+              <br />
+              <p-toggleswitch [(ngModel)]="question.isRequired"
+                              name="isRequired{{i}}"
+                              [disabled]="readonly">
+              </p-toggleswitch>
+            </div>
+
+            <div class="col-11 form-group">
+              <label class="col-form-label dark-label">Question Text</label>
+
+              <textarea pTextarea
+                        rows="3"
+                        class="form-control"
+                        [(ngModel)]="question.questionText"
+                        name="questionText{{i}}"
+                        placeholder="Enter Question Text"
+                        [disabled]="readonly"
+                        #questionTextCtrl="ngModel"
+                        required
+                        minlength="5"
+                        maxlength="500">
+              </textarea>
+              <div class="text-danger mt-1"
+                   *ngIf="questionTextCtrl.invalid && (questionTextCtrl.touched || f.submitted)">
+
+                <small *ngIf="questionTextCtrl.errors?.['required']">
+                  Question text is required.
+                </small>
+
+                <small *ngIf="questionTextCtrl.errors?.['minlength']">
+                  Minimum 5 characters required.
+                </small>
+
+                <small *ngIf="questionTextCtrl.errors?.['maxlength']">
+                  Maximum 500 characters allowed.
+                </small>
+
+              </div>
+
+            </div>
+
+            <div class="col-2 form-group">
+              <label class="col-form-label dark-label">Question Type</label>
+
+              <p-select [options]="questionTypes"
+                        optionLabel="label"
+                        optionValue="id"
+                        [(ngModel)]="question.questionTypeId"
+                        (onChange)="onQuestionTypeChange(i)"
+                        name="questionTypeId{{i}}"
+                        class="w-100"
+                        [disabled]="readonly">
+              </p-select>
+            </div>
+
+            <div class="col-1 form-group">
+              <label class="col-form-label dark-label">Score</label>
+
+              <input pInputText
+                     type="number"
+                     [(ngModel)]="question.score"
+                     name="score{{i}}"
+                     class="form-control"
+                     [disabled]="readonly" />
+            </div>
+
+            <div class="col-9 form-group">
+              <label class="col-form-label dark-label">Available Answers</label>
+
+              <div class="answers-row" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+
+                <ng-container *ngFor="let ans of question.availableAnswers; let j=index">
+
+                  <p-inputgroup>
+                    <ng-container>
+
+                      <p-button label="Preferred"
+                                severity="success"
+                                (click)="setPreferredAnswer(i, j)"
+                                *ngIf="!question.preferredAnswers?.includes(ans.id)"
+                                [disabled]="readonly">
+
+                      </p-button>
+
+                      <p-button label="Unpreferred"
+                                severity="secondary"
+                                (click)="setUnPreferredAnswer(i, j)"
+                                *ngIf="question.preferredAnswers?.includes(ans.id)"
+                                [disabled]="readonly">
+                      </p-button>
+
+                    </ng-container>
+
+                    <input pInputText
+                           [(ngModel)]="question.availableAnswers[j].text"
+                           name="answer_{{i}}_{{j}}"
+                           placeholder="Answer option"
+                           [disabled]="readonly"
+                           #answerCtrl="ngModel"
+                           required
+                           minlength="1"
+                           maxlength="100">
+
+                    <div *ngIf="!readonly">
+                      <p-button icon="pi pi-times"
+                                severity="danger"
+                                (click)="removeAnswer(i,j)">
+                      </p-button>
+                    </div>
+
+                  </p-inputgroup>
+
+                  <div class="text-danger mt-1"
+                       *ngIf="answerCtrl.invalid && (answerCtrl.touched || f.submitted)">
+
+                    <small *ngIf="answerCtrl.errors?.['required']">
+                      Answer is required.
+                    </small>
+
+                    <small *ngIf="answerCtrl.errors?.['minlength']">
+                      Minimum 1 characters required.
+                    </small>
+
+                    <small *ngIf="answerCtrl.errors?.['maxlength']">
+                      Maximum 100 characters allowed.
+                    </small>
+
+                  </div>
+
+                </ng-container>
+
+              </div>
+
+              <div *ngIf="!readonly">
+
+                <button pButton
+                        type="button"
+                        icon="pi pi-plus"
+                        label="Add Answer"
+                        severity="secondary"
+                        [disabled]="!question.questionTypeId || question.availableAnswers.length >= getMaxAnswers(question.questionTypeId)"
+                        (click)="addAnswer(i)">
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+
+        <h4 class="section-title">
+          Questions Count #{{job.questions.length}}
+        </h4>
+
+        <div *ngIf="!readonly">
+          <button pButton
+                  type="button"
+                  icon="pi pi-plus"
+                  label="Add Question"
+                  severity="info"
+                  (click)="addQuestion()">
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+    <!--FOOTER-->
+    <div class="sticky-footer" *ngIf="!readonly">
+
+      <button pButton
+              type="button"
+              label="Reset"
+              icon="pi pi-undo"
+              severity="secondary"
+              (click)="reset()">
+      </button>
+
+      <button pButton
+              type="submit"
+              label="Save Job"
+              icon="pi pi-check"
+              severity="info"
+              [disabled]="f.invalid">
+      </button>
+
+    </div>
+
+
+  </form>
+</div>
+
+
+
+
+
+
+

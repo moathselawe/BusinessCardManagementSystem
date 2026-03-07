@@ -1,0 +1,352 @@
+<p-blockUI [blocked]="loading" *ngIf="loading">
+  <div class="full-page-loader">
+    <p-progressSpinner strokeWidth="6" style="width:5rem; height:5rem;"></p-progressSpinner>
+    <small style="margin-top:10px; color:white;">Analyzing your CV...</small>
+  </div>
+</p-blockUI>
+
+
+<div class="panel-heading sticky-header">
+  <h2 class="page-title">
+    <i class="pi pi-briefcase"></i> Job Application
+  </h2>
+</div>
+
+
+<p-card class="job-card">
+  <div class="job-header">
+    <div style=" display: flex; justify-content: space-between; align-items: start;">
+      <h2>{{ job.title }}</h2>
+      <div class="job-tags" style="margin:10px;">
+        <p-tag icon="pi pi-map-marker" value="{{job.workPlaceId}}" severity="secondary"></p-tag>
+        <p-tag icon="pi pi-building" value="{{job.organizationTypeId}}" severity="secondary"></p-tag>
+        <p-tag icon="pi pi-edit" value="{{job.contractTypeId}}" severity="secondary"></p-tag>
+        <p-tag icon="pi pi-sitemap" value="{{job.industrySectorId}}" severity="secondary"></p-tag>
+        <p-tag icon="pi pi-briefcase" value="{{job.jobTypeId}}" severity="secondary"></p-tag>
+      </div>
+
+      <div class="col-1 flex align-items-start pt-2">
+        <button pButton
+                type="button"
+                label="Apply"
+                icon="pi pi-check"
+                severity="success"
+                (click)="applyJob()">
+        </button>
+      </div>
+
+    </div>
+
+
+    <p-tag value="Closed Soon"
+           icon="pi pi-clock"
+           severity="warn"
+           *ngIf="getJobStatus() === 'closingSoon'">
+    </p-tag>
+
+    <p-tag value="Expired"
+           icon="pi pi-times-circle"
+           severity="danger"
+           *ngIf="getJobStatus() === 'expired'">
+    </p-tag>
+
+    <p-tag value="Closed Position"
+           icon="pi pi-lock"
+           severity="danger"
+           *ngIf="getJobStatus() === 'closed'">
+    </p-tag>
+
+    <p-tag value="Open Position"
+           icon="pi pi-check-circle"
+           severity="success"
+           *ngIf="getJobStatus() === 'open'">
+    </p-tag>
+  </div>
+
+  <small>Dubai, United Arab Emirates{{ job.locationId }} ,{{getDaysSincePosted(job.startDate)}} days ago · Over 100 people clicked apply</small>
+
+  <p-divider></p-divider>
+
+  <div class="grid job-details">
+    <div class="col-12 md:col-6">
+      <div class="detail-item">
+        <i class="pi pi-building"></i>
+        <div>
+          <span class="label">Company</span>
+          <span class="value">Tahaluf Al Emarat Technical Solutions{{ job.companyId }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="detail-item">
+        <i class="pi pi-calendar-plus"></i>
+        <div>
+          <span class="label">Opening Date</span>
+          <span class="value">{{ job.startDate | date }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="detail-item">
+        <i class="pi pi-calendar-times"></i>
+        <div>
+          <span class="label">Closing Date</span>
+          <span class="value">{{ job.endDate | date }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p-divider></p-divider>
+
+  <div class="job-description">
+    <h4>About the job</h4>
+    <div [innerHTML]="job.description"></div>
+  </div>
+</p-card>
+
+
+<p-dialog header="Apply to Tahaluf Al Emarat Technical Solutions{{ job.companyId }}"
+          [modal]="true"
+          [(visible)]="isStartQuestions"
+          (onHide)="cancel()"
+          [style]="{ width: '70rem' }"
+          [draggable]="false"
+          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+  <div class="card" style="padding:2rem; margin:0.2rem;">
+    <p-progressbar [value]="progressValue"
+                   [showValue]="true"
+                   style="margin-bottom:1rem">
+    </p-progressbar>
+    <div class="content-box">
+      <form *ngIf="showFields" novalidate>
+        <div class="p-fluid formgrid grid" *ngFor="let field of jobFields">
+          <div class="field col-12">
+            <label>{{ field.DisplayName }}</label>
+
+            <input *ngIf="field.FieldType==='text'"
+                   type="text"
+                   pInputText
+                   [(ngModel)]="field.Value"
+                   name="{{field.FieldName}}" />
+
+            <textarea *ngIf="field.FieldType==='textarea'"
+                      pInputTextarea
+                      [(ngModel)]="field.Value"
+                      name="{{field.FieldName}}"
+                      rows="3"></textarea>
+
+            <p-multiSelect *ngIf="field.FieldType==='multiselect'"
+                           [options]="getMultiSelectOptions(field.Value)"
+                           [(ngModel)]="field.Value"
+                           name="{{field.FieldName}}"
+                           defaultLabel="Select options">
+            </p-multiSelect>
+
+          </div>
+        </div>
+      </form>
+
+      <div *ngIf="!showFields">
+        <label class="col-form-label dark-label">
+          Upload resume to auto-fill answers.
+        </label>
+
+        <p-fileUpload name="cvFiles"
+                      [customUpload]="true"
+                      (onSelect)="onUpload($event)"
+                      [auto]="true"
+                      [multiple]="false"
+                      accept=".pdf,.doc,.docx"
+                      maxFileSize="50000000"
+                      chooseLabel="Select CV"
+                      mode="advanced">
+
+          <ng-template pTemplate="file" let-file>
+            <div style="display:flex; align-items:center; justify-content: space-between; padding:0.5rem; border-bottom: 1px solid #eee;">
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <i class="pi pi-file" style="font-size: 2rem; color:#888;"></i>
+                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px;">
+                  {{ file.name }}
+                </span>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span>{{ (file.size/1024) | number:'1.0-2' }} KB</span>
+                <span *ngIf="file.uploadStatus==='pending'" class="p-tag p-tag-warning">Pending</span>
+                <button type="button"
+                        pButton
+                        icon="pi pi-times"
+                        class="p-button-text p-button-danger"
+                        (click)="file.clear()">
+                </button>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template #empty>
+            <div style="padding: 2rem; text-align: center; border: 2px dashed #ccc; border-radius: 8px; color: #666;">
+              Drag and drop your CV here to upload
+              <br />
+              <small>or click "Select CV"</small>
+            </div>
+          </ng-template>
+
+        </p-fileUpload>
+      </div>
+
+      <p-divider></p-divider>
+
+      <form novalidate *ngIf="job.questions?.length">
+
+        <div class="field col-12" *ngFor="let question of job.questions; let i = index" style="margin-bottom:30px;">
+          <label class="col-form-label">
+            {{ question.questionText }}
+            <span *ngIf="question.isRequired" style="color:red;">*</span>
+
+          </label>
+
+          <!--Text-->
+          <input pInputText
+                 *ngIf="question.questionTypeId === JobQuestionType.Text"
+                 type="text"
+                 class="form-control"
+                 [(ngModel)]="answers[i]"
+                 (ngModelChange)="updateProgress()"
+                 maxlength="40"
+                 name="question{{i}}" />
+
+          <!--Paragraph-->
+          <textarea *ngIf="question.questionTypeId === JobQuestionType.Paragraph"
+                    pInputTextarea
+                    [(ngModel)]="answers[i]"
+                    (ngModelChange)="updateProgress()"
+                    name="question{{i}}"
+                    rows="4"
+                    class="form-control"></textarea>
+
+          <!--Multiple Choice (Checkboxes)-->
+          <ng-container *ngIf="question.questionTypeId === JobQuestionType.MultipleChoice">
+            <ng-container *ngFor="let option of question.availableAnswers; let j = index">
+              <div class="flex items-center gap-2 mb-2">
+                <p-checkbox [inputId]="'option' + i + '_' + j"
+                            [name]="'question' + i"
+                            [value]="option.id"
+                            [(ngModel)]="answers[i]"
+                            (ngModelChange)="updateProgress()">
+                </p-checkbox>
+
+                <label [for]="'option' + i + '_' + j" style="margin-left: 4px; margin-right: 4px; color: #666;">
+                  {{ option.text }}
+                </label>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <!--Radio Button-->
+          <ng-container *ngIf="question.questionTypeId === JobQuestionType.RadioButton">
+            <ng-container *ngFor="let option of question.availableAnswers; let j = index">
+              <div class="flex items-center gap-2 mb-2">
+                <p-radioButton [inputId]="'radio_' + i + '_' + j"
+                               [name]="'question' + i"
+                               [value]="option.id"
+                               [(ngModel)]="answers[i]"
+                               (ngModelChange)="updateProgress()">
+                </p-radioButton>
+
+                <label [for]="'radio_' + i + '_' + j" style="margin-left: 4px; margin-right: 4px; color: #666;">
+                  {{ option.text }}
+                </label>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <!--Yes/No-->
+          <ng-container *ngIf="question.questionTypeId === JobQuestionType.YesNo">
+            <ng-container *ngFor="let option of question.availableAnswers; let j = index">
+              <div class="flex items-center gap-2 mb-2">
+                <p-radioButton [inputId]="'yesno_' + i + '_' + j"
+                               [name]="'question' + i"
+                               [value]="option.id"
+                               [(ngModel)]="answers[i]"
+                               (ngModelChange)="updateProgress()">
+                </p-radioButton>
+
+                <label [for]="'yesno_' + i + '_' + j" style="margin-left: 4px; margin-right: 4px; color: #666;">
+                  {{ option.text }}
+                </label>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <!--Dropdown-->
+          <p-select *ngIf="question.questionTypeId === JobQuestionType.Dropdown"
+                    [options]="getAnswerOptions(question)"
+                    [(ngModel)]="answers[i]"
+                    (ngModelChange)="updateProgress()"
+                    name="question{{i}}"
+                    placeholder="Select an option"
+                    class="w-100">
+          </p-select>
+
+          <!--Rating-->
+          <p-rating *ngIf="question.questionTypeId === JobQuestionType.Rating"
+                    [(ngModel)]="answers[i]"
+                    (ngModelChange)="updateProgress()"
+                    name="question{{i}}"
+                    class="w-100">
+          </p-rating>
+
+          <!--Number-->
+          <div class="col-2">
+            <input *ngIf="question.questionTypeId === JobQuestionType.Number"
+                   type="number"
+                   pInputText
+                   [(ngModel)]="answers[i]"
+                   (ngModelChange)="updateProgress()"
+                   name="question{{i}}"
+                   class="w-100" />
+          </div>
+
+          <!--Date-->
+          <p-calendar *ngIf="question.questionTypeId === JobQuestionType.Date"
+                      [(ngModel)]="answers[i]"
+                      (ngModelChange)="updateProgress()"
+                      name="question{{i}}"
+                      dateFormat="yy-mm-dd">
+          </p-calendar>
+
+          <p-divider></p-divider>
+
+        </div>
+        <p-divider></p-divider>
+
+
+        <div style=" display: flex; justify-content: end; align-items: end;">
+          <button pButton
+                  type="button"
+                  label="Cancel"
+                  icon="pi pi-times"
+                  severity="secondary">
+          </button>
+
+          <button pButton
+                  type="button"
+                  label="Submit"
+                  icon="pi pi-send"
+                  severity="success">
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+</p-dialog>
+
+
+

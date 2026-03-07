@@ -60,27 +60,27 @@ Backend is built with .NET 9.0 Web API (C#), Frontend with Angular 20, and the d
 ## Quick Start
 ### Setup Backend
 1. Clone the repo: `gh repo clone moathselawe/BusinessCardManagementSystem`
-2. Navigate to backend: `cd BCMS.Api`
+2. Navigate to backend: `cd HireMind.Api`
 3. Restore packages: `dotnet restore`
 4. Update connection string in appsettings.json
 5. Run migrations : `dotnet ef database update`
 6. Run the API: `dotnet run`
 
 ### Docker Setup Backend Only
-From inside the backend folder (BCMS.Api), You can run the backend using Docker without installing the .NET SDK locally.
-1. Build Docker Image 'docker build -t bcms-api'
-2. Run Container 'docker run -d -p 8080:80 --name bcms-api-container bcms-api'
+From inside the backend folder (HireMind.Api), You can run the backend using Docker without installing the .NET SDK locally.
+1. Build Docker Image 'docker build -t HireMind-api'
+2. Run Container 'docker run -d -p 8080:80 --name HireMind-api-container HireMind-api'
 
 ### Setup Frontend
-1. Navigate to frontend: `cd BCMS_UI`
+1. Navigate to frontend: `cd HireMind_UI`
 2. Install dependencies: `npm install`
 3. Start Angular app: `ng serve`
-4. Open browser at: `http://localhost:62882/BCMS/ManageBusinesscards`
+4. Open browser at: `http://localhost:62882/HireMind/ManageBusinesscards`
 
 ### Setup Database
 - Connection string (in `appsettings.json` for backend):
 "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=BCMS_DB;Trusted_Connection=True;TrustServerCertificate=True;"
+    "DefaultConnection": "Server=localhost;Database=HireMind_DB;Trusted_Connection=True;TrustServerCertificate=True;"
 }
 
 
@@ -192,4 +192,4 @@ Select: script.sql
 
 Click Execute or press F5
 
-This script will create the database BCMS_DB, generate the BusinessCards table, and insert sample test data.
+This script will create the database HireMind_DB, generate the BusinessCards table, and insert sample test data.
