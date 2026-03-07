@@ -1,7 +1,8 @@
-﻿using BCMS.Api.Controllers;
+﻿using BCMS.Api.Controllers.BCMSControllers;
 using BCMS.Application.Commands.BusinessCard;
 using BCMS.Application.Queries.BusinessCard;
-using BCMS.Domain.Dtos;
+using BCMS.Domain.Dtos.BusinessCard;
+using BCMS.Domain.Dtos.SharedDtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

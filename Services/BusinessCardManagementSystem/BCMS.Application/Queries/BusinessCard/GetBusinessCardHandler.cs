@@ -1,4 +1,6 @@
-﻿namespace BCMS.Application.Queries.BusinessCard;
+﻿using BCMS.Domain.Dtos.BusinessCard;
+
+namespace BCMS.Application.Queries.BusinessCard;
 public record GetBusinessCardByIdQuery(Guid Id) : IRequest<GetBusinessCardByIdResult>;
 public record GetBusinessCardByIdResult(BusinessCardDto response);
 public class GetBusinessCardByIdHandlerValidator : AbstractValidator<GetBusinessCardByIdQuery>

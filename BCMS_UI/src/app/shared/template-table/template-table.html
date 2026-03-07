@@ -12,7 +12,7 @@
            [totalRecords]="totalRecords"
            [responsiveLayout]="'scroll'"
            [tableStyle]="{ 'min-width': '65rem' , 'background-color': '#fcf8f8d9'}"
-           [(selection)]="selectedRows"
+           [selection]="!withoutImportAndExport ? selectedRows : null"
            [loading]="isLoading">
 
     <ng-template #caption>
@@ -25,7 +25,7 @@
         </div>
         <div style="max-width: fit-content; max-height: fit-content;">
           <p-toolbar *ngIf="showToolbar" class="mb-6" style="background-color: #fcf8f8d9; overflow: hidden;">
-            <ng-template #start>
+            <ng-template #start *ngIf="!withoutImportAndExport">
               <p-fileUpload mode="basic" accept=".csv,.xml"
                             [maxFileSize]="1000000"
                             label="Import"
@@ -73,7 +73,7 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 4rem">
+        <th style="width: 4rem" *ngIf="!withoutImportAndExport">
           <p-tableHeaderCheckbox class="p-checkbox-info"></p-tableHeaderCheckbox>
         </th>
 
@@ -84,27 +84,28 @@
 
     <ng-template pTemplate="body" let-rowData>
       <tr>
-        <td>
+        <td *ngIf="!withoutImportAndExport">
           <p-tableCheckbox [value]="rowData" class="p-checkbox-info"></p-tableCheckbox>
         </td>
 
         <td *ngFor="let col of columns">
+          <!-- Image Column -->
           <ng-container *ngIf="col.isImage; else checkColor">
-
-            <img [src]="defaultUserIcon" alt="Logo"
+            <img [src]="defaultUserIcon"
+                 alt="Logo"
                  class="w-24 rounded shadow-sm"
                  style="object-fit: cover; height: 75px;"
-                 *ngIf="!rowData[col.field] || !rowData[col.field].startsWith('data:image/')"/>
+                 *ngIf="!rowData[col.field] || !rowData[col.field].startsWith('data:image/')" />
 
             <img [src]="rowData[col.field]"
                  alt="image"
                  (click)="showImage(rowData)"
                  class="w-24 rounded shadow-sm"
                  style="object-fit: cover; height: 75px;"
-                 *ngIf="rowData[col.field] && rowData[col.field].startsWith('data:image/')"/>
-
+                 *ngIf="rowData[col.field] && rowData[col.field].startsWith('data:image/')" />
           </ng-container>
 
+          <!-- Color Column -->
           <ng-template #checkColor>
             <ng-container *ngIf="col.isColor; else checkBoolean">
               <div [style.background]="rowData[col.field]"
@@ -113,25 +114,39 @@
             </ng-container>
           </ng-template>
 
+          <!-- Boolean / Toggle Column -->
           <ng-template #checkBoolean>
-            <ng-container *ngIf="col.field === 'isRemoved'; else textCell">
-              <p-toggleswitch [(ngModel)]="rowData.isRemoved"
+            <ng-container *ngIf="col.field === 'isActive'; else textCell">
+              <p-toggleswitch [(ngModel)]="rowData.isActive"
                               (onChange)="onToggleActive.emit(rowData)" />
             </ng-container>
           </ng-template>
 
+          <!-- Text / Date / Other Columns -->
           <ng-template #textCell>
-            <ng-container *ngIf="col.field === 'dateOfBirth'; else normalText">
-              {{ calculateAge(rowData[col.field]) }}
-            </ng-container>
-            <ng-template #normalText>
-              <ng-container *ngIf="isDate(rowData[col.field]); else plainText">
-                {{ rowData[col.field] | date: 'dd/MM/yyyy HH:mm' }}
+            <ng-container [ngSwitch]="col.field">
+
+              <!-- Start Date -->
+              <ng-container *ngSwitchCase="'startDate'">
+                {{ rowData.startDate | date:'dd/MM/yyyy HH:mm' }}
               </ng-container>
-              <ng-template #plainText>
-                {{ (rowData[col.field] || 'No Value') | slice:0:12 }}{{ rowData[col.field]?.length > 10 ? '...' : '' }}
-              </ng-template>
-            </ng-template>
+
+              <!-- End Date -->
+              <ng-container *ngSwitchCase="'endDate'">
+                {{ rowData.endDate | date:'dd/MM/yyyy HH:mm' }}
+              </ng-container>
+
+              <!-- Date of Birth (if used in other pages) -->
+              <ng-container *ngSwitchCase="'dateOfBirth'">
+                {{ calculateAge(rowData[col.field]) }}
+              </ng-container>
+
+              <!-- Default Text Field -->
+              <ng-container *ngSwitchDefault>
+                {{ rowData[col.field] ?? 'No Value' }}
+              </ng-container>
+
+            </ng-container>
           </ng-template>
         </td>
 

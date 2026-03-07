@@ -29,7 +29,7 @@ export abstract class BasePageComponent<T> implements OnInit {
 
 
   ngOnInit(): void {
-  //  this.loadData();
+    this.search({ first: 0, rows: 5 });
   }
 
   loadData(event: any = { first: 0, rows: 5 }) {
@@ -120,12 +120,13 @@ export abstract class BasePageComponent<T> implements OnInit {
     this.service.Delete(id).subscribe({
       next: () => {
         this.closeConfirmationDialog();
-        this.loadData();
+        //this.loadData();
         this.toastService.showMessage({
           messageType: 'success',
           messageTitle: 'Deleted',
           messageBody: `${this.entityName} deleted successfully.`
         });
+        this.search({ first: 0, rows: 5 });
       },
       error: (err: any) => {
         this.toastService.showMessage({
@@ -180,37 +181,63 @@ export abstract class BasePageComponent<T> implements OnInit {
   }
 
   isLoading: boolean = false;
+  //search(event: any = { first: 0, rows: 5 }) {
+  //  this.isLoading = true;
+  //  const filter = new SearchFilters();
+  //  filter.pageNumber = event.first / event.rows + 1;
+  //  filter.pageSize = event.rows;
+  //  filter.searchTerm = this.searchValue;
+
+  //  if (this.dateSearch) {
+  //    const date = new Date(this.dateSearch);
+  //    const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  //    filter.dateSearch = utcDate;
+  //  }
+
+  //  this.service.Search(filter).subscribe({
+  //    next: (res: any) => {
+  //      this.data = res.items;
+  //      this.totalCount = res.totalCount || res.items.length;
+  //      this.isLoading = false; 
+  //    },
+  //    error: (err: any) => {
+  //      this.isLoading = false;
+  //      this.toastService.showMessage({
+  //        messageType: 'error',
+  //        messageTitle: 'Search Failed',
+  //        messageBody: `Failed to search ${this.entityName}.`
+  //      });
+  //      console.error('Search failed', err);
+  //    }
+  //  });
+  //}
+
   search(event: any = { first: 0, rows: 5 }) {
+
     this.isLoading = true;
+
     const filter = new SearchFilters();
     filter.pageNumber = event.first / event.rows + 1;
     filter.pageSize = event.rows;
     filter.searchTerm = this.searchValue;
 
-    if (this.dateSearch) {
-      const date = new Date(this.dateSearch);
-      const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-      filter.dateSearch = utcDate;
-    }
-
     this.service.Search(filter).subscribe({
       next: (res: any) => {
-        this.data = res.items;
-        this.totalCount = res.totalCount || res.items.length;
-        this.isLoading = false; 
+
+        console.log("API RESULT", res);
+
+        this.data = res.items ?? [];
+        this.totalCount = res.totalCount ?? this.data.length;
+
+        this.isLoading = false;
       },
       error: (err: any) => {
         this.isLoading = false;
-        this.toastService.showMessage({
-          messageType: 'error',
-          messageTitle: 'Search Failed',
-          messageBody: `Failed to search ${this.entityName}.`
-        });
-        console.error('Search failed', err);
+        console.error(err);
       }
     });
-  }
 
+  }
   clearSearch() {
     this.searchValue = '';
     this.dateSearch = null;

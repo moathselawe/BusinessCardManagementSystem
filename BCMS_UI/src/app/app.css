@@ -1,0 +1,9 @@
+.floating-btn {
+  position: fixed;
+  bottom: 20px;
+  top: 10%; /* منتصف الصفحة عمودياً */
+  right: 20px; /* مباشرة 20px من اليمين */
+  z-index: 1000;
+}
+
+

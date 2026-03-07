@@ -1,3 +1,6 @@
+using BCMS.Application.Services;
+using BCMS.Infrastructure.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add CORS
@@ -20,6 +23,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add UnitOfWork and Repositories
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBusinessCardRepository, BusinessCardRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddHttpClient<IAIService, AIService>(client =>
+{
+    client.BaseAddress = new Uri("https://openrouter.ai/");
+});
+builder.Services.AddHttpClient<IAnalyzeCvService, AnalyzeCvService>(client =>
+{
+    client.BaseAddress = new Uri("https://openrouter.ai/");
+});
 
 // Add MediatR and scan all assemblies for handlers
 builder.Services.AddMediatR(cfg =>

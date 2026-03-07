@@ -14,12 +14,15 @@ import { MenuModule } from 'primeng/menu';
 import { RippleModule } from 'primeng/ripple';
 import { MainLayout } from './main-layout/main-layout';
 import { ReusableModule } from './reusable/reusable.module';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { TemplateConversation } from './shared/template-conversation/template-conversation';
 
 @NgModule({
   declarations: [
     App,
     AppSideMenu,
-    MainLayout
+    MainLayout,
   ],
   imports: [
     BrowserModule,
@@ -29,7 +32,10 @@ import { ReusableModule } from './reusable/reusable.module';
     BadgeModule,
     AvatarModule,
     RippleModule,
-    ReusableModule
+    ReusableModule,
+    ButtonModule,
+    DialogModule,
+    TemplateConversation,
   ],
   providers: [
     provideHttpClient(),

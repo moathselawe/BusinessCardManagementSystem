@@ -1,4 +1,6 @@
-﻿namespace BCMS.Application.Commands.BusinessCard;
+﻿using BCMS.Domain.Dtos.BusinessCard;
+
+namespace BCMS.Application.Commands.BusinessCard;
 public record PreviewBusinessCardsCommand(IFormFile file) : IRequest<PreviewBusinessCardsResult>;
 public record PreviewBusinessCardsResult(List<BusinessCardPreviewDto> Cards);
 public class PreviewBusinessCardsValidator: AbstractValidator<PreviewBusinessCardsCommand>

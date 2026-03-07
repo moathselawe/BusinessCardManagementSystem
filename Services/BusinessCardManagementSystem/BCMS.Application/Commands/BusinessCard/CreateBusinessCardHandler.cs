@@ -1,4 +1,6 @@
-﻿namespace BCMS.Application.Commands.BusinessCard;
+﻿using BCMS.Domain.Dtos.BusinessCard;
+
+namespace BCMS.Application.Commands.BusinessCard;
 public record CreateBusinessCardCommand(CreateBusinessCardDto Request) : IRequest<CreateBusinessCardResult>;
 public record CreateBusinessCardResult(Guid Id);
 

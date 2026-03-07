@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { BasePageComponent } from '../../../shared/BasePageComponent';
-import { BusinessCard } from '../../../models/businessCard';
-import { BusinessCardService } from '../../../services/businessCard.service';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ToastMessageService } from '../../../services/shared/toast-message.service';
+import { BusinessCardService } from '../../../services/bcms/businessCard.service';
+import { BusinessCard } from '../../../models/bcms/businessCard';
 
 @Component({
   selector: 'app-manage-businesscards-component',

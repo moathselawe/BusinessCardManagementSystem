@@ -5,6 +5,7 @@ import { BCMSRoutingModule } from './bcms-routing-module';
 @NgModule({
   declarations: [
   
+  
   ],
   imports: [
     CommonModule,

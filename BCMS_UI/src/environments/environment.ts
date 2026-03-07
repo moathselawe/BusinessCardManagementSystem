@@ -3,5 +3,8 @@ export const environment = {
 }
 
 export const endpoints = {
-  businesscards: 'BusinessCards/'
+  businesscards: 'BusinessCards/',
+  AI: 'AI/',
+  JobApplication:'JobApplication/',
+  ManageJobs:'ManageJobs/'
 }

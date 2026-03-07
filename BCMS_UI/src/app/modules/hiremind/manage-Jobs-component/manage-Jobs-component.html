@@ -1,0 +1,30 @@
+<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;">Manage Jobs</h2>
+</div>
+
+<app-template-table [title]="'Jobs List'"
+                    [withoutImportAndExport]="true"
+                    [data]="data"
+                    [columns]="columns"
+                    [totalRecords]="totalCount"
+                    [actionsModel]="actionsModel"
+                    [isLoading]="isLoading"
+                    (onEdit)="edit($event)"
+                    (onApply)="apply($event)"
+                    (onPreview)="preview($event)"
+                    (onDelete)="openConfirmationDialog($event)"
+                    (onLazyLoad)="search($event)"
+                    (onToggleActive)="toggleActive($event)"
+                    (onAdd)="Add()"
+                    (onSearch)="searchFromTable($event)">
+</app-template-table>
+
+
+
+<app-template-confirmation-dialog [(visible)]="visibleConfirmation"
+                                  [message]="'Are you sure you want to delete the Job?'"
+                                  (onCancel)="closeConfirmationDialog()"
+                                  (onConfirm)="deleteEntity(deleteId)">
+</app-template-confirmation-dialog>
+
+

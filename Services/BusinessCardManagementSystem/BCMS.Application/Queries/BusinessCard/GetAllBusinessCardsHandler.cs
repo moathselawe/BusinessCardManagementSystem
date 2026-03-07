@@ -1,4 +1,6 @@
-﻿namespace BCMS.Application.Queries.BusinessCard;
+﻿using BCMS.Domain.Dtos.BusinessCard;
+
+namespace BCMS.Application.Queries.BusinessCard;
 public record GetAllBusinessCardsQuery() : IRequest<GetAllBusinessCardsResult>;
 public record GetAllBusinessCardsResult(List<BusinessCardDto> response);
 

@@ -1,0 +1,159 @@
+<div class="card-body">
+
+  <h1 style="text-align: center; font-weight: bold; font-size: 2rem; margin:60px;">
+    Welcome to Business Cards Management System
+  </h1>
+
+  <div class="d-flex justify-content-center align-items-center" style="height: 70vh; width: 1500px;">
+    <div class="card d-flex flex-column p-4 rounded shadow" style="width: 1400px;">
+      <h2 class="text-center mb-4">{{ isNewAccount ? "SignUp" : "Login" }}</h2>
+      <div class="d-flex justify-content-center align-items-center gap-4">
+
+        <div *ngIf="!isNewAccount" class="card col-5 d-flex justify-content-center align-items-start  flex-column gap-2 border-0" style="margin-left:10px;">
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Username</label>
+            <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-envelope"></i>
+                </p-inputgroup-addon>
+                <input pInputText placeholder="Enter your email" />
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Password</label>
+            <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p-inputgroup>
+                <input pInputText placeholder="Enter Password" />
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <div class="flex items-center">
+              <p-checkbox name="rememberme" style="margin-right:3px; margin-left:3px;" />
+              <label class="ml-2"> Remember me</label>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <div class="flex">
+              <p-button label="Login" icon="pi pi-user" severity="info" [style]="{ width: '375px' }" />
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <div class="flex">
+              <p>Forgot password or can't login?<a routerLink="/resetpassword" class="reset-link"> Reset password now</a></p>
+              <p><a (click)="isInfoDialog = true" class="reset-link"> How do I register?</a></p>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="isNewAccount" class="card col-5 d-flex justify-content-center align-items-start  flex-column gap-2 border-0" style="margin-left:10px; padding-bottom:20px">
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Full Name</label>
+            <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input pInputText placeholder="Enter your Full Name" />
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Email</label>
+            <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-envelope"></i>
+                </p-inputgroup-addon>
+                <input pInputText placeholder="Enter your email" />
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Phone Number</label>
+            <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p-inputgroup>
+                <input pInputText placeholder="Enter your phone number" />
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Password</label>
+            <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p-inputgroup>
+                <input pInputText placeholder="Enter password" />
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Confirm Password</label>
+            <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p-inputgroup>
+                <input pInputText placeholder="Enter password" />
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <div class="flex" style="margin-top:5px;">
+              <p-button label="Create Account" icon="pi pi-user-plus" severity="info" [style]="{ width: '375px' }" />
+            </div>
+          </div>
+
+        </div>
+
+        <p-divider layout="vertical" class="!hidden md:!flex" style="height: auto; align-self: stretch;">
+          <label style="font-size: 1.5rem;">OR</label>
+          <!--<p style="font-size: 1.5rem;">OR</p>-->
+        </p-divider>
+
+        <div class="card col-5 d-flex justify-content-center align-items-center flex-column gap-3 border-0">
+          <p-button *ngIf="!isNewAccount" label="Sign Up" icon="pi pi-user-plus" severity="info" [style]="{ width: '350px' }" (onClick)="isNewAccount = true" />
+          <p-button *ngIf="isNewAccount" label="Login" icon="pi pi-user" severity="info" [style]="{ width: '350px' }" (onClick)="isNewAccount = false" />
+          <label style="font-size: 1rem;">Use another way</label>
+          <p-button label="Login with Google" icon="pi pi-google" severity="danger" [style]="{ width: '350px' }" [disabled]="isNewAccount" />
+          <p-button label="Login with Microsoft" icon="pi pi-microsoft" severity="contrast" [style]="{ width: '350px' }" [disabled]="isNewAccount" />
+        </div>
+      </div> 
+    </div>
+  </div>
+
+</div>
+
+<p-dialog header="How do I register?"
+          [(visible)]="isInfoDialog"
+          [modal]="true"
+          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+          [style]="{ width: '50vw' }"
+          [draggable]="false"
+          [resizable]="false">
+
+  <div style="padding:20px 30px;">
+    <p style="font-size:1rem; line-height:1.8; margin:0;">
+      To register in the Business Cards Management System, click on the
+      <b>Sign Up</b> button on the right side of the login page.
+      Fill in your Full Name, Email, Phone Number, and Password, then click
+      <b>Create Account</b>.
+
+      After successful registration, you can log in using your email and password.
+    </p>
+  </div>
+
+</p-dialog>
+
+<!--<p-dialog header="How do I register?" [(visible)]="isInfoDialog" [modal]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+</p-dialog>-->

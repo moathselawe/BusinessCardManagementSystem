@@ -1,4 +1,6 @@
-﻿namespace BCMS.Application.Commands.BusinessCard;
+﻿using BCMS.Domain.Dtos.BusinessCard;
+
+namespace BCMS.Application.Commands.BusinessCard;
 
 public record UpdateBusinessCardCommand(UpdateBusinessCardDto Request) : IRequest<UpdateBusinessCardResult>;
 public record UpdateBusinessCardResult(bool IsSuccess);

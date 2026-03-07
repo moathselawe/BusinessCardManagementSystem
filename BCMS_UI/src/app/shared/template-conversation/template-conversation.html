@@ -1,0 +1,44 @@
+<div class="chat-container">
+
+  <p-toolbar styleClass="chat-header">
+    <div class="p-toolbar-group-start">
+      <i class="pi pi-comments mr-2"></i>
+      <span class="title">{{ title }}</span>
+    </div>
+  </p-toolbar>
+
+  <div class="chat-body" #chatBody>
+    <div *ngFor="let msg of messages" class="message-row" [ngClass]="{'left': msg.sender==='bot', 'right': msg.sender==='user'}">
+      <div class="message" [ngClass]="{'bot': msg.sender==='bot', 'user': msg.sender==='user', 'long-text': msg.isLongText}">
+        <span [innerHTML]="msg.text"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-input">
+  <div class="input-wrapper">
+
+    <input pInputText
+           placeholder="Type your message..."
+           [(ngModel)]="message"
+           (keyup.enter)="sendMessage()"
+           aria-label="username"
+           [invalid]="message.length >= 100"
+           maxlength="100"
+           class="input-field" />
+
+    <p-message *ngIf="message.length >= 100"
+               severity="error"
+               variant="simple"
+               size="small">
+      Message is too long.
+    </p-message>
+
+  </div>
+
+  <button pButton
+          type="button" styleClass="p-button-rounded p-button-lg"
+          icon="pi pi-send"
+          (click)="sendMessage()" severity="info"></button>
+</div>

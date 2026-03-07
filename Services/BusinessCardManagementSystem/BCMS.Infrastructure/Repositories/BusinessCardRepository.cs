@@ -1,4 +1,4 @@
-﻿using BCMS.Domain.Dtos;
+﻿using BCMS.Domain.Dtos.SharedDtos;
 
 namespace BCMS.Infrastructure.Repositories;
 

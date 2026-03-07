@@ -12,3 +12,10 @@ global using BCMS.Infrastructure;
 global using BCMS.Infrastructure.Repositories;
 global using FluentValidation;
 global using Microsoft.EntityFrameworkCore;
+global using BCMS.Application.Commands.JobApplication;
+global using BCMS.Application.Commands.ManageJobs;
+global using BCMS.Application.Queries.ManageJobs;
+global using BCMS.Domain.Dtos.ManageJobs;
+global using BCMS.Domain.Dtos.JobApplication;
+
+

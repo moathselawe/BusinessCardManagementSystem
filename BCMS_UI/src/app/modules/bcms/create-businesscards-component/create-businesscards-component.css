@@ -105,3 +105,13 @@
   display: block;
   margin-bottom: 2px; 
 }
+
+.suggestion-btn .p-button {
+  padding: 0.15rem 0.5rem !important;
+  font-size: 0.7rem !important;
+  height: 24px !important;
+}
+
+.suggestion-btn .p-button-label {
+  font-size: 0.7rem !important;
+}

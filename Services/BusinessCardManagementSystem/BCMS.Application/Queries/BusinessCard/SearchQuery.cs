@@ -1,4 +1,7 @@
-﻿namespace BCMS.Application.Queries.BusinessCard;
+﻿using BCMS.Domain.Dtos.BusinessCard;
+using BCMS.Domain.Dtos.SharedDtos;
+
+namespace BCMS.Application.Queries.BusinessCard;
 
 public record SearchQuery(SearchFiltersRqDto Filters) : IRequest<SearchFiltersRsDto<BusinessCardDto>>;
 

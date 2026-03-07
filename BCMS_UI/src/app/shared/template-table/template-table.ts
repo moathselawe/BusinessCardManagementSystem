@@ -50,9 +50,11 @@ export class TemplateTable {
   @Input() columns: { field: string, header: string, isImage?: boolean, isColor?: boolean }[] = []; // 👈 أضف isColor هنا
   @Input() totalRecords: number = 0;
   @Input() title!: string;
-  @Input() isLoading: boolean = false; 
+  @Input() isLoading: boolean = false;
+  @Input() withoutImportAndExport: boolean = false;
 
   @Output() onEdit = new EventEmitter<any>();
+  @Output() onApply = new EventEmitter<any>();
   @Output() onExport = new EventEmitter<any>();
   @Output() onGeneratePdf = new EventEmitter<any>();
   @Output() onImport = new EventEmitter<any>();
@@ -68,7 +70,7 @@ export class TemplateTable {
   searchValue: string = '';
   dateSearch: Date | null = null;
 
-  currentRowData: any; 
+  currentRowData: any;
 
   delete(id: number) {
     this.onDelete.emit(id);
@@ -99,7 +101,7 @@ export class TemplateTable {
   clearSearch() {
     this.searchValue = '';
     this.dateSearch = null;
-    this.search(); 
+    this.search();
   }
 
   calculateAge(dob: string | Date): number | string {
@@ -114,7 +116,7 @@ export class TemplateTable {
       age--;
     }
 
-    return age;  
+    return age;
   }
 
   toggleMenu(event: any, rowData: any) {
@@ -126,9 +128,11 @@ export class TemplateTable {
         if (item.label === 'Edit') {
           this.onEdit.emit(this.currentRowData.id);
         } else if (item.label === 'Preview') {
-          this.onPreview.emit(this.currentRowData.id); 
+          this.onPreview.emit(this.currentRowData.id);
         } else if (item.label === 'Delete') {
           this.onDelete.emit(this.currentRowData.id);
+        } else if (item.label === 'JobApplication') {   // ✅ FIX
+          this.onApply.emit(this.currentRowData.id);
         }
         else if (item.label === 'PrintPDF') {
           this.onGeneratePdf.emit(this.currentRowData.id);
@@ -147,12 +151,12 @@ export class TemplateTable {
   fileSelected(event: any) {
     const file: File = event.files[0];
     if (file) {
-      this.onFilePreview.emit(file); 
+      this.onFilePreview.emit(file);
     }
   }
 
   export() {
-    this.onExport.emit(this.selectedRows); 
+    this.onExport.emit(this.selectedRows);
   }
 
   showToolbar: boolean = true;

@@ -1,5 +1,4 @@
-﻿using BCMS.Domain.Dtos;
-using System.Threading;
+﻿using BCMS.Domain.Dtos.SharedDtos;
 
 namespace BCMS.Domain.IRepositories;
 

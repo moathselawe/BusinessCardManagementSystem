@@ -114,7 +114,7 @@ public abstract class BaseRepository<TEntity> : BaseRepository where TEntity : c
         {
             var auditable = (entity as BaseAuditableEntity)!;
             auditable.IsDeleted = true;
-            auditable.DeletedDate = DateTime.UtcNow;
+            auditable.DeleteDate = DateTime.UtcNow;
 
             _dbContext.Set<TEntity>().Update(entity);
         }
@@ -132,7 +132,7 @@ public abstract class BaseRepository<TEntity> : BaseRepository where TEntity : c
             {
                 var auditable = (entity as BaseAuditableEntity)!;
                 auditable.IsDeleted = true;
-                auditable.DeletedDate = DateTime.UtcNow;
+                auditable.DeleteDate = DateTime.UtcNow;
             }
             _dbContext.Set<TEntity>().UpdateRange(entities);
         }

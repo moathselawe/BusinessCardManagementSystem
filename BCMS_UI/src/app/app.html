@@ -1,1 +1,24 @@
 <router-outlet />
+
+<div class="floating-btn">
+  <p-button (onClick)="visible ? visible = false : visible = true"
+            icon="pi pi-microchip-ai" severity="info"
+            styleClass="p-button-rounded p-button-lg" />
+</div>
+
+<p-dialog [(visible)]="visible"
+          [modal]="false"
+          [draggable]="false"
+          [resizable]="false"
+          appendTo="body"
+          [position]="'bottomright'"
+          [closable]="false"
+          [style]="{ width: '25rem', height: '39rem' }">
+
+
+  <app-template-conversation [title]="'AI Assistant'"
+                             [messages]="aiMessages"
+                             (messageSent)="onAiMessage($event)">
+  </app-template-conversation>
+
+</p-dialog>

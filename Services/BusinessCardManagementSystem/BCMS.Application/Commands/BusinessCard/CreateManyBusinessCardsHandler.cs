@@ -1,4 +1,6 @@
-﻿namespace BCMS.Application.Commands.BusinessCard;
+﻿using BCMS.Domain.Dtos.BusinessCard;
+
+namespace BCMS.Application.Commands.BusinessCard;
 
 public record CreateManyBusinessCardsCommand(List<CreateBusinessCardDto> Requests) : IRequest<CreateManyBusinessCardsResult>;
 public record CreateManyBusinessCardsResult(int Count); 

@@ -9,5 +9,4 @@ public abstract class BaseAuditableEntity : BaseEntity
     public virtual DateTime CreatedDate { get; set; }
     public virtual Guid? LastModifiedByUserId { get; set; }
     public virtual DateTime? LastModifiedDate { get; set; }
-    public virtual DateTime DeletedDate { get; set; }
 }

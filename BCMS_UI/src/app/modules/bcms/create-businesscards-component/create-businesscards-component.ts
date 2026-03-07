@@ -1,9 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { BusinessCard } from '../../../models/businessCard';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BusinessCardService } from '../../../services/businessCard.service';
 import { NgForm } from '@angular/forms';
 import { ToastMessageService } from '../../../services/shared/toast-message.service';
+import { SuggestionType } from '../../../enum/SuggestionType';
+import { AIService } from '../../../services/shared/aiService.service';
+import { BusinessCardService } from '../../../services/bcms/businessCard.service';
+import { BusinessCard } from '../../../models/bcms/businessCard';
 interface Theme {
   name: string;
   background: string;
@@ -30,6 +32,7 @@ export class CreateBusinesscardsComponent {
     private route: ActivatedRoute,
     private router: Router,
     private service: BusinessCardService,
+    private AiService: AIService,
     private toastService: ToastMessageService
   ) { }
 
@@ -73,7 +76,7 @@ export class CreateBusinesscardsComponent {
   }
 
   loadCard(id: string) {
-    this.isLoadingEditPage = true; 
+    this.isLoadingEditPage = true;
 
     this.service.GetById(id).subscribe({
       next: (res: any) => {
@@ -81,7 +84,7 @@ export class CreateBusinesscardsComponent {
         if (this.cards[0].dateOfBirth) {
           this.cards[0].dateOfBirth = new Date(this.cards[0].dateOfBirth);
         }
-        this.isLoadingEditPage = false; 
+        this.isLoadingEditPage = false;
       },
       error: (err: any) => {
         this.toastService.showMessage({
@@ -90,7 +93,7 @@ export class CreateBusinesscardsComponent {
           messageBody: 'Failed to load business card.'
         });
         console.error('Load failed', err);
-        this.isLoadingEditPage = false; 
+        this.isLoadingEditPage = false;
       }
     });
   }
@@ -119,7 +122,7 @@ export class CreateBusinesscardsComponent {
 
     if (errors.length > 0) {
       alert(errors.join("\n"));
-      this.isEdit = true; 
+      this.isEdit = true;
       return false;
     }
 
@@ -127,7 +130,7 @@ export class CreateBusinesscardsComponent {
   }
 
   saveCard() {
-    if (!this.validateCard(this.card, this.selectedCardIndex)) return; 
+    if (!this.validateCard(this.card, this.selectedCardIndex)) return;
 
     this.imageError = false;
 
@@ -141,7 +144,7 @@ export class CreateBusinesscardsComponent {
               messageBody: 'Business card updated successfully.'
             });
             this.router.navigate(['/BCMS/ManageBusinesscards']);
-          } ,error: (err) => {
+          }, error: (err) => {
             this.toastService.showMessage({
               messageType: 'error',
               messageTitle: 'Error',
@@ -215,6 +218,11 @@ export class CreateBusinesscardsComponent {
     this.imageError = false;
     if (form) form.resetForm();
     if (this.fileInput) this.fileInput.nativeElement.value = '';
+
+    this.arabicNameSuggestions = [];
+    this.englishNameSuggestions = [];
+    this.emailSuggestions = [];
+    this.addressSuggestions = [];
   }
 
   goBack() {
@@ -340,6 +348,65 @@ export class CreateBusinesscardsComponent {
   }
 
   today: Date = new Date();
+
+
+  // Your existing arrays
+  arabicNameSuggestions: string[] = [];
+  englishNameSuggestions: string[] = [];
+  addressSuggestions: string[] = [];
+  emailSuggestions: string[] = [];
+
+
+  fetchAISuggestions(type: SuggestionType, input: string) {
+    if (!input || this.cards?.length != 1) return;
+
+    this.AiService.suggestions({ SuggestionType: type, Input: input }).subscribe({
+      next: (res: any) => {
+        const suggestions: string[] = res?.response?.aiSuggestions || [];
+        console.log(" suggestions", suggestions);
+
+        switch (type) {
+          case SuggestionType.NameArabic:
+            this.arabicNameSuggestions = suggestions;
+            break;
+          case SuggestionType.NameEnglish:
+            this.englishNameSuggestions = suggestions;
+            break;
+          case SuggestionType.Address:
+            this.addressSuggestions = suggestions;
+            break;
+          case SuggestionType.Email:
+            this.emailSuggestions = suggestions;
+            break;
+          default:
+            break;
+        }
+      },
+      error: (err) => {
+        console.error('AI suggestions error:', err);
+      }
+    });
+  }
+
+  // When user clicks a suggestion
+  applySuggestion(cardIndex: number, type: SuggestionType, value: string, userinput: string = "") {
+    switch (type) {
+      case SuggestionType.NameArabic:
+        this.cards[cardIndex].arabicName = value;
+        this.arabicNameSuggestions = [];
+        break;
+      case SuggestionType.NameEnglish:
+        this.cards[cardIndex].englishName = value;
+        this.englishNameSuggestions = [];
+        break;
+      case SuggestionType.Address:
+        this.cards[cardIndex].address = value;
+        this.addressSuggestions = [];
+        break;
+      case SuggestionType.Email:
+        this.cards[cardIndex].email = userinput + value;
+        this.emailSuggestions = [];
+        break;
+    }
+  }
 }
-
-

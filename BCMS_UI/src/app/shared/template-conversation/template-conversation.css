@@ -1,0 +1,151 @@
+/* ===============================
+   Chat Container
+   =============================== */
+.chat-container {
+  height: auto; /* full viewport height */
+  display: flex;
+  flex-direction: column;  
+  background-color: #f4f6f9;
+  position: relative;
+  font-family: Arial, sans-serif;
+}
+
+/* ===============================
+   Chat Header
+   =============================== */
+.chat-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #1976d2;
+  color: white;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+  .chat-header .title {
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+  }
+
+/* ===============================
+   Chat Body (Messages Area)
+   =============================== */
+.chat-body {
+  flex: 1 1 auto; /* take remaining space */
+  overflow-y: auto; /* scroll when content overflows */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 430px;
+}
+
+.chat-scroll {
+  height: 100%; /* fill parent */
+}
+
+/* ===============================
+   Message Rows
+   =============================== */
+.message-row {
+  display: flex;
+  width: 100%;
+}
+
+  .message-row.left {
+    justify-content: flex-start;
+  }
+
+  .message-row.right {
+    justify-content: flex-end;
+  }
+
+/* ===============================
+   Message Bubbles
+   =============================== */
+.message {
+  max-width: 70%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+  /* Bot Message */
+  .message.bot {
+    background-color: #6c757d;
+    color: white;
+    border-bottom-left-radius: 4px;
+  }
+
+  /* User Message */
+  .message.user {
+    background-color: #2196f3;
+    color: white;
+    border-bottom-right-radius: 4px;
+  }
+
+/* Long Text Handling */
+.long-text ul {
+  margin: 0.5rem 0 0 1rem;
+}
+
+/* ===============================
+   Chat Input Area
+   =============================== */
+.chat-input {
+  position: sticky; /* stays visible at bottom */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: white;
+  border-top: 1px solid #ddd;
+  z-index: 10;
+}
+
+.input-field {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 14px;
+}
+
+/* ===============================
+   Floating AI Button
+   =============================== */
+.floating-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+/* ===============================
+   Scrollbar Styling (optional)
+   =============================== */
+.chat-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column; /* يخليهم فوق بعض */
+  gap: 4px; /* مسافة بسيطة */
+  width: 100%;
+}
+
+.input-field {
+  width: 100%;
+}
