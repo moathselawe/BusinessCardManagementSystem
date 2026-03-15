@@ -1,8 +1,5 @@
 <div class="sticky-header">
-  <h2 style="color:#2196f3;">
-    {{ readonly ? 'Preview Job' : (isEditMode ? 'Edit Job' : 'Create Job') }}
-  </h2>
-
+  <h2 style="color:#2196f3;">{{ readonly ? 'Preview Job' : (isEditMode ? 'Edit Job' : 'Create Job') }}</h2>
   <button pButton
           type="button"
           label="Back"
@@ -11,40 +8,30 @@
           (click)="goBack()">
   </button>
 </div>
+
 <div *ngIf="loading" class="form-container">
-
   <div class="section-card">
-
     <p-skeleton width="200px" height="30px" styleClass="mb-3"></p-skeleton>
-
     <div class="grid">
-
       <div class="col-3">
         <p-skeleton height="40px"></p-skeleton>
       </div>
-
       <div class="col-3">
         <p-skeleton height="40px"></p-skeleton>
       </div>
-
       <div class="col-3">
         <p-skeleton height="40px"></p-skeleton>
       </div>
-
       <div class="col-3">
         <p-skeleton height="40px"></p-skeleton>
       </div>
-
       <div class="col-10">
         <p-skeleton height="80px"></p-skeleton>
       </div>
-
       <div class="col-4">
         <p-skeleton height="40px"></p-skeleton>
       </div>
-
     </div>
-
   </div>
 
   <div class="section-card">
@@ -87,7 +74,8 @@
                       placeholder="Select Company"
                       class="w-100"
                       #companyCtrl="ngModel"
-                      [disabled]="readonly">
+                      [disabled]="readonly"
+                      appendTo="body">
             </p-select>
             <div class="text-danger mt-1" *ngIf="companyCtrl.invalid && (companyCtrl.touched || f.submitted)">
               <small *ngIf="companyCtrl.errors?.['required']">Company is required.</small>
@@ -124,7 +112,8 @@
                       placeholder="Select Job Type"
                       class="w-100"
                       [disabled]="readonly"
-                      #jobTypeCtrl="ngModel">
+                      #jobTypeCtrl="ngModel"
+                      appendTo="body">
             </p-select>
             <div class="text-danger mt-1" *ngIf="jobTypeCtrl.invalid && (jobTypeCtrl.touched || f.submitted)">
               <small *ngIf="jobTypeCtrl.errors?.['required']">Job type is required.</small>
@@ -143,7 +132,8 @@
                       placeholder="Select Work Place"
                       class="w-100"
                       [disabled]="readonly"
-                      #workPlaceCtrl="ngModel">
+                      #workPlaceCtrl="ngModel"
+                      appendTo="body">
             </p-select>
             <div class="text-danger mt-1" *ngIf="workPlaceCtrl.invalid && (workPlaceCtrl.touched || f.submitted)">
               <small *ngIf="workPlaceCtrl.errors?.['required']">Work place is required.</small>
@@ -162,7 +152,8 @@
                       placeholder="Select Contract Type"
                       class="w-100"
                       [disabled]="readonly"
-                      #contractTypeCtrl="ngModel">
+                      #contractTypeCtrl="ngModel"
+                      appendTo="body">
             </p-select>
             <div class="text-danger mt-1" *ngIf="contractTypeCtrl.invalid && (contractTypeCtrl.touched || f.submitted)">
               <small *ngIf="contractTypeCtrl.errors?.['required']">Contract type is required.</small>
@@ -181,7 +172,8 @@
                       placeholder="Select Organization Type"
                       class="w-100"
                       [disabled]="readonly"
-                      #organizationTypeCtrl="ngModel">
+                      #organizationTypeCtrl="ngModel"
+                      appendTo="body">
             </p-select>
             <div class="text-danger mt-1" *ngIf="organizationTypeCtrl.invalid && (organizationTypeCtrl.touched || f.submitted)">
               <small *ngIf="organizationTypeCtrl.errors?.['required']">Organization type is required.</small>
@@ -200,7 +192,8 @@
                       placeholder="Select Industry Sector"
                       class="w-100"
                       [disabled]="readonly"
-                      #industrySectorCtrl="ngModel">
+                      #industrySectorCtrl="ngModel"
+                      appendTo="body">
             </p-select>
             <div class="text-danger mt-1" *ngIf="industrySectorCtrl.invalid && (industrySectorCtrl.touched || f.submitted)">
               <small *ngIf="industrySectorCtrl.errors?.['required']">Industry sector is required.</small>
@@ -219,7 +212,8 @@
                       placeholder="Select Location"
                       class="w-100"
                       [disabled]="readonly"
-                      #locationCtrl="ngModel">
+                      #locationCtrl="ngModel"
+                      appendTo="body">
             </p-select>
             <div class="text-danger mt-1" *ngIf="locationCtrl.invalid && (locationCtrl.touched || f.submitted)">
               <small *ngIf="locationCtrl.errors?.['required']">Location is required.</small>
@@ -240,7 +234,6 @@
                       maxlength="10000"
                       minlength="5">
             </p-editor>
-            <!--class="form-control"-->
 
             <div class="text-danger mt-1" *ngIf="descriptionCtrl.invalid && (descriptionCtrl.touched || f.submitted)">
               <small *ngIf="descriptionCtrl.errors?.['required']">Description is required.</small>
@@ -249,30 +242,8 @@
             </div>
           </div>
 
-          <!--Description-->
-          <!--<div class="col-10 form-group">
-            <label class="col-form-label dark-label">Description</label>
-            <textarea pTextarea
-                      rows="3"
-                      class="form-control"
-                      [(ngModel)]="job.description"
-                      [disabled]="readonly"
-                      name="description"
-                      required
-                      maxlength="5000"
-                      minlength="5"
-                      placeholder="Enter Job Description"
-                      #descriptionCtrl="ngModel">
-            </textarea>
-            <div class="text-danger mt-1" *ngIf="descriptionCtrl.invalid && (descriptionCtrl.touched || f.submitted)">
-              <small *ngIf="descriptionCtrl.errors?.['required']">Description is required.</small>
-              <small *ngIf="descriptionCtrl.errors?.['maxlength']">Max 5000 characters allowed.</small>
-              <small *ngIf="descriptionCtrl.errors?.['minlength']">Min 5 characters allowed.</small>
-            </div>
-          </div>-->
-          <!--Start & End Date-->
           <div class="col-4 form-group">
-            <label class="col-form-label dark-label">Start & End Date</label>
+            <label class="col-form-label dark-label">Interviewing Start & End Date</label>
 
             <div class="flex gap-2 mt-2" style="display:flex; flex-wrap: nowrap; width:100%;">
 
@@ -284,7 +255,7 @@
                               dateFormat="yy-mm-dd"
                               [showTime]="false"
                               style="width:100%;"
-                              [minDate]="today"
+                              [minDate]="readonly || isEditMode ? null : today"
                               [disabled]="readonly"
                               #startDateCtrl="ngModel">
                 </p-datepicker>
@@ -332,21 +303,209 @@
             </p-toggleswitch>
           </div>
 
+          <!--<div class="col-2 form-group">
+            <label class="col-form-label dark-label">Interview Stages</label>
+            <br />
+            <button pButton
+                    type="button"
+                    label="{{isShowStages ?  'Hide Stages' : 'Show Stages'}}"
+                    icon="pi pi-sitemap"
+                    severity="secondary"
+                    (click)="showStagesPart()">
+            </button>
+          </div>
+          <div class="col-2 form-group">
+            <label class="col-form-label dark-label">Job Questions</label>
+            <br />
+            <button pButton
+                    type="button"
+                    label="{{isShowQuestions ?  'Hide Questions' :'Show Questions'}}"
+                    icon="pi pi-list"
+                    severity="secondary"
+                    (click)="showQuestionsPart()">
+            </button>
+          </div>-->
+
         </div>
       </div>
     </div>
-    <div class="section-card" *ngIf="readonly">
-      <h5>No questions added to this job.</h5>
-    </div>
 
-
-    <!--QUESTIONS-->
-    <div class="section-card" *ngIf="!readonly">
+    <!--HIRING STAGES-->
+    <div class="section-card" #stagesSection>
 
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h4 class="section-title">Job Questions</h4>
+        <h4 class="section-title clickable-header" (click)="isExtendStages = !isExtendStages">
+          Hiring Stages
+          <i class="pi" [ngClass]="isExtendStages ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+        </h4>
 
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;" *ngIf="job.hiringStages.length">
+          <h5 class="dark-label">Stages Count #</h5>
+          <input pInputText
+                 type="number"
+                 min="0"
+                 max="5"
+                 [(ngModel)]="stagesCount"
+                 (ngModelChange)="onStagesCountChange($event)"
+                 name="stagesCount"
+                 style="width: 80px; margin-bottom:10px;"
+                 [disabled]="readonly" />
+        </div>
+      </div>
+
+      <ng-container *ngIf="isExtendStages">
+        <div *ngFor="let stage of job.hiringStages; let i=index" class="question-card">
+          <div class="grid">
+            <div class="row col-12">
+
+              <!-- Stage Order -->
+              <div class="col-1 form-group">
+                <label class="col-form-label dark-label" style="color:#2196f3; font-size:16px; font-weight:bold;">
+                  Order #{{ i + 1 }}
+                </label>
+                <input pInputText
+                       type="number"
+                       [(ngModel)]="stage.stageOrder"
+                       name="stageOrder{{i}}"
+                       class="form-control"
+                       [disabled]="true" />
+              </div>
+
+              <!-- Stage Name -->
+              <div class="col-3 form-group">
+                <label class="col-form-label dark-label">Stage Name</label>
+                <input pInputText
+                       [(ngModel)]="stage.name"
+                       name="stageName{{i}}"
+                       class="form-control"
+                       placeholder="Enter stage name"
+                       required
+                       [disabled]="readonly || stage.isDisabled || job.hiringStages[i].stageOrder == 1" />
+              </div>
+
+              <!-- Stage Via -->
+              <div class="col-3 form-group">
+                <label class="col-form-label dark-label">Via </label><small> (optional)</small>
+                <!--<p-select [options]="via"
+                          optionLabel="name"
+                          optionValue="id"
+                          [(ngModel)]="stage.viaId"
+                          name="via{{i}}"
+                          placeholder="Select Via"
+                          class="w-100"
+                          #viaCtrl="ngModel"
+                          [disabled]="readonly || stage.isDisabled"
+                          (onChange)="onViaChange(i)"
+                          appendTo="body">
+                </p-select>-->
+
+                <p-select [options]="getViaOptions(i)"
+                          optionLabel="name"
+                          optionValue="id"
+                          [(ngModel)]="stage.viaId"
+                          name="via{{i}}"
+                          placeholder="Select Via"
+                          class="w-100"
+                          #viaCtrl="ngModel"
+                          [disabled]="readonly || stage.isDisabled || job.hiringStages[i].stageOrder == 1"
+                          (onChange)="onViaChange(i)"
+                          appendTo="body">
+                </p-select>
+
+              </div>
+
+              <!-- Create Template / Questions / Exam Buttons -->
+              <div class="col-2 form-group" *ngIf="stage.viaId">
+                <!--&& !stage.isDisabled-->
+                <label class="col-form-label dark-label">Create Template</label>
+                <br />
+                <button pButton
+                        type="button"
+                        label="Email Template"
+                        icon="pi pi-book"
+                        severity="secondary"
+                        (click)="openEmailDialog(i)">
+                </button>
+              </div>
+
+              <div class="col-2 form-group" *ngIf="(stage.viaId == 1 || stage.viaId == 2) && !stage.isDisabled && job.hiringStages[i].stageOrder != 1">
+                <label class="col-form-label dark-label">Create Questions</label>
+                <br />
+                <button pButton
+                        type="button"
+                        label="Interview Questions"
+                        icon="pi pi-question-circle"
+                        severity="secondary"
+                        (click)="openInterviewDialog(i)">
+                </button>
+              </div>
+
+              <div class="col-2 form-group" *ngIf="stage.viaId == 3 && !stage.isDisabled">
+                <label class="col-form-label dark-label">Create Exam</label>
+                <br />
+                <button pButton
+                        type="button"
+                        label="Exam Questions"
+                        icon="pi pi-question-circle"
+                        severity="secondary"
+                        (click)="openExamDialog(i)">
+                </button>
+              </div>
+
+              <!-- Delete Stage -->
+              <div class="col-1 form-group" *ngIf="!readonly && !stage.isDisabled && job.hiringStages[i].stageOrder != 1" style="display:flex; align-items:end;">
+                <p-button icon="pi pi-trash"
+                          severity="danger"
+                          [rounded]="true"
+                          (click)="removeStage(i)">
+                </p-button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;" *ngIf="job.hiringStages.length">
+          <h5 class="section-title">
+            Stages Count #{{job.hiringStages.length}}
+          </h5>
+
+          <div *ngIf="!readonly">
+            <button pButton
+                    type="button"
+                    icon="pi pi-plus"
+                    label="Add default Stages"
+                    severity="info"
+                    style="margin:2px;"
+                    [disabled]="isDefaultStagesAdded || isEditMode"
+                    (click)="createDefaultStages()">
+            </button>
+
+            <button pButton
+                    type="button"
+                    icon="pi pi-plus"
+                    label="Add Cutomized Stage"
+                    severity="info"
+                    style="margin:2px;"
+                    (click)="addStage()">
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+
+    <!--QUESTIONS-->
+    <div class="section-card" #questionsSection>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <!--<h4 class="section-title">Job Questions</h4>-->
+        <h4 class="section-title clickable-header" (click)="isExtendQuestions = !isExtendQuestions">
+          Job Questions
+          <i class="pi" [ngClass]="isExtendQuestions ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+        </h4>
+
+        <div style="display: flex; align-items: center; gap: 0.5rem;" *ngIf="job.questions.length">
           <h5 class="dark-label">Questions Count #</h5>
           <input pInputText
                  type="number"
@@ -358,188 +517,8 @@
                  style="width: 80px; margin-bottom:10px;"
                  [disabled]="readonly" />
         </div>
-      </div>
 
-      <div *ngFor="let question of job.questions; let i = index" class="question-card">
-
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <h5 style="color:#2196f3;">Question #{{ i + 1 }}</h5>
-
-          <ng-container *ngIf="!readonly">
-            <p-button icon="pi pi-trash"
-                      [rounded]="true"
-                      severity="danger"
-                      [outlined]="true"
-                      (click)="removeQuestion(i)">
-            </p-button>
-          </ng-container>
-        </div>
-
-        <div class="grid">
-          <div class="row col-12">
-
-            <div class="col-1 form-group">
-              <label class="col-form-label dark-label">Required</label>
-              <br />
-              <p-toggleswitch [(ngModel)]="question.isRequired"
-                              name="isRequired{{i}}"
-                              [disabled]="readonly">
-              </p-toggleswitch>
-            </div>
-
-            <div class="col-11 form-group">
-              <label class="col-form-label dark-label">Question Text</label>
-
-              <textarea pTextarea
-                        rows="3"
-                        class="form-control"
-                        [(ngModel)]="question.questionText"
-                        name="questionText{{i}}"
-                        placeholder="Enter Question Text"
-                        [disabled]="readonly"
-                        #questionTextCtrl="ngModel"
-                        required
-                        minlength="5"
-                        maxlength="500">
-              </textarea>
-              <div class="text-danger mt-1"
-                   *ngIf="questionTextCtrl.invalid && (questionTextCtrl.touched || f.submitted)">
-
-                <small *ngIf="questionTextCtrl.errors?.['required']">
-                  Question text is required.
-                </small>
-
-                <small *ngIf="questionTextCtrl.errors?.['minlength']">
-                  Minimum 5 characters required.
-                </small>
-
-                <small *ngIf="questionTextCtrl.errors?.['maxlength']">
-                  Maximum 500 characters allowed.
-                </small>
-
-              </div>
-
-            </div>
-
-            <div class="col-2 form-group">
-              <label class="col-form-label dark-label">Question Type</label>
-
-              <p-select [options]="questionTypes"
-                        optionLabel="label"
-                        optionValue="id"
-                        [(ngModel)]="question.questionTypeId"
-                        (onChange)="onQuestionTypeChange(i)"
-                        name="questionTypeId{{i}}"
-                        class="w-100"
-                        [disabled]="readonly">
-              </p-select>
-            </div>
-
-            <div class="col-1 form-group">
-              <label class="col-form-label dark-label">Score</label>
-
-              <input pInputText
-                     type="number"
-                     [(ngModel)]="question.score"
-                     name="score{{i}}"
-                     class="form-control"
-                     [disabled]="readonly" />
-            </div>
-
-            <div class="col-9 form-group">
-              <label class="col-form-label dark-label">Available Answers</label>
-
-              <div class="answers-row" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-
-                <ng-container *ngFor="let ans of question.availableAnswers; let j=index">
-
-                  <p-inputgroup>
-                    <ng-container>
-
-                      <p-button label="Preferred"
-                                severity="success"
-                                (click)="setPreferredAnswer(i, j)"
-                                *ngIf="!question.preferredAnswers?.includes(ans.id)"
-                                [disabled]="readonly">
-
-                      </p-button>
-
-                      <p-button label="Unpreferred"
-                                severity="secondary"
-                                (click)="setUnPreferredAnswer(i, j)"
-                                *ngIf="question.preferredAnswers?.includes(ans.id)"
-                                [disabled]="readonly">
-                      </p-button>
-
-                    </ng-container>
-
-                    <input pInputText
-                           [(ngModel)]="question.availableAnswers[j].text"
-                           name="answer_{{i}}_{{j}}"
-                           placeholder="Answer option"
-                           [disabled]="readonly"
-                           #answerCtrl="ngModel"
-                           required
-                           minlength="1"
-                           maxlength="100">
-
-                    <div *ngIf="!readonly">
-                      <p-button icon="pi pi-times"
-                                severity="danger"
-                                (click)="removeAnswer(i,j)">
-                      </p-button>
-                    </div>
-
-                  </p-inputgroup>
-
-                  <div class="text-danger mt-1"
-                       *ngIf="answerCtrl.invalid && (answerCtrl.touched || f.submitted)">
-
-                    <small *ngIf="answerCtrl.errors?.['required']">
-                      Answer is required.
-                    </small>
-
-                    <small *ngIf="answerCtrl.errors?.['minlength']">
-                      Minimum 1 characters required.
-                    </small>
-
-                    <small *ngIf="answerCtrl.errors?.['maxlength']">
-                      Maximum 100 characters allowed.
-                    </small>
-
-                  </div>
-
-                </ng-container>
-
-              </div>
-
-              <div *ngIf="!readonly">
-
-                <button pButton
-                        type="button"
-                        icon="pi pi-plus"
-                        label="Add Answer"
-                        severity="secondary"
-                        [disabled]="!question.questionTypeId || question.availableAnswers.length >= getMaxAnswers(question.questionTypeId)"
-                        (click)="addAnswer(i)">
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-
-        <h4 class="section-title">
-          Questions Count #{{job.questions.length}}
-        </h4>
-
-        <div *ngIf="!readonly">
+        <div *ngIf="!readonly && !job.questions.length">
           <button pButton
                   type="button"
                   icon="pi pi-plus"
@@ -548,13 +527,215 @@
                   (click)="addQuestion()">
           </button>
         </div>
-
       </div>
+      <ng-container *ngIf="isExtendQuestions">
+        <div *ngFor="let question of job.questions; let i = index" class="question-card">
+
+          <!--<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h5 style="color:#2196f3;">Question #{{ i + 1 }}</h5>
+
+            <ng-container *ngIf="!readonly">
+              <p-button icon="pi pi-trash"
+                        [rounded]="true"
+                        severity="danger"
+                        [outlined]="true"
+                        (click)="removeQuestion(i)">
+              </p-button>
+            </ng-container>
+          </div>-->
+
+          <div class="grid">
+            <div class="row col-12">
+
+              <div class="col-1 form-group">
+
+                <label class="col-form-label dark-label" style="color:#2196f3; font-size:16px; font-weight:bold;">
+                  Question #{{ i + 1 }}
+                </label>
+
+                <label class="col-form-label dark-label">Required</label>
+                <br />
+                <p-toggleswitch [(ngModel)]="question.isRequired"
+                                name="isRequired{{i}}"
+                                [disabled]="readonly">
+                </p-toggleswitch>
+              </div>
+
+              <div class="col-10 form-group">
+                <label class="col-form-label dark-label">Question Text</label>
+
+                <textarea pTextarea
+                          rows="3"
+                          class="form-control"
+                          [(ngModel)]="question.questionText"
+                          name="questionText{{i}}"
+                          placeholder="Enter Question Text"
+                          [disabled]="readonly"
+                          #questionTextCtrl="ngModel"
+                          required
+                          minlength="5"
+                          maxlength="500">
+              </textarea>
+                <div class="text-danger mt-1"
+                     *ngIf="questionTextCtrl.invalid && (questionTextCtrl.touched || f.submitted)">
+
+                  <small *ngIf="questionTextCtrl.errors?.['required']">
+                    Question text is required.
+                  </small>
+
+                  <small *ngIf="questionTextCtrl.errors?.['minlength']">
+                    Minimum 5 characters required.
+                  </small>
+
+                  <small *ngIf="questionTextCtrl.errors?.['maxlength']">
+                    Maximum 500 characters allowed.
+                  </small>
+
+                </div>
+
+              </div>
+
+              <div class="col-1 form-group" *ngIf="!readonly" style="display:flex; align-items:center;">
+
+                <p-button icon="pi pi-trash"
+                          [rounded]="true"
+                          severity="danger"
+                          (click)="removeQuestion(i)">
+                </p-button>
+              </div>
+
+              <div class="col-2 form-group">
+                <label class="col-form-label dark-label">Question Type</label>
+
+                <p-select [options]="questionTypes"
+                          optionLabel="label"
+                          optionValue="id"
+                          [(ngModel)]="question.questionTypeId"
+                          (onChange)="onQuestionTypeChange(i)"
+                          name="questionTypeId{{i}}"
+                          class="w-100"
+                          [disabled]="readonly"
+                          appendTo="body">
+                </p-select>
+              </div>
+
+              <div class="col-1 form-group">
+                <!--*ngIf="i >= countPersonalQuestions">-->
+                <label class="col-form-label dark-label">Score</label>
+
+                <input pInputText
+                       type="number"
+                       [(ngModel)]="question.score"
+                       name="score{{i}}"
+                       class="form-control"
+                       [disabled]="readonly" />
+              </div>
+
+              <div class="col-9 form-group">
+                <label class="col-form-label dark-label">Available Answers</label>
+
+                <div class="answers-row" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+
+                  <ng-container *ngFor="let ans of question.availableAnswers; let j=index">
+
+                    <p-inputgroup>
+                      <ng-container>
+
+                        <p-button label="Preferred"
+                                  severity="success"
+                                  (click)="setPreferredAnswer(i, j)"
+                                  *ngIf="!ans.isPreferredAnswer"
+                                  [disabled]="readonly">
+
+                        </p-button>
+
+                        <p-button label="Unpreferred"
+                                  severity="secondary"
+                                  (click)="setUnPreferredAnswer(i, j)"
+                                  *ngIf="ans.isPreferredAnswer"
+                                  [disabled]="readonly">
+                        </p-button>
+
+                      </ng-container>
+
+                      <input pInputText
+                             [(ngModel)]="question.availableAnswers[j].text"
+                             name="answer_{{i}}_{{j}}"
+                             placeholder="Answer option"
+                             [disabled]="readonly"
+                             #answerCtrl="ngModel"
+                             required
+                             minlength="1"
+                             maxlength="100">
+
+                      <div *ngIf="!readonly">
+                        <p-button icon="pi pi-times"
+                                  severity="danger"
+                                  (click)="removeAnswer(i,j)"
+                                  [disabled]="question.availableAnswers.length === 1">
+                        </p-button>
+                      </div>
+
+                    </p-inputgroup>
+
+                    <div class="text-danger mt-1"
+                         *ngIf="answerCtrl.invalid && (answerCtrl.touched || f.submitted)">
+
+                      <small *ngIf="answerCtrl.errors?.['required']">
+                        Answer is required.
+                      </small>
+
+                      <small *ngIf="answerCtrl.errors?.['minlength']">
+                        Minimum 1 characters required.
+                      </small>
+
+                      <small *ngIf="answerCtrl.errors?.['maxlength']">
+                        Maximum 100 characters allowed.
+                      </small>
+
+                    </div>
+
+                  </ng-container>
+
+                </div>
+
+                <div *ngIf="!readonly">
+
+                  <button pButton
+                          type="button"
+                          icon="pi pi-plus"
+                          label="Add Answer"
+                          severity="secondary"
+                          [disabled]="!question.questionTypeId || question.availableAnswers.length >= getMaxAnswers(question.questionTypeId)"
+                          (click)="addAnswer(i)">
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;" *ngIf="job.questions.length">
+          <h5 class="section-title">
+            Questions Count #{{job.questions.length}}
+          </h5>
+
+          <div *ngIf="!readonly">
+            <button pButton
+                    type="button"
+                    icon="pi pi-plus"
+                    label="Add Question"
+                    severity="info"
+                    (click)="addQuestion()">
+            </button>
+          </div>
+        </div>
+      </ng-container>
 
     </div>
+
     <!--FOOTER-->
     <div class="sticky-footer" *ngIf="!readonly">
-
       <button pButton
               type="button"
               label="Reset"
@@ -562,7 +743,6 @@
               severity="secondary"
               (click)="reset()">
       </button>
-
       <button pButton
               type="submit"
               label="Save Job"
@@ -570,16 +750,263 @@
               severity="info"
               [disabled]="f.invalid">
       </button>
-
     </div>
-
 
   </form>
 </div>
 
+<p-dialog header="Interview Email for Stage #{{stageIndex !== null ? stageIndex + 1 : ''}}"
+          [modal]="true"
+          [(visible)]="isEmailDialogVisiable"
+          (onHide)="clodeEmailDialog()"
+          [style]="{ width: '70rem' }"
+          [draggable]="false"
+          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
 
+  <div class="content-box">
+    <label class="col-form-label dark-label">Email Template</label>
+    <div class="card">
+      <p-editor [(ngModel)]="emailTemplate"
+                [readonly]="readonly"
+                [style]="{ height: '320px' }">
+      </p-editor>
+    </div>
 
+    <p-divider></p-divider>
 
+    <div style=" display: flex; justify-content: end; align-items: end;" *ngIf="!readonly">
+      <button pButton
+              type="button"
+              label="Cancel"
+              icon="pi pi-times"
+              severity="secondary"
+              (click)="clodeEmailDialog()">
+      </button>
 
+      <button pButton
+              type="button"
+              label="Save"
+              icon="pi pi-send"
+              severity="success"
+              (click)="saveEmailDialog()">
+      </button>
+    </div>
+  </div>
+</p-dialog>
 
+<p-dialog header="Interview Questions for {{StageTitle}} Stage #{{stageIndex !== null ? stageIndex + 1 : ''}}"
+          [modal]="true"
+          [(visible)]="isInterviewDialogVisible"
+          (onHide)="clodeInterviewDialog()"
+          [style]="{ width: '70rem' }"
+          [draggable]="false">
 
+  <div class="card" style="padding:2rem; margin:0.2rem;">
+    <div *ngFor="let q of interviewQuestions; let i = index" class="mb-3">
+      <div class="row col-12">
+        <div class="col-11 form-group">
+          <label class="col-form-label dark-label">Question #{{ i + 1 }}</label>
+          <input pInputText
+                 type="text"
+                 [(ngModel)]="q.questionText"
+                 name="interviewQuestion{{i}}"
+                 class="form-control"
+                 placeholder="Enter question"
+                 [disabled]="readonly" />
+        </div>
+        <div class="col-1 form-group" *ngIf="!readonly" style="display:flex; align-items:end;">
+          <p-button icon="pi pi-trash"
+                    [rounded]="true"
+                    severity="danger"
+                    (click)="removeInterviewQuestion(i)">
+          </p-button>
+        </div>
+        <div style="margin-top:5px;">
+          <p-rating [(ngModel)]="ratingValue" [readonly]="true"></p-rating>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!readonly">
+      <button pButton
+              type="button"
+              icon="pi pi-plus"
+              label="Add Question"
+              severity="secondary"
+              (click)="addInterviewQuestion()">
+      </button>
+    </ng-container>
+    <p-divider></p-divider>
+
+    <div style="display:flex; justify-content:end; gap:10px" *ngIf="!readonly">
+      <button pButton
+              type="button"
+              label="Cancel"
+              icon="pi pi-times"
+              severity="secondary"
+              (click)="clodeInterviewDialog()">
+      </button>
+      <button pButton
+              type="button"
+              label="Save"
+              icon="pi pi-check"
+              severity="success"
+              (click)="saveInterviewDialog()">
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Exam Questions for {{StageTitle}} Stage #{{stageIndex !== null ? stageIndex + 1 : ''}}"
+          [modal]="true"
+          [(visible)]="isExamDialogVisible"
+          (onHide)="closeExamDialog()"
+          [style]="{ width: '75rem' }"
+          [draggable]="false">
+
+  <div class="card" style="padding:2rem; margin:0.2rem;">
+    <div *ngFor="let q of examQuestions; let i = index" class="mb-4">
+      <div class="row col-12">
+        <!-- Question text -->
+        <div class="col-10 form-group">
+          <label class="col-form-label dark-label">Question #{{ i + 1 }}</label>
+
+          <textarea pTextarea
+                    rows="2"
+                    [(ngModel)]="q.questionText"
+                    name="examQuestionText{{i}}"
+                    class="form-control"
+                    placeholder="Enter exam question"
+                    [disabled]="readonly">
+          </textarea>
+        </div>
+
+        <!-- delete -->
+        <div class="col-2 form-group" style="display:flex; align-items:end;" *ngIf="!readonly">
+          <p-button icon="pi pi-trash"
+                    severity="danger"
+                    [rounded]="true"
+                    (click)="removeExamQuestion(i)">
+          </p-button>
+        </div>
+
+        <!-- Question type -->
+        <div class="col-3 form-group">
+          <label class="col-form-label dark-label">Question Type</label>
+
+          <p-select [options]="examQuestionTypes"
+                    optionLabel="label"
+                    optionValue="id"
+                    [(ngModel)]="q.questionTypeId"
+                    (onChange)="onExamTypeChange(i)"
+                    name="examType{{i}}"
+                    class="w-100"
+                    appendTo="body"
+                    [disabled]="readonly">
+          </p-select>
+        </div>
+
+        <!-- score -->
+        <div class="col-2 form-group">
+          <label class="col-form-label dark-label">Score</label>
+
+          <input pInputText
+                 type="number"
+                 [(ngModel)]="q.score"
+                 name="examScore{{i}}"
+                 class="form-control"
+                 [disabled]="readonly">
+
+        </div>
+
+        <!-- Answers -->
+        <div class="col-12 mt-3">
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <ng-container *ngFor="let ans of q.availableAnswers; let j=index">
+              <p-inputgroup>
+                <p-button label="Correct"
+                          severity="success"
+                          *ngIf="!ans.isPreferredAnswer"
+                          (click)="setExamPreferred(i,j)"
+                          [disabled]="readonly">
+                </p-button>
+
+                <p-button label="Wrong"
+                          severity="secondary"
+                          *ngIf="ans.isPreferredAnswer"
+                          (click)="setExamUnPreferred(i,j)"
+                          [disabled]="readonly">
+                </p-button>
+
+                <input pInputText
+                       [(ngModel)]="ans.text"
+                       name="examAnswer{{i}}{{j}}"
+                       placeholder="Answer option"
+                       [disabled]="readonly"
+                       required
+                       minlength="1"
+                       maxlength="100">
+
+                <div *ngIf="!readonly">
+                  <p-button icon="pi pi-times"
+                            severity="danger"
+                            (click)="removeExamAnswer(i,j)">
+                  </p-button>
+                </div>
+
+              </p-inputgroup>
+            </ng-container>
+          </div>
+
+          <!-- Add Answer -->
+          <div *ngIf="!readonly && q.questionTypeId !== 5 && q.availableAnswers.length < 4"
+               style="margin-top:10px">
+
+            <button pButton
+                    type="button"
+                    icon="pi pi-plus"
+                    label="Add Answer"
+                    severity="secondary"
+                    (click)="addExamAnswer(i)">
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+    </div>
+
+    <!-- Add Question -->
+    <button pButton
+            type="button"
+            icon="pi pi-plus"
+            label="Add Question"
+            severity="info"
+            *ngIf="!readonly"
+            (click)="addExamQuestion()">
+    </button>
+
+    <p-divider></p-divider>
+
+    <div style="display:flex; justify-content:end; gap:10px" *ngIf="!readonly">
+      <button pButton
+              type="button"
+              label="Cancel"
+              icon="pi pi-times"
+              severity="secondary"
+              (click)="closeExamDialog()">
+      </button>
+
+      <button pButton
+              type="button"
+              label="Save"
+              icon="pi pi-check"
+              severity="success"
+              (click)="saveExamDialog()">
+      </button>
+
+    </div>
+
+  </div>
+</p-dialog>

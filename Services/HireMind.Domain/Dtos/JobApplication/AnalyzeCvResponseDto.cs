@@ -2,10 +2,7 @@
 
 public class AnalyzeCvResponseDto
 {
+    public int AnalyzeCvId { get; set; }
     public AnalyzedCvDataDto AnalyzedCvData { get; set; } = new AnalyzedCvDataDto();
 }
 
-public class AnalyzedCvDataDto
-{
-    public Dictionary<string, object> Fields { get; set; } = new();
-}

@@ -55,6 +55,7 @@ export class TemplateTable {
 
   @Output() onEdit = new EventEmitter<any>();
   @Output() onApply = new EventEmitter<any>();
+  @Output() onManageApplications = new EventEmitter<any>();
   @Output() onExport = new EventEmitter<any>();
   @Output() onGeneratePdf = new EventEmitter<any>();
   @Output() onImport = new EventEmitter<any>();
@@ -133,6 +134,9 @@ export class TemplateTable {
           this.onDelete.emit(this.currentRowData.id);
         } else if (item.label === 'JobApplication') {   // ✅ FIX
           this.onApply.emit(this.currentRowData.id);
+        }
+        else if (item.label === 'ManageApplications') {   // ✅ FIX
+          this.onManageApplications.emit(this.currentRowData.id);
         }
         else if (item.label === 'PrintPDF') {
           this.onGeneratePdf.emit(this.currentRowData.id);

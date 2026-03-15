@@ -1,5 +1,5 @@
 ﻿namespace HireMind.Application.Queries.ManageJobs;
-public record GetJobByIdQuery(Guid Id) : IRequest<GetJobByIdResult>;
+public record GetJobByIdQuery(int Id) : IRequest<GetJobByIdResult>;
 public record GetJobByIdResult(GetJobResponseDto response);
 public class GetJobByIdHandlerValidator : AbstractValidator<GetJobByIdQuery>
 {

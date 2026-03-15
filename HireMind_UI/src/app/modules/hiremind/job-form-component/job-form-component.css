@@ -35,7 +35,7 @@
   background-color: #fefbfbd9;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
 .section-title {
@@ -75,4 +75,12 @@
 .answer-item {
   flex: 1 1 auto;  
   min-width: 150px;   
+}
+
+.clickable-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none; /* prevents text selection while clicking */
 }

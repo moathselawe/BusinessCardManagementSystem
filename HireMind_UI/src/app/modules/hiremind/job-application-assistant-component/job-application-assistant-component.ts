@@ -6,6 +6,8 @@ import { JobQuestion } from '../../../models/hiremind/JobQuestion';
 import { Job } from '../../../models/hiremind/Job';
 import { JobApplicationService } from '../../../services/hiremind/jobApplication.service';
 import { ManageJobsService } from '../../../services/hiremind/manageJobs.service';
+import { LookupItem } from '../../../models/hiremind/LookupItem';
+import { ManageLookupsService } from '../../../services/shared/managelookup.service';
 
 interface JobField {
   FieldName: string;
@@ -25,7 +27,6 @@ interface JobField {
 export class JobApplicationAssistantComponent implements OnInit {
 
   job: Job = new Job();
-
   questionsCount: number = 0;
   loading: boolean = false;
   isStartQuestions: boolean = false;
@@ -34,9 +35,15 @@ export class JobApplicationAssistantComponent implements OnInit {
   jobFields: any[] = [];
   showFields = false;
   cvUploaded: boolean = false;
+  analyzeCvId: any;
+  answers: any[] = [];
+  progressValue: number = 0;
+  isApplicantEmailFiled: boolean = false;
+  isSubmited: boolean = false;
   constructor(
     private service: JobApplicationService,
     public manageJobsService: ManageJobsService,
+    public serviceLookups: ManageLookupsService,
     private toastService: ToastMessageService,
     private route: ActivatedRoute,
     private router: Router,
@@ -57,9 +64,38 @@ export class JobApplicationAssistantComponent implements OnInit {
 
     this.JobQuestionType = JobQuestionType;
 
+    this.serviceLookups.getAllParentsAndChilds().subscribe({
+      next: (res: any) => {
+        const parents: any[] = res.response || [];
+
+        const mapChildren = (parentName: string): LookupItem[] => {
+          const parent = parents.find(p => p.categoryName?.toLowerCase() === parentName.toLowerCase());
+          return (parent?.children || []).map((c: any) => ({
+            id: c.id,
+            name: c.categoryName,
+            categoryName: c.categoryName,
+            parentId: c.parentId
+          }));
+        };
+
+        this.countryCodes = mapChildren('CountryCodes');
+
+        this.loading = false;
+      },
+      error: (err) => {
+        this.loading = false;
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Error',
+          messageBody: 'Failed to load lookups.'
+        });
+        console.error(err);
+      }
+    });
+
   }
 
-  loadJob(id: string) {
+  loadJob(id: any) {
     this.manageJobsService.GetById(id).subscribe({
       next: (res: any) => {
         const job = res.response;
@@ -69,22 +105,30 @@ export class JobApplicationAssistantComponent implements OnInit {
           title: job.title,
           description: job.description,
           locationId: job.locationId,
+          locationName: job.locationName,
           workPlaceId: job.workPlaceId,
+          workPlaceName: job.workPlaceName,               // correct
           organizationTypeId: job.organizationTypeId,
+          organizationTypeName: job.organizationTypenName, // note the "n" here
           contractTypeId: job.contractTypeId,
+          contractTypeName: job.contractTypeName,
           industrySectorId: job.industrySectorId,
+          industrySectorName: job.industrySectorName,
           jobTypeId: job.jobTypeId,
+          jobTypeName: job.jobTypeName,
           companyId: job.companyId,
           startDate: job.startDate ? new Date(job.startDate) : null,
           endDate: job.endDate ? new Date(job.endDate) : null,
           isActive: job.isActive,
+          hiringStages: (job.hiringStages || [])
+            .sort((a: any, b: any) => a.stageOrder - b.stageOrder),
+
           questions: (job.questions || []).map((q: any) => ({
             ...q,
             availableAnswers: q.availableAnswers || [],
             preferredAnswers: q.preferredAnswers || []
           }))
         };
-
         this.questionsCount = this.job.questions.length;
 
         this.loading = false;
@@ -121,6 +165,7 @@ export class JobApplicationAssistantComponent implements OnInit {
 
   cancel() {
     this.isStartQuestions = false;
+    this.isApplicantEmailFiled = false;
   }
 
   onUpload(event: any) {
@@ -131,13 +176,15 @@ export class JobApplicationAssistantComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('File', file);
-    formData.append('JobId', this.job.id);
+    formData.append('JobId', this.job.id.toString());
+    formData.append('EmailAddress', this.personalInfo.emailAddress);
 
     this.service.analyzeCv(formData).subscribe({
       next: (res: any) => {
 
         console.log("analyzeCv response", res);
 
+        this.analyzeCvId = res?.response?.analyzeCvId;
         const fields = res?.response?.analyzedCvData?.fields || {};
 
         Object.keys(fields).forEach(key => {
@@ -212,129 +259,31 @@ export class JobApplicationAssistantComponent implements OnInit {
         });
 
       },
-      //next: (res: any) => {
 
-      //  console.log("analyzeCv response", res);
-
-      //  const fields = res?.response?.analyzedCvData?.fields || {};
-
-      //  Object.keys(fields).forEach(key => {
-
-      //    const index = parseInt(key.replace('Q_', ''), 10);
-      //    const value = fields[key];
-
-      //    if (!isNaN(index)) {
-      //      this.answers[index] = value;
-      //    }
-
-      //  });
-
-      //  this.cvUploaded = true;
-
-      //  this.updateProgress();
-
-      //  this.loading = false;
-
-      //  this.toastService.showMessage({
-      //    messageType: 'success',
-      //    messageTitle: 'Success',
-      //    messageBody: 'CV analyzed and answers filled.'
-      //  });
-
-      //},
-
-      error: () => {
+      error: (err) => {
 
         this.loading = false;
+
+        const message = err?.error?.message || 'Failed to upload the CV.';
 
         this.toastService.showMessage({
           messageType: 'error',
           messageTitle: 'Error',
-          messageBody: 'Failed to upload the CV.'
+          messageBody: message
         });
-
       }
-
     });
-
   }
-
-  //onUpload(event: any) {
-  //  this.loading = true; // show loader
-
-  //  const file = event.files[0];
-  //  const formData = new FormData();
-  //  formData.append('File', file);
-  //  formData.append('JobId', this.job.id); // ضع الـ JobId المناسب
-
-  //  console.log("Sending formData", formData);
-
-  //  this.service.analyzeCv(formData).subscribe({
-  //    next: (res: any) => {
-  //      console.log("analyzeCv response", res);
-
-  //      // تحويل البيانات من API إلى jobFields
-  //      const fields = res?.analyzedCvData?.fields || {};
-  //      this.jobFields = Object.keys(fields).map(key => {
-  //        const value = fields[key];
-  //        let fieldType = 'text'; // افتراضياً نص
-
-  //        // تحديد نوع الحقل
-  //        if (Array.isArray(value)) {
-  //          fieldType = 'multiselect';
-  //        } else if (typeof value === 'string' && value.length > 100) {
-  //          fieldType = 'textarea';
-  //        } else {
-  //          fieldType = 'text';
-  //        }
-
-  //        return {
-  //          FieldName: key,
-  //          DisplayName: key,
-  //          FieldType: fieldType,
-  //          Value: value
-  //        };
-  //      });
-
-  //      //this.showFields = true;
-
-  //      this.cvUploaded = true;
-  //      this.updateProgress();
-
-  //      this.loading = false;
-
-
-  //      this.toastService.showMessage({
-  //        messageType: 'success',
-  //        messageTitle: 'Success',
-  //        messageBody: 'CV Uploaded Successfully.'
-  //      });
-  //    },
-  //    error: (err) => {
-  //      this.loading = false;
-
-  //      this.toastService.showMessage({
-  //        messageType: 'error',
-  //        messageTitle: 'Error',
-  //        messageBody: 'Failed to upload the CV.'
-  //      });
-  //    },
-  //  });
-  //}
 
   getMultiSelectOptions(values: string[] | undefined) {
     if (!values) return [];
     return values.map(v => ({ label: v, value: v }));
   }
 
-  answers: any[] = [];
-
   getAnswerOptions(question: JobQuestion): { label: string; value: string }[] {
     if (!question.availableAnswers) return [];
     return question.availableAnswers.map(a => ({ label: a.text, value: a.id }));
   }
-
-  progressValue: number = 0;
 
   updateProgress() {
 
@@ -384,5 +333,103 @@ export class JobApplicationAssistantComponent implements OnInit {
     }
 
     return 'open';
+  }
+
+  Next(form: any) {
+    if (this.personalInfo.emailAddress.trim() &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.personalInfo.emailAddress) &&
+      this.personalInfo.countryCodeId && this.personalInfo.mobileNumber.trim() &&
+      this.personalInfo.fullName.trim())
+
+      this.isApplicantEmailFiled = true;
+  }
+
+  personalInfo: {
+    fullName: string;
+    emailAddress: string;
+    mobileNumber: string;
+    countryCodeId: number | null;
+  } = {
+      fullName: '',
+      emailAddress: '',
+      mobileNumber: '',
+      countryCodeId: null
+    };
+
+
+  countryCodes: LookupItem[] = [];
+
+
+  submit() {
+    if (!this.job || !this.job.id) {
+      this.toastService.showMessage({
+        messageType: 'error',
+        messageTitle: 'Error',
+        messageBody: 'Job not loaded.'
+      });
+      return;
+    }
+
+    // Validate answers
+    const missingRequired = this.job.questions.some((q, i) => q.isRequired &&
+      (this.answers[i] === null || this.answers[i] === undefined || this.answers[i] === '' ||
+        (Array.isArray(this.answers[i]) && this.answers[i].length === 0))
+    );
+
+    if (missingRequired) {
+      this.toastService.showMessage({
+        messageType: 'error',
+        messageTitle: 'Validation Error',
+        messageBody: 'Please answer all required questions.'
+      });
+      return;
+    }
+
+    // Validate personal info
+    if (!this.personalInfo.fullName || !this.personalInfo.emailAddress || !this.personalInfo.mobileNumber || !this.personalInfo.countryCodeId) {
+      this.toastService.showMessage({
+        messageType: 'error',
+        messageTitle: 'Validation Error',
+        messageBody: 'Please fill all personal information fields.'
+      });
+      return;
+    }
+
+    this.loading = true;
+
+    const payload: any = {
+      JobId: this.job.id,
+      AnalyzeCvId: this.analyzeCvId || null,
+      Answers: {} as any,
+      PersonalInfo: this.personalInfo
+    };
+
+    this.job.questions.forEach((q, i) => {
+      payload.Answers[`Q_${i}`] = this.answers[i];
+    });
+
+    this.service.submitJobApplication(payload).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        this.isStartQuestions = false;
+        this.jobFields = [];
+        this.personalInfo = { fullName: '', emailAddress: '', mobileNumber: '', countryCodeId: null };
+        this.isApplicantEmailFiled = false;
+        this.isSubmited = true;
+        this.toastService.showMessage({
+          messageType: 'success',
+          messageTitle: 'Success',
+          messageBody: 'Job Application Submitted.'
+        });
+      },
+      error: () => {
+        this.loading = false;
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Error',
+          messageBody: 'Failed to Submit Your Job Application.'
+        });
+      }
+    });
   }
 }

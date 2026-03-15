@@ -1,5 +1,5 @@
 ﻿namespace HireMind.Application.Commands.Shared;
-public record DeleteLookupCommand(Guid Id) : IRequest<DeleteLookupResult>;
+public record DeleteLookupCommand(int Id) : IRequest<DeleteLookupResult>;
 public record DeleteLookupResult(bool IsSuccess);
 public class DeleteLookupHandlerValidator : AbstractValidator<DeleteLookupCommand>
 {

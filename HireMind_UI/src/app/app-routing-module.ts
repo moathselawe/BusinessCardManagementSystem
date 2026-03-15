@@ -39,6 +39,18 @@ const routes: Routes = [
       }
     ]
   },
+  {
+    path: '',
+    component: MainLayout,
+    children: [
+      {
+        path: 'Shared',
+        loadChildren: () =>
+          import('./modules/reusable/reusable-module')
+            .then(m => m.ReusableModule)
+      }
+    ]
+  },
   { path: '', redirectTo: 'BCMS/ManageBusinesscards', pathMatch: 'full' }
 ];
 

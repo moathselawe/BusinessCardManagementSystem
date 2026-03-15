@@ -1,0 +1,210 @@
+<!--<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;">Manage Lookups</h2>
+</div>
+
+<app-template-table [title]="'Lookups List'"
+                    [withoutImportAndExport]="true"
+                    [data]="data"
+                    [columns]="columns"
+                    [totalRecords]="totalCount"
+                    [actionsModel]="actionsModel"
+                    [isLoading]="isLoading"
+                    (onPreview)="preview($event)"
+                    (onEdit)="edit($event)"
+                    (onDelete)="openConfirmationDialog($event)"
+                    (onLazyLoad)="search($event)"
+                    (onToggleActive)="toggleActive($event)"
+                    (onAdd)="Add()"
+                    (onSearch)="searchFromTable($event)">
+</app-template-table>
+
+
+<p-dialog header="Confirm Delete" [(visible)]="visibleConfirmation" [modal]="true">
+  <p>Are you sure you want to delete this {{entityName}}?</p>
+  <div style=" display: flex; justify-content: end; align-items: end; gap: 0.2rem; margin-top:10px;">
+    <button pButton label="Yes" (click)="confirmDelete()" class="p-button-danger"></button>
+    <button pButton label="No" (click)="visibleConfirmation=false" class="p-button-secondary"></button>
+  </div>
+</p-dialog>
+
+<p-dialog header="{{ dialogMode === 'Add' ? 'Add Lookup' : dialogMode === 'Edit' ? 'Edit Lookup' : 'Preview Lookup' }}"
+          [modal]="true"
+          [(visible)]="visible"
+          (onHide)="onCloseDialog()"
+          [style]="{ width: '40rem', maxWidth: '95vw', height: 'auto', maxHeight: '90vh' }">
+
+  <form #f="ngForm" (ngSubmit)="submit()">
+    <div class="col-12 form-group">
+      <label class="col-form-label dark-label">Category</label>
+      <input id="category" type="text" pInputText class="form-control"
+             [(ngModel)]="entity.categoryName" minlength="1" maxlength="30" required [disabled]="dialogMode==='Preview'"
+             name="category"
+             #categoryCtrl="ngModel" />
+      <div class="text-danger mt-1" *ngIf="categoryCtrl.invalid && (categoryCtrl.touched || f.submitted)">
+        <small *ngIf="categoryCtrl.errors?.['required']">Category is required.</small>
+        <small *ngIf="categoryCtrl.errors?.['maxlength']">Max 30 characters allowed.</small>
+        <small *ngIf="categoryCtrl.errors?.['minlength']">Min 1 character required.</small>
+      </div>
+    </div>
+
+    <div class="col-12 form-group">
+      <label class="col-form-label dark-label">Child/Parent</label>
+      <p-select [options]="typeOptions"
+                [(ngModel)]="entity.type"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Type"
+                required
+                [appendTo]="'body'"
+                class="w-100"
+                name="type"
+                [disabled]="dialogMode==='Preview'"
+                #typeOptionsCtrl="ngModel">
+      </p-select>
+      <div class="text-danger mt-1" *ngIf="typeOptionsCtrl.invalid && (typeOptionsCtrl.touched || f.submitted)">
+        <small *ngIf="typeOptionsCtrl.errors?.['required']">Child/Parent is required.</small>
+      </div>
+    </div>
+
+    <div class="col-12 form-group" *ngIf="entity.type === 'Child'">
+      <label class="col-form-label dark-label">Parent Lookup</label>
+      <p-select [options]="lookupOptions"
+                [(ngModel)]="entity.parentId"
+                optionLabel="categoryName"
+                optionValue="id"
+                placeholder="Select Parent"
+                [appendTo]="'body'"
+                required
+                class="w-100"
+                name="parent"
+                [disabled]="dialogMode==='Preview'"
+                #lookupOptionsCtrl="ngModel">
+      </p-select>
+      <div class="text-danger mt-1" *ngIf="lookupOptionsCtrl.invalid && (lookupOptionsCtrl.touched || f.submitted)">
+        <small *ngIf="lookupOptionsCtrl.errors?.['required']">Parent Lookup is required.</small>
+      </div>
+    </div>-->
+<!--</div>-->
+<!--<div style=" display: flex; justify-content: end; align-items: end; gap: 0.2rem; margin-top:10px;">
+      <button pButton
+              type="button"
+              label="Cancel"
+              severity="secondary"
+              (click)="onCloseDialog()">
+      </button>
+
+      <button pButton
+              type="submit"
+              label="{{ entity.id ? 'Update' : 'Create' }}"
+              icon="pi pi-check"
+              severity="info"
+              [disabled]="f.invalid">
+      </button>
+    </div>
+
+  </form>
+</p-dialog>-->
+
+
+<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;">Manage Lookups</h2>
+</div>
+
+<app-template-table [title]="'Lookups List'"
+                    [withoutImportAndExport]="true"
+                    [data]="data"
+                    [columns]="columns"
+                    [totalRecords]="totalCount"
+                    [actionsModel]="actionsModel"
+                    [isLoading]="isLoading"
+                    (onPreview)="preview($event)"
+                    (onEdit)="edit($event)"
+                    (onDelete)="openConfirmationDialog($event)"
+                    (onLazyLoad)="search($event)"
+                    (onToggleActive)="toggleActive($event)"
+                    (onAdd)="Add()"
+                    (onSearch)="searchFromTable($event)">
+</app-template-table>
+
+<!-- Confirm Delete Dialog -->
+<p-dialog header="Confirm Delete" [(visible)]="visibleConfirmation" [modal]="true">
+  <p>Are you sure you want to delete this {{entityName}}?</p>
+  <div class="dialog-buttons">
+    <button pButton label="Yes" (click)="confirmDelete()" class="p-button-danger"></button>
+    <button pButton label="No" (click)="visibleConfirmation=false" class="p-button-secondary"></button>
+  </div>
+</p-dialog>
+
+<!-- Add/Edit/Preview Lookup Dialog -->
+<p-dialog header="{{ dialogMode === 'Add' ? 'Add Lookup' : dialogMode === 'Edit' ? 'Edit Lookup' : 'Preview Lookup' }}"
+          [(visible)]="visible"
+          [modal]="true"
+          (onHide)="onCloseDialog()"
+          [style]="{ width: '40rem', maxWidth: '95vw', height: 'auto', maxHeight: '90vh' }">
+
+  <form #f="ngForm" (ngSubmit)="submit()">
+
+    <!-- Category Name -->
+    <div class="col-12 form-group">
+      <label class="col-form-label dark-label">Category</label>
+      <input id="category" type="text" pInputText class="form-control"
+             [(ngModel)]="entity.categoryName"
+             minlength="1" maxlength="30" required
+             name="category"
+             [disabled]="dialogMode==='Preview'"
+             #categoryCtrl="ngModel" />
+      <div class="text-danger mt-1" *ngIf="categoryCtrl.invalid && (categoryCtrl.touched || f.submitted)">
+        <small *ngIf="categoryCtrl.errors?.['required']">Category is required.</small>
+        <small *ngIf="categoryCtrl.errors?.['maxlength']">Max 30 characters allowed.</small>
+        <small *ngIf="categoryCtrl.errors?.['minlength']">Min 1 character required.</small>
+      </div>
+    </div>
+
+    <!-- Child/Parent Selection -->
+    <div class="col-12 form-group">
+      <label class="col-form-label dark-label">Child/Parent</label>
+      <p-select [options]="typeOptions"
+                [(ngModel)]="entity.type"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Type"
+                required
+                [appendTo]="'body'"
+                class="w-100"
+                name="type"
+                [disabled]="dialogMode==='Preview'"
+                #typeOptionsCtrl="ngModel">
+      </p-select>
+      <div class="text-danger mt-1" *ngIf="typeOptionsCtrl.invalid && (typeOptionsCtrl.touched || f.submitted)">
+        <small *ngIf="typeOptionsCtrl.errors?.['required']">Child/Parent is required.</small>
+      </div>
+    </div>
+
+    <!-- Parent Lookup Dropdown (only if Child) -->
+    <div class="col-12 form-group" *ngIf="entity.type === 'Child'">
+      <label class="col-form-label dark-label">Parent Lookup</label>
+      <p-select [options]="lookupOptions"
+                [(ngModel)]="entity.parentId"
+                optionLabel="categoryName"
+                optionValue="id"
+                placeholder="Select Parent"
+                required
+                [appendTo]="'body'"
+                class="w-100"
+                name="parent"
+                [disabled]="dialogMode==='Preview'"
+                #lookupOptionsCtrl="ngModel">
+      </p-select>
+      <div class="text-danger mt-1" *ngIf="lookupOptionsCtrl.invalid && (lookupOptionsCtrl.touched || f.submitted)">
+        <small *ngIf="lookupOptionsCtrl.errors?.['required']">Parent Lookup is required.</small>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="dialog-buttons">
+      <button pButton type="button" label="Cancel" severity="secondary" (click)="onCloseDialog()"></button>
+      <button pButton type="submit" label="{{ entity.id ? 'Update' : 'Create' }}" icon="pi pi-check" severity="info" [disabled]="f.invalid"></button>
+    </div>
+
+  </form>
+</p-dialog>

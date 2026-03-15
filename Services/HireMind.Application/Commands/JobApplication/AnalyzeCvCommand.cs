@@ -1,4 +1,6 @@
-﻿namespace HireMind.Application.Commands.JobApplication;
+﻿using HireMind.Domain.SeedWork;
+
+namespace HireMind.Application.Commands.JobApplication;
 public record AnalyzeCvCommand(AnalyzeCvRequestDto request) : IRequest<AnalyzeCvResult>;
 public record AnalyzeCvResult(AnalyzeCvResponseDto response);
 
@@ -14,18 +16,42 @@ public class AnalyzeCvValidator : AbstractValidator<AnalyzeCvCommand>
 public class AnalyzeCvHandler : IRequestHandler<AnalyzeCvCommand, AnalyzeCvResult>
 {
     private readonly IAnalyzeCvService _analyzeCvService;
+    private readonly IJobApplicationRepository _jobApplicantRepository;
+    private readonly IAnalyzeCvRepository analyzeCvRepository;
     private readonly IJobRepository _jobRepository;
+    private readonly string _cvDB;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AnalyzeCvHandler(IAnalyzeCvService analyzeCvService, IJobRepository jobRepository)
+    public AnalyzeCvHandler(
+        IAnalyzeCvService analyzeCvService,
+        IJobApplicationRepository repository,
+        IJobRepository jobRepository,
+        IAnalyzeCvRepository analyzeCvRepository,
+        IConfiguration configuration,
+        IUnitOfWork unitOfWork)
     {
         _analyzeCvService = analyzeCvService;
+        _jobApplicantRepository = repository;
         _jobRepository = jobRepository;
+        this.analyzeCvRepository = analyzeCvRepository;
+        _cvDB = configuration["Files:CVDB"];
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<AnalyzeCvResult> Handle(
         AnalyzeCvCommand command,
         CancellationToken cancellationToken)
     {
+
+        // check if fully applied
+        var isAlreadyApplied = await _jobApplicantRepository
+            .CheckApplicationByEmailAndJobId(command.request.EmailAddress, command.request.JobId, cancellationToken);
+
+        if (isAlreadyApplied)
+            throw new Exception("You have already applied to this position.");
+
+        (bool isUpdateProcess, string fullPath) = await SaveCV(command, cancellationToken);
+
         var job = await _jobRepository.GetByIdAsync(
             command.request.JobId,
             cancellationToken);
@@ -38,54 +64,93 @@ public class AnalyzeCvHandler : IRequestHandler<AnalyzeCvCommand, AnalyzeCvResul
             job,
             cancellationToken);
 
+        var analyzeCvId = 0;
+        AnalyzeCv existingAnalyzedCv = new AnalyzeCv();
+
+        if (!isUpdateProcess)
+        {
+            var entity = AnalyzeCv.Create(
+                command.request.JobId,
+                fullPath,
+                analyzedData.CvText,
+                analyzedData.AiScore,
+                JsonSerializer.Serialize(analyzedData.Fields),
+                false,
+                command.request.EmailAddress
+            );
+
+            analyzeCvId = await analyzeCvRepository.AddAsync(entity, cancellationToken);
+        }
+        else
+        {
+            existingAnalyzedCv = await analyzeCvRepository
+               .GetAnalyzedCvAsync(command.request.EmailAddress, job.Id, cancellationToken);
+
+            existingAnalyzedCv = AnalyzeCv.Update(
+                existingAnalyzedCv.Id,
+                command.request.JobId,
+                fullPath,
+                analyzedData.CvText,
+                analyzedData.AiScore,
+                JsonSerializer.Serialize(analyzedData.Fields),
+                false,
+                command.request.EmailAddress
+            );
+
+            await analyzeCvRepository.UpdateAsync(existingAnalyzedCv, false, cancellationToken);
+        }
+
+        await _unitOfWork.SaveWorkAsync(cancellationToken);
+
+        analyzedData.AiScore = 0;
+
         var response = new AnalyzeCvResponseDto
         {
+            AnalyzeCvId = isUpdateProcess ? existingAnalyzedCv.Id : analyzeCvId,
             AnalyzedCvData = analyzedData
         };
 
         return new AnalyzeCvResult(response);
     }
+
+    private async Task<(bool isUpdateProcess, string fullPath)> SaveCV(AnalyzeCvCommand command, CancellationToken cancellationToken)
+    {
+        var isUpdateProcess = false;
+
+        // make email safe
+        var safeEmail = command.request.EmailAddress
+                            .Replace("@", "_")
+                            .Replace(".", "_");
+
+        // delete old CVs if exist in _cvDB
+        var searchPattern = $"{safeEmail}_{command.request.JobId}_*.*";
+        var existingFiles = Directory.GetFiles(_cvDB, searchPattern);
+
+        if (existingFiles.Length > 0)
+        {
+            isUpdateProcess = true;
+            foreach (var oldFile in existingFiles)
+            {
+                File.Delete(oldFile);
+            }
+        }
+
+        // ensure CV folder exists
+        if (!Directory.Exists(_cvDB))
+            Directory.CreateDirectory(_cvDB);
+
+        // save new CV
+        var file = command.request.File;
+        var extension = Path.GetExtension(file.FileName);
+        var fileName = $"{safeEmail}_{command.request.JobId}_{Guid.NewGuid()}{extension}";
+        var fullPath = Path.Combine(_cvDB, fileName);
+
+        using (var stream = new FileStream(fullPath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream, cancellationToken);
+        }
+
+        return (isUpdateProcess, fullPath);
+    }
 }
 
-
-
-//        //// 1️ Get job fields
-//        //var jobFields = await _jobRepository.GetJobFieldsAsync(command.JobId, cancellationToken);
-//        // Test data instead of fetching from DB
-//        var jobFields = new List<JobFieldDto>
-//        {
-//            new JobFieldDto { FieldName = "FullName", DisplayName = "Full Name", IsRequired = true, FieldType = "string" },
-//            new JobFieldDto { FieldName = "Email", DisplayName = "Email Address", IsRequired = true, FieldType = "string" },
-//            new JobFieldDto { FieldName = "Phone", DisplayName = "Phone Number", IsRequired = false, FieldType = "string" },
-//            new JobFieldDto { FieldName = "Skills", DisplayName = "Skills", IsRequired = false, FieldType = "list" }
-//        };
-
-//        // 2️ Analyze CV using AI
-//        var analyzedCvData = await _analyzeCvService.GetAnalyzedCvAsync(command.file, jobFields, cancellationToken);
-
-//        // 3️ Save analyzed data in DB
-//        //var analyzedCvId = await _analyzeCvRepository.AddAsync(analyzedCvData, cancellationToken);
-
-//        //// 4️ Save CV file
-//        //var fileId = await _fileRepository.AddAsync(command.file, cancellationToken);
-
-//        //// 5️ Create draft application
-//        //var draftApplicationId = await _draftJobApplicationRepository.CreateNewApplicationAsync(
-//        //    jobId: command.JobId,
-//        //    fileId: fileId,
-//        //    analyzedCvId: analyzedCvId,
-//        //    cancellationToken: cancellationToken
-//        //);
-
-//        //// 6️ Commit all changes 
-//        //await _unitOfWork.SaveWorkAsync(cancellationToken);
-
-//        // 7️ Return response to UI
-//        var response = new AnalyzeCvResponseDto
-//        {
-//            //DraftApplicationId = draftApplicationId,
-//            //FileId = fileId,
-//            AnalyzedCvData = analyzedCvData
-//        };
-
-//        return new AnalyzeCvResult(response);

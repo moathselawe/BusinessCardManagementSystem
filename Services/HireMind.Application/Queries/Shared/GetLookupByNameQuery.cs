@@ -1,6 +1,6 @@
 ﻿namespace HireMind.Application.Queries.Shared;
 public record GetLookupByNameQuery(string CategoryName) : IRequest<GetLookupByNameResult>;
-public record GetLookupByNameResult(List<GetLookupByNameDto> Response);
+public record GetLookupByNameResult(List<GetLookupDto> Response);
 
 internal class GetLookupByNameHandler : IRequestHandler<GetLookupByNameQuery, GetLookupByNameResult>
 {

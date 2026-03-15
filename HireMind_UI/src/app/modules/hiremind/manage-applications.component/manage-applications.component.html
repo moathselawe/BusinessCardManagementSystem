@@ -1,0 +1,86 @@
+<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;">Manage Applications</h2>
+</div>
+
+<div class="card mt-3">
+
+  <p-table [value]="applications"
+           [paginator]="true"
+           [rows]="10"
+           [loading]="loading"
+           responsiveLayout="scroll"
+           styleClass="p-datatable-striped">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="fullName">
+          Name
+          <p-sortIcon field="fullName"></p-sortIcon>
+        </th>
+
+        <th>Email</th>
+
+        <th>Mobile</th>
+
+        <th pSortableColumn="systemScore">
+          System Score
+          <p-sortIcon field="systemScore"></p-sortIcon>
+        </th>
+
+        <th>Total Score</th>
+
+        <th>Stage</th>
+
+        <th>Status</th>
+
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-app>
+      <tr>
+
+        <td>{{ app.fullName }}</td>
+
+        <td>{{ app.email }}</td>
+
+        <td>
+          {{ app.countryCode }} {{ app.mobileNumber }}
+        </td>
+
+        <td>
+          <span class="score-badge">
+            {{ app.systemScore }}
+          </span>
+        </td>
+
+        <td>
+          {{ app.totalScore }}
+        </td>
+
+        <td>
+          {{ app.currentStageName }}
+        </td>
+
+        <td>
+          <span class="status-badge">
+            {{ app.status }}
+          </span>
+        </td>
+
+        <td>
+
+          <button pButton
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info p-button-sm"
+                  title="View Application">
+          </button>
+
+        </td>
+
+      </tr>
+    </ng-template>
+
+  </p-table>
+
+</div>

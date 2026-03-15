@@ -17,7 +17,7 @@ public class BusinessCardRepository : BaseRepository<BusinessCard>, IBusinessCar
             .FirstOrDefaultAsync(b => b.Email == email && b.IsDeleted == false, cancellationToken);
     }
 
-    public Task<Guid> AddAsync(BusinessCard businessCard, CancellationToken cancellationToken)
+    public Task<int> AddAsync(BusinessCard businessCard, CancellationToken cancellationToken)
     {
         Add(businessCard); 
         return Task.FromResult(businessCard.Id); 
@@ -29,7 +29,7 @@ public class BusinessCardRepository : BaseRepository<BusinessCard>, IBusinessCar
         return Task.FromResult(businessCards.Count);
     }
 
-    public async Task<BusinessCard?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<BusinessCard?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await GetByIdQuery(id).FirstOrDefaultAsync(cancellationToken);
     }
@@ -45,7 +45,7 @@ public class BusinessCardRepository : BaseRepository<BusinessCard>, IBusinessCar
         return true; 
     }
 
-    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
     {
         var entity = await GetByIdQuery(id).FirstOrDefaultAsync(cancellationToken);
         if (entity == null) return false;
@@ -54,7 +54,7 @@ public class BusinessCardRepository : BaseRepository<BusinessCard>, IBusinessCar
         return true;
     }
 
-    public async Task<List<BusinessCard>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
+    public async Task<List<BusinessCard>> GetByIdsAsync(List<int> ids, CancellationToken cancellationToken)
     {
         return await GetQuery()
             .Where(c => ids.Contains(c.Id))

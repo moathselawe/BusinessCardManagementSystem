@@ -1,5 +1,5 @@
 ﻿namespace HireMind.Application.Commands.ManageJobs;
-public record DeleteJobCommand(Guid Id) : IRequest<DeleteJobResult>;
+public record DeleteJobCommand(int Id) : IRequest<DeleteJobResult>;
 public record DeleteJobResult(bool IsSuccess);
 public class DeleteJobHandlerValidator : AbstractValidator<DeleteJobCommand>
 {

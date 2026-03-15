@@ -75,7 +75,7 @@ export class CreateBusinesscardsComponent {
     this.selectedCardIndex = index;
   }
 
-  loadCard(id: string) {
+  loadCard(id: any) {
     this.isLoadingEditPage = true;
 
     this.service.GetById(id).subscribe({

@@ -6,15 +6,23 @@ public class JobRepository : BaseRepository<Job>, IJobRepository
 {
     public JobRepository(ApplicationDbContext dbContext) : base(dbContext) { }
 
-    public Task<Guid> AddAsync(Job job, CancellationToken cancellationToken)
+    public Task<int> AddAsync(Job job, CancellationToken cancellationToken)
     {
         Add(job);
         return Task.FromResult(job.Id);
     }
 
-    public async Task<Job?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Job?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await GetByIdQuery(id).FirstOrDefaultAsync(cancellationToken);
+        return await GetByIdQuery(id)
+            .Include(x => x.Location)
+            .Include(x => x.JobType)
+            .Include(x => x.WorkPlace)
+            .Include(x => x.ContractType)
+            .Include(x => x.OrganizationType)
+            .Include(x => x.IndustrySector)
+            .Include(x => x.HiringStages.OrderBy(s => s.StageOrder))
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<bool> UpdateAsync(Job job, bool ActivationOnly = false, CancellationToken cancellationToken = default)
@@ -49,10 +57,10 @@ public class JobRepository : BaseRepository<Job>, IJobRepository
                 .Select(a => new AnswerOption
                 {
                     Id = a.Id,
-                    Text = a.Text
+                    Text = a.Text,
+                    IsPreferredAnswer = a.IsPreferredAnswer
                 })
                 .ToList() ?? new List<AnswerOption>(),
-                PreferredAnswerId = q.PreferredAnswerId,
                 Score = q.Score
             })
             );
@@ -70,7 +78,7 @@ public class JobRepository : BaseRepository<Job>, IJobRepository
         return true;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
     {
         var entity = await GetByIdQuery(id).FirstOrDefaultAsync(cancellationToken);
         if (entity == null) return false;
@@ -80,8 +88,8 @@ public class JobRepository : BaseRepository<Job>, IJobRepository
     }
 
     public async Task<SearchFiltersRsDto<GetJobResponseDto>> SearchAsync(
-        SearchFiltersRqDto filters,
-        CancellationToken cancellationToken)
+    SearchFiltersRqDto filters,
+    CancellationToken cancellationToken)
     {
         filters ??= new SearchFiltersRqDto(null);
 
@@ -90,7 +98,13 @@ public class JobRepository : BaseRepository<Job>, IJobRepository
         string sortBy = string.IsNullOrWhiteSpace(filters.SortBy) ? "CreatedDate" : filters.SortBy;
         string orderBy = string.IsNullOrWhiteSpace(filters.OrderBy) ? "desc" : filters.OrderBy;
 
-        var query = GetQuery();
+        IQueryable<Job> query = GetQuery()
+            .Include(x => x.Location)
+            .Include(x => x.JobType)
+            .Include(x => x.WorkPlace)
+            .Include(x => x.ContractType)
+            .Include(x => x.OrganizationType)
+            .Include(x => x.IndustrySector);
 
         if (!string.IsNullOrWhiteSpace(filters.SearchTerm))
         {
@@ -105,17 +119,23 @@ public class JobRepository : BaseRepository<Job>, IJobRepository
         if (filters.DateSearch.HasValue)
         {
             var date = filters.DateSearch.Value.Date;
-            query = query.Where(job => job.CreatedDate.Date == date);
+
+            query = query.Where(job =>
+                job.CreatedDate.Date == date
+            );
         }
 
         query = (sortBy, orderBy.ToLower()) switch
         {
             ("CreatedDate", "desc") => query.OrderByDescending(x => x.CreatedDate),
             ("CreatedDate", "asc") => query.OrderBy(x => x.CreatedDate),
+
             ("Title", "desc") => query.OrderByDescending(x => x.Title),
             ("Title", "asc") => query.OrderBy(x => x.Title),
+
             ("StartDate", "desc") => query.OrderByDescending(x => x.StartDate),
             ("StartDate", "asc") => query.OrderBy(x => x.StartDate),
+
             _ => query.OrderByDescending(x => x.CreatedDate)
         };
 
@@ -129,12 +149,18 @@ public class JobRepository : BaseRepository<Job>, IJobRepository
                 Id = job.Id,
                 Title = job.Title,
                 Description = job.Description,
+
                 LocationId = job.LocationId,
+                LocationName = job.Location.CategoryName,
+
                 JobTypeId = job.JobTypeId,
+                JobTypeName = job.JobType.CategoryName,
+
                 CompanyId = job.CompanyId,
+
                 StartDate = job.StartDate,
                 EndDate = job.EndDate,
-                IsActive = job.IsActive,
+                IsActive = job.IsActive
             })
             .ToListAsync(cancellationToken);
 

@@ -7,7 +7,7 @@ public interface IRepository : IDisposable, IAsyncDisposable
 
 public interface IRepository<TEntity> : IRepository where TEntity : class
 {
-    IQueryable<TEntity> GetByIdQuery(Guid id, bool excludeDeleted = true, bool asNoTracking = true);
+    IQueryable<TEntity> GetByIdQuery(int id, bool excludeDeleted = true, bool asNoTracking = true);
     IQueryable<TEntity> GetQuery(bool excludeDeleted = true, bool asNoTracking = true);
     void Add(TEntity entity);
     void AddMany(IEnumerable<TEntity> entities);

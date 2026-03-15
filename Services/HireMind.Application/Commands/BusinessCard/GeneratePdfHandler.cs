@@ -5,7 +5,7 @@ using PuppeteerSharp.Media;
 
 namespace HireMind.Application.Commands.BusinessCard;
 
-public record GeneratePdfCommand(Guid Id) : IRequest<GeneratePdfResult>;
+public record GeneratePdfCommand(int Id) : IRequest<GeneratePdfResult>;
 public record GeneratePdfResult(byte[] FileBytes, string FileName);
 public class GeneratePdfHandlerValidator : AbstractValidator<GeneratePdfCommand>
 {

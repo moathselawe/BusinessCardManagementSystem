@@ -13,6 +13,10 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { SkeletonModule } from 'primeng/skeleton';
 import { EditorModule } from 'primeng/editor';
+import { AccordionModule } from 'primeng/accordion';
+import { DialogModule } from 'primeng/dialog';
+import { DividerModule } from 'primeng/divider';
+import { RatingModule } from 'primeng/rating';
 
 @NgModule({
   declarations: [JobFormComponent],
@@ -30,7 +34,11 @@ import { EditorModule } from 'primeng/editor';
     InputGroupAddonModule,
     EditorModule,
     ReactiveFormsModule,
-    SkeletonModule
+    SkeletonModule,
+    AccordionModule,
+    DialogModule,
+    DividerModule,
+    RatingModule
   ]
 })
 export class JobFormModule { }

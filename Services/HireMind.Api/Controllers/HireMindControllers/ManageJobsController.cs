@@ -1,6 +1,4 @@
-﻿using HireMind.Domain.Dtos.SharedDtos;
-
-namespace HireMind.Api.Controllers.HireMindControllers;
+﻿namespace HireMind.Api.Controllers.HireMindControllers;
 
 public class ManageJobsController : ApiBaseController
 {
@@ -18,7 +16,7 @@ public class ManageJobsController : ApiBaseController
     }
 
     [HttpGet("get/{id}")]
-    public async Task<GetJobByIdResult> GetJobById(Guid id)
+    public async Task<GetJobByIdResult> GetJobById(int id)
     {
         var result = await _sender.Send(new GetJobByIdQuery(id));
 
@@ -55,7 +53,7 @@ public class ManageJobsController : ApiBaseController
     }
 
     [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(int id)
     {
         var result = await _sender.Send(new DeleteJobCommand(id));
 

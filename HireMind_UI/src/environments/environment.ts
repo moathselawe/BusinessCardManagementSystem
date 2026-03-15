@@ -6,5 +6,7 @@ export const endpoints = {
   businesscards: 'BusinessCards/',
   AI: 'AI/',
   JobApplication:'JobApplication/',
-  ManageJobs:'ManageJobs/'
+  ManageJobs:'ManageJobs/',
+  ManageLooks:'LookUps/',
+  Lookups:'LookUps/'
 }

@@ -1,5 +1,5 @@
 export class BusinessCard {
-  id!: string;
+  id!: number;
   arabicName!: string;
   englishName!: string;
   dateOfBirth!: Date;

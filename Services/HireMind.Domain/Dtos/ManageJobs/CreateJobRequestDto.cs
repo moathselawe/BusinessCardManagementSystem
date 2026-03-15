@@ -14,4 +14,8 @@ public class CreateJobRequestDto
     public DateTime? EndDate { get; set; }
     public bool IsActive { get; set; } = true;
     public List<JobQuestionDto> Questions { get; set; } = new List<JobQuestionDto>();
+
+    //new
+    public List<CreateHiringStageDto>? HiringStages { get; set; }
+
 }

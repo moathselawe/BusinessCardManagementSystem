@@ -1,7 +1,7 @@
 ﻿using HireMind.Domain.Dtos.BusinessCard;
 
 namespace HireMind.Application.Queries.BusinessCard;
-public record GetBusinessCardByIdQuery(Guid Id) : IRequest<GetBusinessCardByIdResult>;
+public record GetBusinessCardByIdQuery(int Id) : IRequest<GetBusinessCardByIdResult>;
 public record GetBusinessCardByIdResult(BusinessCardDto response);
 public class GetBusinessCardByIdHandlerValidator : AbstractValidator<GetBusinessCardByIdQuery>
 {

@@ -1,7 +1,7 @@
 ﻿namespace HireMind.Application.Commands.Shared;
 
 public record CreateLookupCommand(CreateLookUpDto command) : IRequest<CreateLookupResult>;
-public record CreateLookupResult(Guid Id);
+public record CreateLookupResult(int Id);
 
 internal class CreateLookupHandler : IRequestHandler<CreateLookupCommand, CreateLookupResult>
 {
@@ -22,6 +22,7 @@ internal class CreateLookupHandler : IRequestHandler<CreateLookupCommand, Create
         );
 
         var lookupId = await _lookupRepository.AddAsync(lookup, cancellationToken);
+        await _unitOfWork.SaveWorkAsync(cancellationToken);
 
         return new CreateLookupResult(lookupId);
     }

@@ -66,8 +66,8 @@ public abstract class BaseRepository<TEntity> : BaseRepository where TEntity : c
         return query;
     }
 
-    public virtual IQueryable<TEntity> GetByIdQuery(Guid id, bool excludeDeleted = true, bool asNoTracking = true)
-        => GetQuery(excludeDeleted, asNoTracking).Where(x => (x as BaseEntity)!.Id == id);
+    public virtual IQueryable<TEntity> GetByIdQuery(int id, bool excludeDeleted = true, bool asNoTracking = true)
+        => GetQuery(excludeDeleted, asNoTracking).Where(x => (x as BaseEntity<int>)!.Id == id);
 
     public virtual void Add(TEntity entity)
     {

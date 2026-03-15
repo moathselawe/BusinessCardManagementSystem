@@ -18,14 +18,14 @@
     <div style=" display: flex; justify-content: space-between; align-items: start;">
       <h2>{{ job.title }}</h2>
       <div class="job-tags" style="margin:10px;">
-        <p-tag icon="pi pi-map-marker" value="{{job.workPlaceId}}" severity="secondary"></p-tag>
-        <p-tag icon="pi pi-building" value="{{job.organizationTypeId}}" severity="secondary"></p-tag>
-        <p-tag icon="pi pi-edit" value="{{job.contractTypeId}}" severity="secondary"></p-tag>
-        <p-tag icon="pi pi-sitemap" value="{{job.industrySectorId}}" severity="secondary"></p-tag>
-        <p-tag icon="pi pi-briefcase" value="{{job.jobTypeId}}" severity="secondary"></p-tag>
+        <p-tag icon="pi pi-map-marker" value="{{job.workPlaceName}}" severity="secondary"></p-tag>
+        <p-tag icon="pi pi-building" value="{{job.organizationTypeName}}" severity="secondary"></p-tag>
+        <p-tag icon="pi pi-edit" value="{{job.contractTypeName}}" severity="secondary"></p-tag>
+        <p-tag icon="pi pi-sitemap" value="{{job.industrySectorName}}" severity="secondary"></p-tag>
+        <p-tag icon="pi pi-briefcase" value="{{job.jobTypeName}}" severity="secondary"></p-tag>
       </div>
 
-      <div class="col-1 flex align-items-start pt-2">
+      <div class="col-1 flex align-items-start pt-2" *ngIf="!isSubmited">
         <button pButton
                 type="button"
                 label="Apply"
@@ -63,7 +63,7 @@
     </p-tag>
   </div>
 
-  <small>Dubai, United Arab Emirates{{ job.locationId }} ,{{getDaysSincePosted(job.startDate)}} days ago · Over 100 people clicked apply</small>
+  <small>{{ job.locationName }} ,{{getDaysSincePosted(job.startDate)}} days ago · Over 100 people clicked apply</small>
 
   <p-divider></p-divider>
 
@@ -117,7 +117,105 @@
           [draggable]="false"
           [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
 
-  <div class="card" style="padding:2rem; margin:0.2rem;">
+  <div class="card" style="padding:2rem; margin:0.2rem;" *ngIf="!isApplicantEmailFiled">
+    <form #f="ngForm" (ngSubmit)="Next(f)">
+
+      <div class="content-box">
+
+        <div class="col-12">
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Full Name</label>
+            <input pInputText
+                   class="form-control"
+                   type="text"
+                   [(ngModel)]="personalInfo.fullName"
+                   name="fullName"
+                   required
+                   placeholder="Enter Full Name"
+                   #fullName="ngModel" />
+            <div class="text-danger" *ngIf="fullName.invalid && fullName.touched">
+              <small *ngIf="fullName.errors?.['required']">Full Name is required.</small>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Email Address</label>
+            <input pInputText
+                   class="form-control"
+                   type="email"
+                   [(ngModel)]="personalInfo.emailAddress"
+                   name="emailAddress"
+                   required
+                   placeholder="Enter Email Address"
+                   #email="ngModel" />
+            <div class="text-danger" *ngIf="email.invalid && email.touched">
+              <small *ngIf="email.errors?.['required']">Email is required.</small>
+              <small *ngIf="email.errors?.['email']">Enter a valid email.</small>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Country Code</label>
+
+            <p-select [options]="countryCodes"
+                      [(ngModel)]="personalInfo.countryCodeId"
+                      optionLabel="name"
+                      optionValue="id"
+                      name="countryCode"
+                      required
+                      placeholder="Select Country Code"
+                      class="w-100"
+                      #codeCtrl="ngModel"
+                      appendTo="body">
+            </p-select>
+            <div class="text-danger mt-1" *ngIf="codeCtrl.invalid && (codeCtrl.touched || f.submitted)">
+              <small *ngIf="codeCtrl.errors?.['required']">Code is required.</small>
+            </div>
+          </div>
+
+          <div class="col-8 form-group">
+            <label class="col-form-label dark-label">Mobile Number</label>
+            <input pInputText
+                   class="form-control"
+                   type="text"
+                   [(ngModel)]="personalInfo.mobileNumber"
+                   name="mobileNumber"
+                   required
+                   placeholder="Enter Mobile Number"
+                   #mobile="ngModel" />
+            <div class="text-danger" *ngIf="mobile.invalid && mobile.touched">
+              <small *ngIf="mobile.errors?.['required']">Mobile Number is required.</small>
+            </div>
+          </div>
+        </div>
+
+        <p-divider></p-divider>
+
+
+        <div style=" display: flex; justify-content: end; align-items: end;">
+          <button pButton
+                  type="button"
+                  label="Cancel"
+                  icon="pi pi-times"
+                  severity="secondary"
+                  (click)="cancel()">
+          </button>
+
+          <button pButton
+                  type="submit"
+                  label="Next"
+                  icon="pi pi-send"
+                  severity="success"
+                  [disabled]="f.invalid">
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="card" style="padding:2rem; margin:0.2rem;" *ngIf="isApplicantEmailFiled">
     <p-progressbar [value]="progressValue"
                    [showValue]="true"
                    style="margin-bottom:1rem">
@@ -330,6 +428,7 @@
           <button pButton
                   type="button"
                   label="Cancel"
+                  (click)="cancel()"
                   icon="pi pi-times"
                   severity="secondary">
           </button>
@@ -338,7 +437,8 @@
                   type="button"
                   label="Submit"
                   icon="pi pi-send"
-                  severity="success">
+                  severity="success"
+                  (click)="submit()">
           </button>
         </div>
       </form>

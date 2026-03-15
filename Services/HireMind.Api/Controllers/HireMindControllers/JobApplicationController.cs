@@ -1,4 +1,6 @@
-﻿namespace HireMind.Api.Controllers.HireMindControllers;
+﻿using HireMind.Application.Queries.JobApplication;
+
+namespace HireMind.Api.Controllers.HireMindControllers;
 
 public class JobApplicationController : ApiBaseController
 {
@@ -11,15 +13,32 @@ public class JobApplicationController : ApiBaseController
 
     [HttpPost("analyze")]
     [Consumes("multipart/form-data")]
-    public async Task<AnalyzeCvResult> Analyze([FromForm] AnalyzeCvRequestDto request)
+    public async Task<ActionResult<AnalyzeCvResult>> Analyze([FromForm] AnalyzeCvRequestDto request)
     {
-        var result = await _sender.Send(new AnalyzeCvCommand(request));
-        return result;
+        try
+        {
+            var result = await _sender.Send(new AnalyzeCvCommand(request));
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
-    //[HttpPost("submit")]
-    //public async Task<JobApplicationResponse> Submit([FromBody] SubmitJobApplicationRequest request)
-    //{
-    //    return await _sender.Send(new SubmitJobApplicationCommand(request));
-    //}
+    [HttpPost("submit")]
+    public async Task<IActionResult> Submit([FromBody] SubmitJobApplicationRequestDto request)
+    {
+        var result = await _sender.Send(new SubmitJobApplicationCommand(request));
+
+        return Ok(result.Id);
+    }
+
+
+    [HttpGet("GetAllByJobId/{jobId}")]
+    public async Task<GetAllJobApplicationsByJobIdResult> GetAllJobApplicationsByJobId(int jobId)
+    {
+        var result = await _sender.Send(new GetAllJobApplicationsByJobIdQuery(jobId));
+        return result;
+    }
 }

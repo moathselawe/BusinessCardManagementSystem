@@ -26,7 +26,7 @@ public class BusinessCard: BaseAuditableEntity
         };
     }
 
-    public static BusinessCard Update(Guid id, string arabicName, string englishName, DateTime dateOfBirth, string email, string phone, string logo, string address)
+    public static BusinessCard Update(int id, string arabicName, string englishName, DateTime dateOfBirth, string email, string phone, string logo, string address)
     {
         return new BusinessCard()
         {

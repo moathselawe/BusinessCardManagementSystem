@@ -32,14 +32,14 @@ public class BusinessCardsController : ApiBaseController
     {
         var result = await _sender.Send(new CreateBusinessCardCommand(command));
 
-        if (result.Id != Guid.Empty)
+        if (result.Id > 0)
             return Ok(result.Id);
         else
             return BadRequest("Failed to create business card.");
     }
 
     [HttpGet("get/{id}")] 
-    public async Task<GetBusinessCardByIdResult> GetCardById(Guid id)
+    public async Task<GetBusinessCardByIdResult> GetCardById(int id)
     {
         var result = await _sender.Send(new GetBusinessCardByIdQuery(id));
 
@@ -58,7 +58,7 @@ public class BusinessCardsController : ApiBaseController
     }
 
     [HttpDelete("delete/{id}")] 
-    public async Task<IActionResult> DeleteCard(Guid id)
+    public async Task<IActionResult> DeleteCard(int id)
     {
         var result = await _sender.Send(new DeleteBusinessCardCommand(id));
 

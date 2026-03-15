@@ -22,11 +22,126 @@ namespace HireMind.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HireMind.Domain.Entities.AnalyzeCv", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("AiScore")
+                        .HasColumnType("float");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CvFilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CvText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExtractedAnswersJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("LastModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("AnalyzeCvs");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.ApplicationStage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("HiringStageId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("LastModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HiringStageId");
+
+                    b.HasIndex("JobApplicationId");
+
+                    b.ToTable("ApplicationStages");
+                });
+
             modelBuilder.Entity("HireMind.Domain.Entities.BusinessCard", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -80,11 +195,77 @@ namespace HireMind.Infrastructure.Migrations
                     b.ToTable("BusinessCards");
                 });
 
+            modelBuilder.Entity("HireMind.Domain.Entities.HiringStage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EmailTemplate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExamQuestionsJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InterviewQuestionsJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("LastModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StageOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ViaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("HiringStages");
+                });
+
             modelBuilder.Entity("HireMind.Domain.Entities.Job", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -151,17 +332,97 @@ namespace HireMind.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ContractTypeId");
+
+                    b.HasIndex("IndustrySectorId");
+
+                    b.HasIndex("JobTypeId");
+
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("OrganizationTypeId");
+
+                    b.HasIndex("WorkPlaceId");
+
                     b.ToTable("Jobs");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.JobApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AnalyzeCvId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CurrentStageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("FinalStageId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("LastModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("SystemScore")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalScore")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserAnswersJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnalyzeCvId");
+
+                    b.HasIndex("CurrentStageId");
+
+                    b.HasIndex("FinalStageId");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("JobApplications");
                 });
 
             modelBuilder.Entity("HireMind.Domain.Entities.Lookup", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CategoryName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid?>("CreatedByUserId")
                         .HasColumnType("uniqueidentifier");
@@ -184,12 +445,217 @@ namespace HireMind.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ParentId");
+
                     b.ToTable("Lookups");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.AnalyzeCv", b =>
+                {
+                    b.HasOne("HireMind.Domain.Entities.Job", "Job")
+                        .WithMany("AnalyzeCvs")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.ApplicationStage", b =>
+                {
+                    b.HasOne("HireMind.Domain.Entities.HiringStage", "HiringStage")
+                        .WithMany("ApplicationStages")
+                        .HasForeignKey("HiringStageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HireMind.Domain.Entities.JobApplication", "JobApplication")
+                        .WithMany("ApplicationStages")
+                        .HasForeignKey("JobApplicationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("HiringStage");
+
+                    b.Navigation("JobApplication");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.HiringStage", b =>
+                {
+                    b.HasOne("HireMind.Domain.Entities.Job", "Job")
+                        .WithMany("HiringStages")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.Job", b =>
+                {
+                    b.HasOne("HireMind.Domain.Entities.Lookup", "ContractType")
+                        .WithMany()
+                        .HasForeignKey("ContractTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HireMind.Domain.Entities.Lookup", "IndustrySector")
+                        .WithMany()
+                        .HasForeignKey("IndustrySectorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HireMind.Domain.Entities.Lookup", "JobType")
+                        .WithMany()
+                        .HasForeignKey("JobTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HireMind.Domain.Entities.Lookup", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HireMind.Domain.Entities.Lookup", "OrganizationType")
+                        .WithMany()
+                        .HasForeignKey("OrganizationTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HireMind.Domain.Entities.Lookup", "WorkPlace")
+                        .WithMany()
+                        .HasForeignKey("WorkPlaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ContractType");
+
+                    b.Navigation("IndustrySector");
+
+                    b.Navigation("JobType");
+
+                    b.Navigation("Location");
+
+                    b.Navigation("OrganizationType");
+
+                    b.Navigation("WorkPlace");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.JobApplication", b =>
+                {
+                    b.HasOne("HireMind.Domain.Entities.AnalyzeCv", "AnalyzeCv")
+                        .WithMany()
+                        .HasForeignKey("AnalyzeCvId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HireMind.Domain.Entities.ApplicationStage", "CurrentStage")
+                        .WithMany()
+                        .HasForeignKey("CurrentStageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HireMind.Domain.Entities.ApplicationStage", "FinalStage")
+                        .WithMany()
+                        .HasForeignKey("FinalStageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HireMind.Domain.Entities.Job", "Job")
+                        .WithMany("JobApplications")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.OwnsOne("HireMind.Domain.Entities.PersonalInfo", "PersonalInfo", b1 =>
+                        {
+                            b1.Property<int>("JobApplicationId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("CountryCodeId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("EmailAddress")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)");
+
+                            b1.Property<string>("FullName")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)");
+
+                            b1.Property<string>("MobileNumber")
+                                .IsRequired()
+                                .HasMaxLength(20)
+                                .HasColumnType("nvarchar(20)");
+
+                            b1.HasKey("JobApplicationId");
+
+                            b1.HasIndex("CountryCodeId");
+
+                            b1.ToTable("JobApplications");
+
+                            b1.HasOne("HireMind.Domain.Entities.Lookup", "CountryCode")
+                                .WithMany()
+                                .HasForeignKey("CountryCodeId")
+                                .OnDelete(DeleteBehavior.Restrict)
+                                .IsRequired();
+
+                            b1.WithOwner()
+                                .HasForeignKey("JobApplicationId");
+
+                            b1.Navigation("CountryCode");
+                        });
+
+                    b.Navigation("AnalyzeCv");
+
+                    b.Navigation("CurrentStage");
+
+                    b.Navigation("FinalStage");
+
+                    b.Navigation("Job");
+
+                    b.Navigation("PersonalInfo")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.Lookup", b =>
+                {
+                    b.HasOne("HireMind.Domain.Entities.Lookup", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.HiringStage", b =>
+                {
+                    b.Navigation("ApplicationStages");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.Job", b =>
+                {
+                    b.Navigation("AnalyzeCvs");
+
+                    b.Navigation("HiringStages");
+
+                    b.Navigation("JobApplications");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.JobApplication", b =>
+                {
+                    b.Navigation("ApplicationStages");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.Lookup", b =>
+                {
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }

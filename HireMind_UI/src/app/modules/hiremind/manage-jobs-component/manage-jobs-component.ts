@@ -27,10 +27,9 @@ export class ManageJobsComponent extends BasePageComponent<Job> {
 
   columns = [
     { field: 'title', header: 'Title' },
-    //{ field: 'description', header: 'Description' },
-    { field: 'locationId', header: 'Location ID' },
-    { field: 'jobTypeId', header: 'Job Type ID' },
-    { field: 'companyId', header: 'Company ID' },
+    { field: 'locationName', header: 'Location' },
+    { field: 'jobTypeName', header: 'Job Type' },
+    { field: 'companyId', header: 'Company ID' }, 
     { field: 'startDate', header: 'Start Date' },
     { field: 'endDate', header: 'End Date' },
     { field: 'isActive', header: 'Active' }
@@ -44,23 +43,28 @@ export class ManageJobsComponent extends BasePageComponent<Job> {
     { label: 'Preview', icon: 'pi pi-eye' },
     { label: 'Edit', icon: 'pi pi-pencil' },
     { label: 'Delete', icon: 'pi pi-trash' },
-    { label: 'JobApplication', icon: 'pi pi-plus' }
+    { label: 'JobApplication', icon: 'pi pi-plus' },
+    { label: 'ManageApplications', icon: 'pi pi-list' }
   ];
 
   Add() {
     this.router.navigate(['/HireMind/CreateJob']);
   }
 
-  edit(rowId: string) {
+  edit(rowId: any) {
     this.router.navigate(['/HireMind/ModifyJob', rowId]);
   }
 
-  preview(rowId: string) {
+  preview(rowId: any) {
     this.router.navigate(['/HireMind/PreviewJob', rowId], { queryParams: { readonly: true } });
   }
 
-  apply(rowId: string) {
+  apply(rowId: any) {
     this.router.navigate(['/HireMind/JobApplication', rowId]);
+  }
+
+  manageApplications(rowId: any) {
+    this.router.navigate(['/HireMind/ManageApplications', rowId]);
   }
 
   selectedRows!: any[];

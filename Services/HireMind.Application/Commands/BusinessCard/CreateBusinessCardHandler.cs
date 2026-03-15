@@ -2,7 +2,7 @@
 
 namespace HireMind.Application.Commands.BusinessCard;
 public record CreateBusinessCardCommand(CreateBusinessCardDto Request) : IRequest<CreateBusinessCardResult>;
-public record CreateBusinessCardResult(Guid Id);
+public record CreateBusinessCardResult(int Id);
 
 public class CreateBusinessCardValidator : AbstractValidator<CreateBusinessCardCommand>
 {

@@ -2,6 +2,6 @@
 
 public class UpdateJobActivationRequestDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public bool IsActive { get; set; } = true;
 }

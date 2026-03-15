@@ -51,7 +51,7 @@ export class BusinessCardService {
     return this.httpClient.post(this.baseUrl + 'exportfile', param, { responseType: 'blob' });
   }
 
-  generatePdf(id: string) {
+  generatePdf(id: any) {
     return this.httpClient.post(this.baseUrl + 'printpdf', { id }, { responseType: 'blob' });
   }
 }

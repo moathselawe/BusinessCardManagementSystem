@@ -13,4 +13,12 @@ export class JobApplicationService {
   analyzeCv(formData: FormData) {
     return this.httpClient.post(this.baseUrl + 'analyze', formData);
   }
+
+  submitJobApplication(dto: any) {
+    return this.httpClient.post(this.baseUrl + 'submit', dto);
+  }
+
+  getAllJobApplicationsByJobId(jobId: number) {
+    return this.httpClient.get(`${this.baseUrl}GetAllByJobId/${jobId}`);
+  }
 }

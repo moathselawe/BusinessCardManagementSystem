@@ -46,11 +46,11 @@ export class ManageBusinesscardsComponent extends BasePageComponent<BusinessCard
     this.router.navigate(['/BCMS/CreateBusinesscard']);
   }
 
-  edit(rowId: string) {
+  edit(rowId: any) {
     this.router.navigate(['/BCMS/ModifyBusinesscard', rowId]);
   }
 
-  preview(rowId: string) {
+  preview(rowId: any) {
     this.router.navigate(['/BCMS/PreviewBusinesscard', rowId], { queryParams: { readonly: true } });
   }
 
@@ -132,7 +132,7 @@ export class ManageBusinesscardsComponent extends BasePageComponent<BusinessCard
     this.errorExportdialog = false;
   }
 
-  generatePdf(rowId: string) {
+  generatePdf(rowId: any) {
     this.service.generatePdf(rowId).subscribe((pdfBlob: Blob) => {
       const url = window.URL.createObjectURL(pdfBlob);
       window.open(url);

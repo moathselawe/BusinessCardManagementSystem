@@ -20,8 +20,8 @@ public class ExportRequestDtoValidator : AbstractValidator<ExportRequestDto>
             .WithMessage("File type must be either 'csv' or 'xml'.");
 
         RuleFor(x => x.Ids)
-            .Must(ids => ids == null || ids.All(id => id != Guid.Empty))
-            .WithMessage("All Ids must be valid GUIDs.");
+            .Must(ids => ids == null || ids.All(id => id > 0))
+            .WithMessage("All Ids must be valid IDs.");
     }
 }
 public class ExportBusinessCardsHandler : IRequestHandler<ExportBusinessCardsQuery, ExportBusinessCardsResult>

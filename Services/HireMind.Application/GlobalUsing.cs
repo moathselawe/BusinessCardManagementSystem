@@ -8,6 +8,7 @@ global using HireMind.Application.Interfaces;
 global using Microsoft.AspNetCore.Http;
 global using businessCardModel = HireMind.Domain.Entities.BusinessCard;
 global using jobModel = HireMind.Domain.Entities.Job;
+global using jobApplication = HireMind.Domain.Entities.JobApplication;
 global using lookupModel = HireMind.Domain.Entities.Lookup;
 global using HireMind.Domain.Dtos.ManageJobs;
 global using HireMind.Domain.Entities;

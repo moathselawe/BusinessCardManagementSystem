@@ -3,5 +3,5 @@
 public record CreateLookUpDto
 {
     public string CategoryName { get; set; } = default!;
-    public Guid? ParentId { get; set; }
+    public int? ParentId { get; set; }
 }

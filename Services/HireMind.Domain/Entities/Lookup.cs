@@ -2,12 +2,16 @@
 
 public class Lookup : BaseAuditableEntity
 {
-    public string? CategoryName { get; set; }
-    public Guid? ParentId { get; set; }
+    public string CategoryName { get; private set; } = null!;
+    public int? ParentId { get; private set; }
 
-    public static Lookup Create(string categoryName, Guid? parentId = null)
+    public Lookup? Parent { get; private set; }
+
+    public ICollection<Lookup> Children { get; private set; } = new List<Lookup>();
+
+    public static Lookup Create(string categoryName, int? parentId = null)
     {
-        return new Lookup()
+        return new Lookup
         {
             CategoryName = categoryName,
             ParentId = parentId,
@@ -15,9 +19,9 @@ public class Lookup : BaseAuditableEntity
         };
     }
 
-    public static Lookup Update(Guid id, string categoryName, Guid? parentId = null)
+    public static Lookup Update(int id, string categoryName, int? parentId = null)
     {
-        return new Lookup()
+        return new Lookup
         {
             Id = id,
             CategoryName = categoryName,
@@ -25,7 +29,4 @@ public class Lookup : BaseAuditableEntity
             LastModifiedDate = DateTime.UtcNow
         };
     }
-
 }
-
-

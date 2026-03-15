@@ -1,7 +1,7 @@
 ﻿namespace HireMind.Domain.Dtos.BusinessCard;
 
 public record BusinessCardDto(
-    Guid Id,
+    int Id,
     string ArabicName,
     string EnglishName,
     DateTime DateOfBirth,

@@ -24,7 +24,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBusinessCardRepository, BusinessCardRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
 builder.Services.AddScoped<ILookupRepository, LookupRepository>();
+builder.Services.AddScoped<IAnalyzeCvRepository, AnalyzeCvRepository>();
+builder.Services.AddScoped<IHiringStageRepository, HiringStageRepository>();
+builder.Services.AddScoped<IApplicationStageRepository, ApplicationStageRepository>();
 builder.Services.AddHttpClient<IAIService, AIService>(client =>
 {
     client.BaseAddress = new Uri("https://openrouter.ai/");

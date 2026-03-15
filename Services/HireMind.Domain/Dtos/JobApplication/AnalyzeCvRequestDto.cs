@@ -2,5 +2,6 @@
 public class AnalyzeCvRequestDto
 {
     public IFormFile File { get; set; }   
-    public Guid JobId { get; set; }    
+    public int JobId { get; set; }    
+    public string? EmailAddress { get; set; }    
 }

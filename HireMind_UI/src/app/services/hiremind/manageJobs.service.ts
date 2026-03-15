@@ -28,7 +28,7 @@ export class ManageJobsService {
     return this.httpClient.post(this.baseUrl + 'search', params);
   }
 
-  UpdateActivation(param: { id: string; isActive: boolean }) {
+  UpdateActivation(param: { id: any; isActive: boolean }) {
     return this.httpClient.put(this.baseUrl + 'updateJobActivation', param);
   }
 

@@ -1,5 +1,5 @@
 ﻿namespace HireMind.Application.Commands.BusinessCard;
-public record DeleteBusinessCardCommand(Guid Id) : IRequest<DeleteBusinessCardResult>;
+public record DeleteBusinessCardCommand(int Id) : IRequest<DeleteBusinessCardResult>;
 public record DeleteBusinessCardResult(bool IsSuccess);
 public class DeleteBusinessCardHandlerValidator : AbstractValidator<DeleteBusinessCardCommand>
 {

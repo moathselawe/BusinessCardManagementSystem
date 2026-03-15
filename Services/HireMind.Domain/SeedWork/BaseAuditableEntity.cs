@@ -1,6 +1,6 @@
 ﻿namespace HireMind.Domain.SeedWork;
 
-public abstract class BaseAuditableEntity : BaseEntity
+public abstract class BaseAuditableEntity : BaseEntity<int>
 {
     public virtual bool IsDeleted { get; set; }
     public virtual Guid? DeletedByUserId { get; set; }

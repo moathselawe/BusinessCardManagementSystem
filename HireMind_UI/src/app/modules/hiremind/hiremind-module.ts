@@ -6,6 +6,7 @@ import { HireMindRoutingModule } from './hiremind-routing-module';
   declarations: [
   
   
+  
   ],
   imports: [
     CommonModule,
