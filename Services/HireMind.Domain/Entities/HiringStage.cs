@@ -2,15 +2,16 @@
 public class HiringStage : BaseAuditableEntity
 {
     public int JobId { get; private set; }
-    public Job Job { get;  set; } = null!;
+    public Job Job { get; set; } = null!;
     public string Name { get; private set; } = string.Empty;
     public int StageOrder { get; private set; }
     public bool IsActive { get; private set; } = false;
+    public bool IsFinalStage { get; private set; } = false;
     public int? ViaId { get; private set; }
     public string EmailTemplate { get; private set; } = string.Empty;
     public ICollection<ApplicationStage> ApplicationStages { get; set; } = new List<ApplicationStage>();
     public string InterviewQuestionsJson { get; private set; } = "[]";
-    
+
     public List<JobQuestion> InterviewQuestions
     {
         get => JsonSerializer.Deserialize<List<JobQuestion>>(InterviewQuestionsJson) ?? new List<JobQuestion>();
@@ -29,6 +30,7 @@ public class HiringStage : BaseAuditableEntity
         string name,
         int stageOrder,
         bool isActive,
+        bool isFinalStage = false,
         int? viaId = null,
         string? emailTemplate = null)
     {
@@ -38,40 +40,25 @@ public class HiringStage : BaseAuditableEntity
             Name = name,
             StageOrder = stageOrder,
             IsActive = isActive,
+            IsFinalStage = isFinalStage,
             ViaId = viaId,
             EmailTemplate = emailTemplate ?? string.Empty,
             CreatedDate = DateTime.Now
         };
     }
 
-    public static HiringStage Update(
-        int id,
-        int jobid,
-        string name,
-        int stageOrder,
-        bool isActive,
-        int? viaId = null,
-        string? emailTemplate = null)
-    {
-        return new HiringStage()
-        {
-            Id = id,
-            JobId = jobid,
-            Name = name,
-            StageOrder = stageOrder,
-            IsActive = isActive,
-            ViaId = viaId,
-            EmailTemplate = emailTemplate ?? string.Empty,
-            LastModifiedDate = DateTime.Now
-        };
-    }
-
-    public void UpdateDetails(string name, int stageOrder, bool isActive, int? viaId, string? emailTemplate)
+    public void UpdateDetails(string name, int stageOrder, bool isActive, bool isFinalStage, int? viaId, string? emailTemplate)
     {
         Name = name;
         StageOrder = stageOrder;
         IsActive = isActive;
+        IsFinalStage = isFinalStage;
         ViaId = viaId;
         EmailTemplate = emailTemplate;
+    }
+
+    public void MarkAsFinalStage()
+    {
+        IsFinalStage = true;
     }
 }

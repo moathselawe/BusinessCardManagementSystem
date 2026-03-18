@@ -6,6 +6,8 @@ public class UpdateHiringStageDto
     public string Name { get; set; } = string.Empty;
 
     public int StageOrder { get; set; }
+    public bool IsActive { get; set; } = false;
+    public bool IsFinalStage { get; set; } = false;
 
     // New properties for questions
     public List<JobQuestionDto>? InterviewQuestions { get; set; }

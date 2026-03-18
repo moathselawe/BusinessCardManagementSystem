@@ -1,4 +1,6 @@
-﻿using HireMind.Application.Queries.JobApplication;
+﻿using HireMind.Application.Commands.ApplicationStage;
+using HireMind.Application.Queries.JobApplication;
+using HireMind.Domain.Dtos.UpdateApplicationStageStatusRequestDto;
 
 namespace HireMind.Api.Controllers.HireMindControllers;
 
@@ -41,4 +43,74 @@ public class JobApplicationController : ApiBaseController
         var result = await _sender.Send(new GetAllJobApplicationsByJobIdQuery(jobId));
         return result;
     }
+
+    [HttpGet("getJobApplicationById/{id}")]
+    public async Task<GetJobApplicationByIdResult> getJobApplicationById(int id)
+    {
+        var result = await _sender.Send(new GetJobApplicationByIdQuery(id));
+        return result;
+    }
+
+    [HttpGet("download-cv/{applicationId}")]
+    public async Task<IActionResult> DownloadCv(int applicationId)
+    {
+        // 1. Get CV path from database
+        var result = await _sender.Send(new GetCvByApplicationIdQuery(applicationId));
+
+        if (string.IsNullOrEmpty(result.CvFilePath))
+            return NotFound("CV not found.");
+
+        var fullPath = Path.Combine("wwwroot", result.CvFilePath);
+
+        if (!System.IO.File.Exists(fullPath))
+            return NotFound("CV file missing.");
+
+        var fileName = Path.GetFileName(fullPath);
+
+        // 2. Determine MIME type dynamically
+        var extension = Path.GetExtension(fileName).ToLower();
+        string contentType = extension switch
+        {
+            ".pdf" => "application/pdf",
+            ".doc" => "application/msword",
+            ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            _ => "application/octet-stream"
+        };
+
+        // 3. Return file as stream
+        var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+        return File(fileStream, contentType, fileName);
+    }
+
+    [HttpGet("preview-cv/{applicationId}")]
+    public async Task<IActionResult> PreviewCv(int applicationId)
+    {
+        // 1. Get CV path from database
+        var result = await _sender.Send(new GetCvByApplicationIdQuery(applicationId));
+
+        if (string.IsNullOrEmpty(result.CvFilePath))
+            return NotFound("CV not found.");
+
+        var fullPath = Path.Combine("wwwroot", result.CvFilePath);
+
+        if (!System.IO.File.Exists(fullPath))
+            return NotFound("CV file missing.");
+
+        var fileName = Path.GetFileName(fullPath);
+
+        // 2. Determine MIME type dynamically
+        var extension = Path.GetExtension(fileName).ToLower();
+        string contentType = extension switch
+        {
+            ".pdf" => "application/pdf",
+            ".doc" => "application/msword",
+            ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            _ => "application/octet-stream"
+        };
+
+        // 3. Return file inline (do not trigger download)
+        var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+        return File(fileStream, contentType); // no Content-Disposition attachment
+    }
 }
+

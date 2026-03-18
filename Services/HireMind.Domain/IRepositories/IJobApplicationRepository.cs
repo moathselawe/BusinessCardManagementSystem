@@ -8,4 +8,7 @@ public interface IJobApplicationRepository : IRepository<JobApplication>
     Task<bool> UpdateAsync(JobApplication application, CancellationToken cancellationToken = default);
     Task<bool> CheckApplicationByEmailAndJobId(string email, int jobId, CancellationToken cancellationToken);
     Task<List<JobApplicationDto>> GetAllJobApplicationsByJobIdAsync(int jobid, CancellationToken cancellationToken);
+    Task<JobApplication> GetByIdAsync(int jobApplicationId, CancellationToken cancellationToken);
+    Task<JobApplication> GetJobApplicationByIdWithAnalyzedCVAsync(int jobApplicationId, CancellationToken cancellationToken);
+    Task<List<JobApplication>> GetByIdsWithCurrentStageAsync(List<int> ids, CancellationToken cancellationToken);
 }

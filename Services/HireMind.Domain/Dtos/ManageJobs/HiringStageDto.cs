@@ -7,6 +7,9 @@ public class HiringStageDto
 
     public int StageOrder { get; set; }
 
+    public bool IsActive { get; set; }
+    public bool IsFinalStage { get; set; } = false;
+
     public int? ViaId { get; set; }
 
     public string EmailTemplate { get; set; } = string.Empty;

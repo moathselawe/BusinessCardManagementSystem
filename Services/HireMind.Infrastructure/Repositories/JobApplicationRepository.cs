@@ -1,4 +1,5 @@
 ﻿using HireMind.Domain.Dtos.JobApplication;
+using HireMind.Domain.Dtos.UpdateApplicationStageStatusRequestDto;
 using Microsoft.EntityFrameworkCore;
 
 namespace HireMind.Infrastructure.Repositories;
@@ -40,9 +41,11 @@ public class JobApplicationRepository : BaseRepository<JobApplication>, IJobAppl
         var result = await _dbContext.Set<JobApplication>()
             .Where(x => x.JobId == jobid)
             .Include(x => x.Job)
+                .ThenInclude(j => j.HiringStages)
+            //.Include(x => x.FinalStage)
             .Include(x => x.CurrentStage)
                 .ThenInclude(x => x.HiringStage)
-            .Include(x => x.PersonalInfo.CountryCode) // include lookup for CountryCode
+            .Include(x => x.PersonalInfo.CountryCode)
             .Select(x => new JobApplicationDto
             {
                 Id = x.Id,
@@ -54,15 +57,53 @@ public class JobApplicationRepository : BaseRepository<JobApplication>, IJobAppl
                 SystemScore = x.SystemScore,
                 TotalScore = x.TotalScore,
                 JobTitle = x.Job.Title,
+                CurrentStageId = x.CurrentStage != null ? x.CurrentStage.HiringStage.Id : 0,
                 CurrentStageName = x.CurrentStage != null ? x.CurrentStage.HiringStage.Name : string.Empty,
                 CurrentStageOrder = x.CurrentStage != null ? x.CurrentStage.HiringStage.StageOrder : 0,
                 ApplicationStageId = x.CurrentStage != null ? x.CurrentStage.Id : 0,
                 HiringStageId = x.CurrentStage != null ? x.CurrentStage.HiringStageId : 0,
-                Status = x.CurrentStage != null ? x.CurrentStage.Status.ToString() : string.Empty
+                Status = x.CurrentStage != null ? x.CurrentStage.Status.ToString() : string.Empty,            
             })
             .OrderByDescending(x => x.TotalScore)
             .ToListAsync(cancellationToken);
 
         return result;
+    }
+
+    public async Task<JobApplication> GetByIdAsync(int jobApplicationId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Set<JobApplication>().Where(x => x.Id == jobApplicationId).FirstOrDefaultAsync();
+    }
+
+    public async Task<JobApplication> GetJobApplicationByIdWithAnalyzedCVAsync(int jobApplicationId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Set<JobApplication>().Include(x => x.AnalyzeCv).Where(x => x.Id == jobApplicationId).FirstOrDefaultAsync();
+    }
+
+    
+
+
+    public async Task<List<JobApplication>> GetByIdsAsync(List<int> ids, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Set<JobApplication>()
+            .Include(x => x.CurrentStage)       // include navigation properties needed
+            .Include(x => x.ApplicationStages)
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task UpdateRangeAsync(List<JobApplication> applications, CancellationToken cancellationToken)
+    {
+        _dbContext.Set<JobApplication>().UpdateRange(applications);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<List<JobApplication>> GetByIdsWithCurrentStageAsync(List<int> ids, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Set<JobApplication>()
+            .Include(x => x.CurrentStage) // eager load current stage
+            .Include(x => x.ApplicationStages) // optional if needed
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync(cancellationToken);
     }
 }

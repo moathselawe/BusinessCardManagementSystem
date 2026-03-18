@@ -25,16 +25,6 @@
         <p-tag icon="pi pi-briefcase" value="{{job.jobTypeName}}" severity="secondary"></p-tag>
       </div>
 
-      <div class="col-1 flex align-items-start pt-2" *ngIf="!isSubmited">
-        <button pButton
-                type="button"
-                label="Apply"
-                icon="pi pi-check"
-                severity="success"
-                (click)="applyJob()">
-        </button>
-      </div>
-
     </div>
 
 
@@ -63,8 +53,17 @@
     </p-tag>
   </div>
 
-  <small>{{ job.locationName }} ,{{getDaysSincePosted(job.startDate)}} days ago · Over 100 people clicked apply</small>
 
+  <small>{{ job.locationName }} ,{{getDaysSincePosted(job.startDate)}} days ago · Over 100 people clicked apply</small>
+  <div class="col-1 flex align-items-start pt-2" *ngIf="!isSubmited">
+    <p-button 
+              label="Apply"
+              icon="pi pi-check"
+              severity="info"
+              (click)="applyJob()"
+              rounded>
+    </p-button>
+  </div>
   <p-divider></p-divider>
 
   <div class="grid job-details">
@@ -132,7 +131,7 @@
                    name="fullName"
                    required
                    placeholder="Enter Full Name"
-                   #fullName="ngModel" />
+                   #fullName="ngModel"/>
             <div class="text-danger" *ngIf="fullName.invalid && fullName.touched">
               <small *ngIf="fullName.errors?.['required']">Full Name is required.</small>
             </div>

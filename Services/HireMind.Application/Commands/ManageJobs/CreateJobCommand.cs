@@ -65,6 +65,7 @@ public class CreateJobHandler : IRequestHandler<CreateJobCommand, CreateJobResul
             jobid: 0,
             name: "Initiate Application",
             stageOrder: 1,
+            isFinalStage: false,
             isActive: true,
             viaId: 1,
             emailTemplate: !string.IsNullOrWhiteSpace(userInputEmailTemplate) ? userInputEmailTemplate
@@ -86,6 +87,7 @@ public class CreateJobHandler : IRequestHandler<CreateJobCommand, CreateJobResul
                 jobid: 0,
                 name: s.Name,
                 stageOrder: s.StageOrder == 0 ? order++ : s.StageOrder,
+                isFinalStage: false,
                 isActive: false,
                 viaId: s.ViaId,
                 emailTemplate: s.EmailTemplate
@@ -134,94 +136,3 @@ public class CreateJobHandler : IRequestHandler<CreateJobCommand, CreateJobResul
         return new CreateJobResult(job.Id);
     }
 }
-//    public async Task<CreateJobResult> Handle(CreateJobCommand command, CancellationToken cancellationToken)
-//    {
-//        var job = jobModel.Create(
-//            title: command.Request.Title,
-//            description: command.Request.Description,
-//            locationId: command.Request.LocationId,
-//            workPlaceId: command.Request.WorkPlaceId,
-//            contractTypeId: command.Request.ContractTypeId,
-//            organizationTypeId: command.Request.OrganizationTypeId,
-//            industrySectorId: command.Request.IndustrySectorId,
-//            jobTypeId: command.Request.JobTypeId,
-//            companyId: command.Request.CompanyId,
-//            startDate: command.Request.StartDate,
-//            endDate: command.Request.EndDate,
-//            isActive: command.Request.IsActive,
-//            questions: command.Request.Questions?.ConvertAll(q => new JobQuestion
-//            {
-//                QuestionText = q.QuestionText,
-//                QuestionTypeId = q.QuestionTypeId,
-//                IsRequired = q.IsRequired,
-//                AvailableAnswers = q.AvailableAnswers?
-//                    .Select(a => new AnswerOption
-//                    {
-//                        Id = a.Id,
-//                        Text = a.Text,
-//                        IsPreferredAnswer = a.IsPreferredAnswer
-//                    }).ToList() ?? new List<AnswerOption>(),
-//                Score = q.Score
-//            })
-//        );
-
-//        // Add stages to the Job directly
-//        if (command.Request.HiringStages != null)
-//        {
-//            int order = 1;
-//            foreach (var s in command.Request.HiringStages)
-//            {
-//                var stage = HiringStage.Create(
-//                    jobid: 0, // temporary, EF will set FK via navigation
-//                    name: s.Name,
-//                    stageOrder: s.StageOrder == 0 ? order++ : s.StageOrder,
-//                    isActive: false,
-//                    viaId: s.ViaId,
-//                    emailTemplate: s.EmailTemplate
-//                );
-
-//                // Set navigation
-//                stage.Job = job;
-
-//                // Map questions
-//                stage.InterviewQuestions = s.InterviewQuestions?.Select(q => new JobQuestion
-//                {
-//                    QuestionText = q.QuestionText,
-//                    QuestionTypeId = q.QuestionTypeId,
-//                    IsRequired = q.IsRequired,
-//                    AvailableAnswers = q.AvailableAnswers?.Select(a => new AnswerOption
-//                    {
-//                        Id = a.Id,
-//                        Text = a.Text,
-//                        IsPreferredAnswer = a.IsPreferredAnswer
-//                    }).ToList() ?? new List<AnswerOption>(),
-//                    Score = q.Score
-//                }).ToList() ?? new List<JobQuestion>();
-
-//                stage.ExamQuestions = s.ExamQuestions?.Select(q => new JobQuestion
-//                {
-//                    QuestionText = q.QuestionText,
-//                    QuestionTypeId = q.QuestionTypeId,
-//                    IsRequired = q.IsRequired,
-//                    AvailableAnswers = q.AvailableAnswers?.Select(a => new AnswerOption
-//                    {
-//                        Id = a.Id,
-//                        Text = a.Text,
-//                        IsPreferredAnswer = a.IsPreferredAnswer
-//                    }).ToList() ?? new List<AnswerOption>(),
-//                    Score = q.Score
-//                }).ToList() ?? new List<JobQuestion>();
-
-//                job.HiringStages.Add(stage);
-//            }
-//        }
-
-//        // Add Job (with stages) in one call
-//        await _repository.AddAsync(job, cancellationToken);
-
-//        // Commit all at once
-//        await _unitOfWork.SaveWorkAsync(cancellationToken);
-
-//        return new CreateJobResult(job.Id);
-//    }
-//}

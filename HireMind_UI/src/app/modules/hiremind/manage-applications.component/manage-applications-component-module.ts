@@ -17,7 +17,14 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ManageApplicationsComponent } from './manage-applications.component';
 import { TableModule } from 'primeng/table';
-
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { MenuModule } from 'primeng/menu';
+import { TooltipModule } from 'primeng/tooltip';
+import { TagModule } from 'primeng/tag';
+import { MessageModule } from 'primeng/message';
+import { StepperModule } from 'primeng/stepper';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
   declarations: [ManageApplicationsComponent],
@@ -27,6 +34,7 @@ import { TableModule } from 'primeng/table';
     InputTextModule,
     CheckboxModule,
     ButtonModule,
+    RadioButtonModule,
     DatePickerModule,
     SelectModule,
     ToggleSwitchModule,
@@ -39,7 +47,14 @@ import { TableModule } from 'primeng/table';
     DialogModule,
     DividerModule,
     RatingModule,
-    TableModule
+    TableModule,
+    IconFieldModule,
+    InputIconModule,
+    MenuModule,
+    TooltipModule,
+    TagModule,
+    MessageModule,
+    StepperModule,
   ]
 })
 export class ManageApplicationsModule { }

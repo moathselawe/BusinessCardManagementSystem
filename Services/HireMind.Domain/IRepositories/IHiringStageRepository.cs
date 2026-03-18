@@ -10,5 +10,4 @@ public interface IHiringStageRepository : IRepository<HiringStage>
     Task UpdateAsync(HiringStage stage, bool trackChanges, CancellationToken cancellationToken);
 
     Task DeleteRangeAsync(List<HiringStage> stages, CancellationToken cancellationToken);
-
 }

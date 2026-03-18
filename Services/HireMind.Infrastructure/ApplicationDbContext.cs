@@ -80,11 +80,11 @@ public class ApplicationDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         // FinalStage relation
-        modelBuilder.Entity<JobApplication>()
-            .HasOne(j => j.FinalStage)
-            .WithMany()
-            .HasForeignKey(j => j.FinalStageId)
-            .OnDelete(DeleteBehavior.Restrict);
+        //modelBuilder.Entity<JobApplication>()
+        //    .HasOne(j => j.FinalStage)
+        //    .WithMany()
+        //    .HasForeignKey(j => j.FinalStageId)
+        //    .OnDelete(DeleteBehavior.Restrict);
 
         // Configure PersonalInfo as owned type
         modelBuilder.Entity<JobApplication>()

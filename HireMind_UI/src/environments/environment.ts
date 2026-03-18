@@ -8,5 +8,7 @@ export const endpoints = {
   JobApplication:'JobApplication/',
   ManageJobs:'ManageJobs/',
   ManageLooks:'LookUps/',
-  Lookups:'LookUps/'
+  Lookups: 'LookUps/',
+  HiringStage: 'HiringStages/',
+  ApplicationStage: 'ApplicationStage/'
 }

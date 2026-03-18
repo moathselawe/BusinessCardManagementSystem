@@ -85,10 +85,28 @@
   font-weight: 600;
 }
 
+/*.job-description {
+  line-height: 1.7;
+}*/
 .job-description {
   line-height: 1.7;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  word-break: break-word;
 }
 
+  .job-description * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .job-description img,
+  .job-description table,
+  .job-description iframe {
+    max-width: 100%;
+    height: auto;
+  }
 .job-tags {
   display: flex;
   gap: 10px;

@@ -1,4 +1,6 @@
-﻿namespace HireMind.Domain.Dtos.JobApplication;
+﻿using HireMind.Domain.Entities;
+
+namespace HireMind.Domain.Dtos.JobApplication;
 public class JobApplicationDto
 {
     public int Id { get; set; }
@@ -10,9 +12,12 @@ public class JobApplicationDto
     public double SystemScore { get; set; }
     public double TotalScore { get; set; }
     public string JobTitle { get; set; } = string.Empty;
+    public int CurrentStageId { get; set; }
     public string CurrentStageName { get; set; } = string.Empty;
     public int CurrentStageOrder { get; set; }
     public int ApplicationStageId { get; set; }
     public int HiringStageId { get; set; }
     public string Status { get; set; } = string.Empty;
+    public int FinalStageId { get; set; }
+    public string FinalStageName { get; set; } = string.Empty;
 }

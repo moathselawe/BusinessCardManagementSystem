@@ -24,7 +24,7 @@
           <p-button icon="pi pi-plus" rounded [pTooltip]="'Create new'" size="small" severity="info" tooltipPosition="bottom" (click)="onAdd.emit()" />
         </div>
         <div style="max-width: fit-content; max-height: fit-content;">
-          <p-toolbar *ngIf="showToolbar" class="mb-6" style="background-color: #fcf8f8d9; overflow: hidden;">
+          <p-toolbar *ngIf="showToolbar" class="mb-6" style="overflow: hidden;">
             <ng-template #start *ngIf="!withoutImportAndExport">
               <p-fileUpload mode="basic" accept=".csv,.xml"
                             [maxFileSize]="1000000"
@@ -161,6 +161,14 @@
             </button>
 
           </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="columns.length + (!withoutImportAndExport ? 2 : 1)" >
+          No record found
         </td>
       </tr>
     </ng-template>

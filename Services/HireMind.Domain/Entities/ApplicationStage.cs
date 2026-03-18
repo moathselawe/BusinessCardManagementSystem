@@ -22,4 +22,27 @@ public class ApplicationStage : BaseAuditableEntity
             CreatedDate = DateTime.UtcNow
         };
     }
+
+    public static ApplicationStage Update(int id, int jobApplicationId, int hiringStageId, StageStatus status, int? score, string? notes)
+    {
+        return new ApplicationStage()
+        {
+            Id = id,
+            JobApplicationId = jobApplicationId,
+            HiringStageId = hiringStageId,
+            Status = status,
+            Score = score,
+            Notes = notes,
+            LastModifiedDate = DateTime.UtcNow
+        };
+    }
+
+    public static ApplicationStage UpdateApplicationStageStatus(int id, StageStatus NewStatus)
+    {
+        return new ApplicationStage()
+        { 
+            Id = id,
+            Status = NewStatus,
+        };
+    }
 }

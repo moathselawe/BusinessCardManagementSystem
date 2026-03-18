@@ -1,86 +1,358 @@
+<!-- Sticky Header -->
 <div class="panel-heading sticky-header">
-  <h2 style="color: #2196f3;">Manage Applications</h2>
+  <h3 style="color: #2196f3;">Manage {{applications[0].jobTitle}} Applications</h3>
 </div>
 
-<div class="card mt-3">
+<!-- Hiring Stages -->
+<div class="card card-modern" *ngIf="!loading">
+  <h6>Current Hiring Stages</h6>
+  <p-stepper [value]="activeStep" class="w-full" [linear]="true">
+    <p-step-list>
+      <p-step *ngFor="let stage of hiringStages"
+              [value]="stage.stageOrder"
+              class="flex flex-row flex-auto gap-2">
+        <span class="text-center"
+              [ngStyle]="{'color': stage.isActive ? '#2196f3' : '#040404', 'font-weight': stage.isFinalStage ? 'bold' : 'normal'}">
+          {{ stage.name }}
+          <small *ngIf="stage.isFinalStage" style="color: #ff5722;">(Final)</small>
+        </span>
+      </p-step>
+    </p-step-list>
+  </p-stepper>
+</div>
 
+<!-- Actions & Search -->
+<div class="card card-modern" *ngIf="!loading">
+  <div class="actions-container">
+
+    <!-- Bulk Buttons -->
+    <div class="bulk-actions">
+      <p-button label="Mark Selected" (click)="openBulkDialog('Mark Bulk Selected')" severity="success" rounded raised></p-button>
+      <p-button label="Mark Not Selected" (click)="openBulkDialog('Mark Bulk Not Selected')" severity="danger" rounded raised></p-button>
+      <p-button label="Move to Next Stage" (click)="openBulkDialog('Move Bulk to Next Stage')" severity="info" rounded raised></p-button>
+    </div>
+
+    <!-- Search -->
+    <div style="display: flex; justify-content: space-between; gap: 10px; padding: .5rem; margin: 0.2rem; ">
+      <input pInputText
+             type="text"
+             placeholder="Search..."
+             style="width: 100%;" />
+      <p-button label="Search" icon="pi pi-search" severity="info" rounded></p-button>
+      <p-button label="Clear" icon="pi pi-times" severity="secondary" rounded></p-button>
+    </div>
+
+  </div>
+
+  <!-- Applications Table -->
   <p-table [value]="applications"
+           [(selection)]="selectedRows"
+           dataKey="id"
            [paginator]="true"
            [rows]="10"
            [loading]="loading"
            responsiveLayout="scroll"
-           styleClass="p-datatable-striped">
+           styleClass="p-datatable-striped p-datatable-hoverable modern-table">
 
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="fullName">
-          Name
-          <p-sortIcon field="fullName"></p-sortIcon>
-        </th>
-
+        <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+        <th pSortableColumn="fullName">Name <p-sortIcon field="fullName"></p-sortIcon></th>
         <th>Email</th>
-
         <th>Mobile</th>
-
-        <th pSortableColumn="systemScore">
-          System Score
-          <p-sortIcon field="systemScore"></p-sortIcon>
-        </th>
-
+        <th pSortableColumn="systemScore">System Score <p-sortIcon field="systemScore"></p-sortIcon></th>
         <th>Total Score</th>
-
         <th>Stage</th>
-
         <th>Status</th>
-
         <th>Actions</th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-app>
       <tr>
-
+        <td><p-tableCheckbox [value]="app"></p-tableCheckbox></td>
         <td>{{ app.fullName }}</td>
-
         <td>{{ app.email }}</td>
-
+        <td>{{ app.countryCode }} {{ app.mobileNumber }}</td>
+        <td><span class="score-badge">{{ app.systemScore }}</span></td>
+        <td>{{ app.totalScore }}</td>
+        <td>{{ app.currentStageName }}</td>
         <td>
-          {{ app.countryCode }} {{ app.mobileNumber }}
+          <p-tag *ngIf="app.status === 'New'" value="New" severity="info" rounded></p-tag>
+          <p-tag *ngIf="app.status === 'Selected'" value="Selected" severity="info" rounded></p-tag>
+          <p-tag *ngIf="app.status === 'NotSelected'" value="Not Selected" severity="danger" rounded></p-tag>
+          <p-tag *ngIf="app.status === 'Approved'" value="Approved" severity="success" rounded></p-tag>
         </td>
-
         <td>
-          <span class="score-badge">
-            {{ app.systemScore }}
-          </span>
+          <div class="flex">
+            <p-menu #menu [popup]="true" [model]="actionsModel" appendTo="body"></p-menu>
+            <button pButton pRipple type="button" severity="info"
+                    icon="pi pi-ellipsis-v"
+                    class="p-button-rounded p-button-text"
+                    (click)="toggleMenu($event, app)">
+            </button>
+          </div>
         </td>
+      </tr>
+    </ng-template>
 
-        <td>
-          {{ app.totalScore }}
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="9" style="text-align:center; padding:20px;">
+          No records found
         </td>
-
-        <td>
-          {{ app.currentStageName }}
-        </td>
-
-        <td>
-          <span class="status-badge">
-            {{ app.status }}
-          </span>
-        </td>
-
-        <td>
-
-          <button pButton
-                  icon="pi pi-eye"
-                  class="p-button-rounded p-button-info p-button-sm"
-                  title="View Application">
-          </button>
-
-        </td>
-
       </tr>
     </ng-template>
 
   </p-table>
-
 </div>
+
+<!-- Bulk Action Dialog -->
+<p-dialog [header]="dialogHeader"
+          [(visible)]="isDialogVisiable"
+          [modal]="true"
+          [style]="{ width: '500px' }"
+          [draggable]="false"
+          (onHide)="closeBulkDialog()">
+
+  <div class="dialog-content">
+    <p-message *ngIf="bulkErrorMessage" severity="error" [text]="bulkErrorMessage"></p-message>
+
+    <div *ngIf="!bulkErrorMessage" class="confirmation-text">
+      Are you sure you want to <b>{{dialogHeader}}</b>?
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="dialog-actions">
+      <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closeBulkDialog()"></p-button>
+      <p-button label="Submit" icon="pi pi-check" severity="success" (click)="submitBulkAction()"></p-button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Apply to Tahaluf Al Emarat Technical Solutions{{ job.companyId }}"
+          [modal]="true"
+          [(visible)]="isPreviewApplicationVisiable"
+          (onHide)="isPreviewApplicationVisiable = false"
+          [style]="{ width: '70rem' }"
+          [draggable]="false"
+          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+  <div class="card" style="padding:2rem; margin:0.2rem;">
+
+    <div class="col-12">
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Full Name</label>
+        <input pInputText
+               class="form-control"
+               type="text"
+               [(ngModel)]="personalInfo.fullName"
+               name="fullName"
+               required
+               placeholder="Enter Full Name"
+               [readonly]="true" />
+      </div>
+
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Email Address</label>
+        <input pInputText
+               class="form-control"
+               type="email"
+               [(ngModel)]="personalInfo.emailAddress"
+               name="emailAddress"
+               required
+               placeholder="Enter Email Address"
+               [readonly]="true" />
+      </div>
+
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Country Code</label>
+
+        <p-select [options]="countryCodes"
+                  [(ngModel)]="personalInfo.countryCodeId"
+                  optionLabel="name"
+                  optionValue="id"
+                  name="countryCode"
+                  required
+                  placeholder="Select Country Code"
+                  class="w-100"
+                  appendTo="body"
+                  [disabled]="true">
+        </p-select>
+      </div>
+
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Mobile Number</label>
+        <input pInputText
+               class="form-control"
+               type="text"
+               [(ngModel)]="personalInfo.mobileNumber"
+               name="mobileNumber"
+               required
+               placeholder="Enter Mobile Number"
+               [readonly]="true" />
+      </div>
+    </div>
+
+
+    <p-divider></p-divider>
+
+
+
+
+    <div class="field col-12" *ngFor="let question of job.questions; let i = index" style="margin-bottom:30px;">
+      <label class="col-form-label">
+        {{ question.questionText }}
+        <span *ngIf="question.isRequired" style="color:red;">*</span>
+
+      </label>
+
+      <!--Text-->
+      <input pInputText
+             *ngIf="question.questionTypeId === JobQuestionType.Text"
+             type="text"
+             class="form-control"
+             [(ngModel)]="answers[i]"
+             maxlength="40"
+             name="question{{i}}"
+             [readonly]="true" />
+
+      <!--Paragraph-->
+      <textarea *ngIf="question.questionTypeId === JobQuestionType.Paragraph"
+                pInputTextarea
+                [(ngModel)]="answers[i]"
+                name="question{{i}}"
+                rows="4"
+                class="form-control"
+                [disabled]="true">
+</textarea>
+
+      <!--Multiple Choice (Checkboxes)-->
+      <ng-container *ngIf="question.questionTypeId === JobQuestionType.MultipleChoice">
+        <ng-container *ngFor="let option of question.availableAnswers; let j = index">
+          <div class="flex items-center gap-2 mb-2">
+            <p-checkbox [inputId]="'option' + i + '_' + j"
+                        [name]="'question' + i"
+                        [value]="option.id"
+                        [(ngModel)]="answers[i]"
+                        [disabled]="true">
+            </p-checkbox>
+
+            <label [for]="'option' + i + '_' + j" style="margin-left: 4px; margin-right: 4px; color: #666;">
+              {{ option.text }}
+            </label>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <!--Radio Button-->
+      <ng-container *ngIf="question.questionTypeId === JobQuestionType.RadioButton">
+        <ng-container *ngFor="let option of question.availableAnswers; let j = index">
+          <div class="flex items-center gap-2 mb-2">
+            <p-radioButton [inputId]="'radio_' + i + '_' + j"
+                           [name]="'question' + i"
+                           [value]="option.id"
+                           [(ngModel)]="answers[i]"
+                           [disabled]="true">
+            </p-radioButton>
+
+            <label [for]="'radio_' + i + '_' + j" style="margin-left: 4px; margin-right: 4px; color: #666;">
+              {{ option.text }}
+            </label>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <!--Yes/No-->
+      <ng-container *ngIf="question.questionTypeId === JobQuestionType.YesNo">
+        <ng-container *ngFor="let option of question.availableAnswers; let j = index">
+          <div class="flex items-center gap-2 mb-2">
+            <p-radioButton [inputId]="'yesno_' + i + '_' + j"
+                           [name]="'question' + i"
+                           [value]="option.id"
+                           [(ngModel)]="answers[i]"
+                           [disabled]="true">
+            </p-radioButton>
+
+            <label [for]="'yesno_' + i + '_' + j" style="margin-left: 4px; margin-right: 4px; color: #666;">
+              {{ option.text }}
+            </label>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <!--Dropdown-->
+      <p-select *ngIf="question.questionTypeId === JobQuestionType.Dropdown"
+                [options]="getAnswerOptions(question)"
+                [(ngModel)]="answers[i]"
+                name="question{{i}}"
+                placeholder="Select an option"
+                class="w-100">
+      </p-select>
+
+      <!--Rating-->
+      <p-rating *ngIf="question.questionTypeId === JobQuestionType.Rating"
+                [(ngModel)]="answers[i]"
+                name="question{{i}}"
+                class="w-100">
+      </p-rating>
+
+      <!--Number-->
+      <div class="col-2">
+        <input *ngIf="question.questionTypeId === JobQuestionType.Number"
+               type="number"
+               pInputText
+               [(ngModel)]="answers[i]"
+               name="question{{i}}"
+               class="w-100" />
+      </div>
+
+      <!--Date-->
+      <p-calendar *ngIf="question.questionTypeId === JobQuestionType.Date"
+                  [(ngModel)]="answers[i]"
+                  name="question{{i}}"
+                  dateFormat="yy-mm-dd">
+      </p-calendar>
+    </div>
+
+  </div>
+</p-dialog>
+
+
+
+<p-dialog header="Final Stage Confirmation"
+          [(visible)]="isFinalStageDialogVisible"
+          [modal]="true"
+          [style]="{ width: '450px' }"
+          [draggable]="false">
+
+  <p>
+    This stage is the last stage but is not marked as the final stage.
+  </p>
+
+  <p>
+    Do you want to mark it as the <b>Final Stage</b> and approve this candidate?
+  </p>
+
+  <p-divider></p-divider>
+
+  <div class="flex justify-content-end gap-2">
+
+    <p-button label="Cancel"
+              icon="pi pi-times"
+              severity="secondary"
+              (click)="isFinalStageDialogVisible = false">
+    </p-button>
+
+    <p-button label="Approve"
+              icon="pi pi-check"
+              severity="success"
+              (click)="confirmApproveLastStage()">
+    </p-button>
+
+  </div>
+
+</p-dialog>
+
+

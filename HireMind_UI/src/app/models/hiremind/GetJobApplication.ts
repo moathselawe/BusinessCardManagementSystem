@@ -8,10 +8,12 @@ export class GetJobApplication {
   systemScore!: number;
   totalScore!: number;
   jobTitle: string = '';
+  currentStageId!: number;
   currentStageName: string = '';
   currentStageOrder!: number;
   applicationStageId!: number;
   hiringStageId!: number;
   status: string = '';
+  cvFilePath: string = '';
 }
 

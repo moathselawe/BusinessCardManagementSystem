@@ -8,5 +8,6 @@ export class HiringStage {
   emailTemplate: string = '';
   interviewQuestions?: JobQuestion[]; 
   examQuestions?: JobQuestion[];
-  isDisabled: boolean = false; // ← جديد
+  isDisabled: boolean = false;
+  isFinalStage: boolean = false;
 }

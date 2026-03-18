@@ -91,13 +91,13 @@ public class SubmitJobApplicationHandler : IRequestHandler<SubmitJobApplicationC
         if (hiringStage?.Id == null)
             throw new Exception("Intial stage not found");
 
-        var applicationStage = ApplicationStage.Create(
+        var applicationStagee = applicationStage.Create(
             jobApplicationId: submitJobApplicationId,
             hiringStageId: hiringStage!.Id,
             status: StageStatus.New
          );
 
-        var submitApplicationStageId = await _applicationStageRepository.AddAsync(applicationStage, cancellationToken);
+        var submitApplicationStageId = await _applicationStageRepository.AddAsync(applicationStagee, cancellationToken);
 
         entity.CurrentStageId = submitApplicationStageId;
 

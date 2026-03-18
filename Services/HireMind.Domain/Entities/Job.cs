@@ -99,39 +99,6 @@ public class Job : BaseAuditableEntity
         };
     }
 
-    public void UpdateDetails(
-    string title,
-    string description,
-    int locationId,
-    int workPlaceId,
-    int contractTypeId,
-    int organizationTypeId,
-    int industrySectorId,
-    int jobTypeId,
-    int companyId,
-    DateTime startDate,
-    DateTime? endDate,
-    bool isActive,
-    List<JobQuestion>? questions = null)
-    {
-        Title = title;
-        Description = description;
-        LocationId = locationId;
-        WorkPlaceId = workPlaceId;
-        ContractTypeId = contractTypeId;
-        OrganizationTypeId = organizationTypeId;
-        IndustrySectorId = industrySectorId;
-        JobTypeId = jobTypeId;
-        CompanyId = companyId;
-        StartDate = startDate;
-        EndDate = endDate;
-        IsActive = isActive;
-        if (questions != null)
-            Questions = questions;
-
-        LastModifiedDate = DateTime.UtcNow;
-    }
-
     public static Job UpdateActivation(int id, bool isActive)
     {
         return new Job()

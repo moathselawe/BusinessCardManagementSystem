@@ -135,7 +135,8 @@ export class JobFormComponent implements OnInit {
         stageOrder: 1,
         viaId:1,
         emailTemplate: this.defaultEmailTemplate,
-        isDisabled: true
+        isDisabled: true,
+        isFinalStage: false
       });
     }
   }
@@ -165,7 +166,8 @@ export class JobFormComponent implements OnInit {
           name: ds.name,
           stageOrder: ds.stageOrder,
           emailTemplate: '',
-          isDisabled: false
+          isDisabled: false,
+          isFinalStage: false
         });
       });
 
@@ -185,7 +187,8 @@ export class JobFormComponent implements OnInit {
       name: '',
       stageOrder: this.job.hiringStages.length + 1,
       emailTemplate: "",
-      isDisabled: false
+      isDisabled: false,
+      isFinalStage: false
     });
 
     this.stagesCount = this.job.hiringStages.length;
