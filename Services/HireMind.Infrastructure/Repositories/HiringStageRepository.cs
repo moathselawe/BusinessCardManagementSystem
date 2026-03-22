@@ -1,4 +1,6 @@
 ﻿
+using HireMind.Domain.Entities.HireMind;
+
 namespace HireMind.Infrastructure.Repositories;
 public class HiringStageRepository : BaseRepository<HiringStage>, IHiringStageRepository
 {

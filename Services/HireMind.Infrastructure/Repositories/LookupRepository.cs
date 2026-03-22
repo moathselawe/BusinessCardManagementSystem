@@ -1,4 +1,6 @@
-﻿namespace HireMind.Infrastructure.Repositories;
+﻿using HireMind.Domain.Entities.Shared;
+
+namespace HireMind.Infrastructure.Repositories;
 
 public class LookupRepository : BaseRepository<Lookup>, ILookupRepository
 {

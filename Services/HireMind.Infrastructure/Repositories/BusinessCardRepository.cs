@@ -1,4 +1,5 @@
 ﻿using HireMind.Domain.Dtos.SharedDtos;
+using HireMind.Domain.Entities.BCMS;
 
 namespace HireMind.Infrastructure.Repositories;
 

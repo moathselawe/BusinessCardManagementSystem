@@ -1,5 +1,6 @@
 ﻿using HireMind.Domain.Dtos.JobApplication;
 using HireMind.Domain.Dtos.UpdateApplicationStageStatusRequestDto;
+using HireMind.Domain.Entities.HireMind;
 using Microsoft.EntityFrameworkCore;
 
 namespace HireMind.Infrastructure.Repositories;

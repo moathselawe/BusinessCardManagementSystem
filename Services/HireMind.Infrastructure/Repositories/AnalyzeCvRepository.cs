@@ -1,4 +1,6 @@
-﻿namespace HireMind.Infrastructure.Repositories;
+﻿using HireMind.Domain.Entities.HireMind;
+
+namespace HireMind.Infrastructure.Repositories;
 
 public class AnalyzeCvRepository : BaseRepository<AnalyzeCv>, IAnalyzeCvRepository
 {
