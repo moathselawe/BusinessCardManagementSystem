@@ -1,4 +1,6 @@
-﻿namespace HireMind.Domain.Dtos.SharedDtos;
+﻿using HireMind.Domain.Entities.Shared;
+
+namespace HireMind.Domain.Dtos.SharedDtos;
 public record GetLookupDto
 {
     public int Id { get; set; }

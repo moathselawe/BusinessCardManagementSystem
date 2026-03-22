@@ -43,8 +43,9 @@ export class ManageJobsComponent extends BasePageComponent<Job> {
     { label: 'Preview', icon: 'pi pi-eye' },
     { label: 'Edit', icon: 'pi pi-pencil' },
     { label: 'Delete', icon: 'pi pi-trash' },
-    { label: 'JobApplication', icon: 'pi pi-plus' },
-    { label: 'ManageApplications', icon: 'pi pi-list' }
+    { label: 'Job Application', icon: 'pi pi-plus' },
+    { label: 'Manage Applications', icon: 'pi pi-list' },
+    { label: 'Manage Stages & Questions', icon: 'pi pi-wrench' }
   ];
 
   Add() {
@@ -53,6 +54,10 @@ export class ManageJobsComponent extends BasePageComponent<Job> {
 
   edit(rowId: any) {
     this.router.navigate(['/HireMind/ModifyJob', rowId]);
+  }
+
+  editManageStagesAndQuestions(rowId: any) {
+    this.router.navigate(['/HireMind/ManageStagesAndQuestions', rowId]);
   }
 
   preview(rowId: any) {

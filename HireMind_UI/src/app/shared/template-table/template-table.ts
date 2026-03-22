@@ -54,6 +54,7 @@ export class TemplateTable {
   @Input() withoutImportAndExport: boolean = false;
 
   @Output() onEdit = new EventEmitter<any>();
+  @Output() onEditManageStagesAndQuestions = new EventEmitter<any>();
   @Output() onApply = new EventEmitter<any>();
   @Output() onManageApplications = new EventEmitter<any>();
   @Output() onExport = new EventEmitter<any>();
@@ -128,14 +129,16 @@ export class TemplateTable {
       command: () => {
         if (item.label === 'Edit') {
           this.onEdit.emit(this.currentRowData.id);
-        } else if (item.label === 'Preview') {
+        } else if (item.label === 'Manage Stages & Questions') {
+          this.onEditManageStagesAndQuestions.emit(this.currentRowData.id);
+        }else if (item.label === 'Preview') {
           this.onPreview.emit(this.currentRowData.id);
         } else if (item.label === 'Delete') {
           this.onDelete.emit(this.currentRowData.id);
-        } else if (item.label === 'JobApplication') {   // ✅ FIX
+        } else if (item.label === 'Job Application') {   // ✅ FIX
           this.onApply.emit(this.currentRowData.id);
         }
-        else if (item.label === 'ManageApplications') {   // ✅ FIX
+        else if (item.label === 'Manage Applications') {   // ✅ FIX
           this.onManageApplications.emit(this.currentRowData.id);
         }
         else if (item.label === 'PrintPDF') {

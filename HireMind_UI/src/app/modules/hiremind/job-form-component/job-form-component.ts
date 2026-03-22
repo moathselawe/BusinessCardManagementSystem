@@ -50,6 +50,7 @@ export class JobFormComponent implements OnInit {
   contractTypes: LookupItem[] = [];
   organizationTypes: LookupItem[] = [];
   industrySectors: LookupItem[] = [];
+  isManageStagesAndQuestions: boolean = false;
 
   companies = [
     { name: 'Company A', id: 1 },
@@ -100,6 +101,11 @@ export class JobFormComponent implements OnInit {
       this.isEditMode = true;
     }
 
+    else if (url.includes('ManageStagesAndQuestions')) {
+      this.isManageStagesAndQuestions = true
+      this.isEditMode = true;
+    }
+
     this.today.setHours(0, 0, 0, 0);
 
     this.tomorrow = new Date(this.today);
@@ -136,6 +142,7 @@ export class JobFormComponent implements OnInit {
         viaId:1,
         emailTemplate: this.defaultEmailTemplate,
         isDisabled: true,
+        isActive: true,
         isFinalStage: false
       });
     }
@@ -167,6 +174,7 @@ export class JobFormComponent implements OnInit {
           stageOrder: ds.stageOrder,
           emailTemplate: '',
           isDisabled: false,
+          isActive:false,
           isFinalStage: false
         });
       });
@@ -188,6 +196,7 @@ export class JobFormComponent implements OnInit {
       stageOrder: this.job.hiringStages.length + 1,
       emailTemplate: "",
       isDisabled: false,
+      isActive:false,
       isFinalStage: false
     });
 
@@ -662,20 +671,20 @@ export class JobFormComponent implements OnInit {
     this.stageIndex = null;
   }
 
-  openInterviewDialog(stageIndex: number) {
-    const stage = this.job.hiringStages[stageIndex];
-    if (!stage) return;
+  //openInterviewDialog(stageIndex: number) {
+  //  const stage = this.job.hiringStages[stageIndex];
+  //  if (!stage) return;
 
-    this.stageIndex = stageIndex;
-    this.StageTitle = stage.name || 'Interview';
+  //  this.stageIndex = stageIndex;
+  //  this.StageTitle = stage.name || 'Interview';
 
-    if (!stage.interviewQuestions) {
-      stage.interviewQuestions = [];
-    }
+  //  if (!stage.interviewQuestions) {
+  //    stage.interviewQuestions = [];
+  //  }
 
-    this.interviewQuestions = [...stage.interviewQuestions];
-    this.isInterviewDialogVisible = true;
-  }
+  //  this.interviewQuestions = [...stage.interviewQuestions];
+  //  this.isInterviewDialogVisible = true;
+  //}
 
   saveInterviewDialog() {
     if (this.stageIndex !== null) {
@@ -706,19 +715,19 @@ export class JobFormComponent implements OnInit {
     this.interviewQuestions.splice(index, 1);
   }
 
-  openExamDialog(stageIndex: number) {
-    const stage = this.job.hiringStages[stageIndex];
-    if (!stage) return;
+  //openExamDialog(stageIndex: number) {
+  //  const stage = this.job.hiringStages[stageIndex];
+  //  if (!stage) return;
 
-    this.stageIndex = stageIndex;
-    this.StageTitle = stage.name || 'Exam';
+  //  this.stageIndex = stageIndex;
+  //  this.StageTitle = stage.name || 'Exam';
 
-    if (!stage.examQuestions)
-      stage.examQuestions = [];
+  //  if (!stage.examQuestions)
+  //    stage.examQuestions = [];
 
-    this.examQuestions = [...stage.examQuestions];
-    this.isExamDialogVisible = true;
-  }
+  //  this.examQuestions = [...stage.examQuestions];
+  //  this.isExamDialogVisible = true;
+  //}
 
   saveExamDialog() {
     if (this.stageIndex !== null) {
@@ -811,5 +820,46 @@ export class JobFormComponent implements OnInit {
       });
 
     }
+  }
+
+  interviewFieldsDisabled: boolean = false;
+  examFieldsDisabled: boolean = false;
+
+  openInterviewDialog(stageIndex: number) {
+    const stage = this.job.hiringStages[stageIndex];
+    if (!stage) return;
+
+    this.stageIndex = stageIndex;
+    this.StageTitle = stage.name || 'Interview';
+
+    if (!stage.interviewQuestions) {
+      stage.interviewQuestions = [];
+    }
+
+    this.interviewQuestions = [...stage.interviewQuestions];
+
+    // ← Set dialog fields to disabled if stage is active
+    this.interviewFieldsDisabled = stage.isActive;
+
+    this.isInterviewDialogVisible = true;
+  }
+
+  openExamDialog(stageIndex: number) {
+    const stage = this.job.hiringStages[stageIndex];
+    if (!stage) return;
+
+    this.stageIndex = stageIndex;
+    this.StageTitle = stage.name || 'Exam';
+
+    if (!stage.examQuestions) {
+      stage.examQuestions = [];
+    }
+
+    this.examQuestions = [...stage.examQuestions];
+
+    // ← Set dialog fields to disabled if stage is active
+    this.examFieldsDisabled = stage.isActive;
+
+    this.isExamDialogVisible = true;
   }
 }

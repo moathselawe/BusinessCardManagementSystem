@@ -13,6 +13,7 @@ import { ManageJobsService } from '../../../services/hiremind/manageJobs.service
 import { JobQuestion } from '../../../models/hiremind/JobQuestion';
 import { ManageLookupsService } from '../../../services/shared/managelookup.service';
 import { ApplicationStageService } from '../../../services/hiremind/ApplicationStages.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-manage-applications.component',
@@ -66,6 +67,8 @@ export class ManageApplicationsComponent {
     public toastService: ToastMessageService
   ) { }
 
+
+
   ngOnInit(): void {
 
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -73,25 +76,127 @@ export class ManageApplicationsComponent {
     this.loading = true;
 
     if (id) {
-      this.loadApplicationsByJobId(id);
-      this.getAllHiringStagesByJobId(id);
+
+      this.searchApplications();          // load applications
+      this.getAllHiringStagesByJobId(id); // load stages
+      this.loadJob(id);                   // ⭐ load job (missing)
+
     }
 
     this.serviceLookups.getAllParentsAndChilds().subscribe({
       next: (res: any) => {
         const parents: any[] = res.response || [];
         const parent = parents.find(p => p.categoryName?.toLowerCase() === 'countrycodes');
+
         this.countryCodes = (parent?.children || []).map((c: any) => ({
           id: c.id,
           name: c.categoryName,
           categoryName: c.categoryName,
           parentId: c.parentId
         }));
-      },
-      error: (err) => {
-        console.error(err);
       }
     });
+  }
+
+  searchInput: string = '';
+  selectedStageId: number | null = null;
+  isActionsVisibale: boolean = false;
+  isFiltersVisibale: boolean = false;
+  selectedStageStatusId: StageStatus | null = null;
+  shortListCount: number | null = null;
+  StageStatus = StageStatus;
+
+  onStageTagClick(status: StageStatus) {
+    if (this.selectedStageStatusId === status) {
+      // Deselect if clicked again
+      this.selectedStageStatusId = null;
+    } else {
+      this.selectedStageStatusId = status;
+    }
+    this.searchApplications();
+  }
+
+  onStageClick(stage: any) {
+    if (this.selectedStageId === stage.id) {
+      // User clicked the same step again → deselect
+      this.activeStep = 0; // or null if you prefer
+      this.selectedStageId = null;
+      this.searchApplications();
+    } else {
+      // Select the clicked step
+      this.activeStep = stage.stageOrder;
+      this.selectedStageId = stage.id;
+      this.searchApplications();
+    }
+  }
+
+  searchApplications() {
+
+    const request: any = {
+      jobId: this.jobId
+    };
+
+    if (this.selectedStageStatusId !== null) {
+      request.stageStatusId = this.selectedStageStatusId;
+    }
+
+    if (this.selectedStageId) {
+      request.stageId = this.selectedStageId;
+    }
+
+    if (this.shortListCount) {
+      request.limit = this.shortListCount; // send to backend as limit
+    }
+
+    if (this.searchInput && this.searchInput.trim() !== '') {
+      request.searchInput = this.searchInput.trim();
+    }
+
+    this.loading = true;
+
+    this.applicationStageService.searchApplications(request).subscribe({
+      next: (res: any) => {
+
+        this.applications = res;
+        this.loading = false;
+
+      },
+      error: () => {
+
+        this.loading = false;
+
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Error',
+          messageBody: 'Failed to search applications.'
+        });
+
+      }
+    });
+
+  }
+
+  onShortListChange(value: string) {
+    const parsed = parseInt(value, 10);
+
+    if (!isNaN(parsed) && parsed > 0) {
+      this.shortListCount = parsed;
+    } else {
+      this.shortListCount = null; // clear if invalid
+    }
+
+    this.searchApplications();
+  }
+
+  clearSearch() {
+
+    this.searchInput = '';
+    this.selectedStageId = null;
+    this.selectedStageStatusId = null;
+    this.shortListCount = null;
+    this.activeStep = 0;
+
+    this.searchApplications();
   }
 
   loadApplicationsByJobId(id: any) {
@@ -246,7 +351,7 @@ export class ManageApplicationsComponent {
           messageBody: 'Statuses updated successfully.'
         });
 
-        this.loadApplicationsByJobId(this.jobId);
+        this.searchApplications();
         this.getAllHiringStagesByJobId(this.jobId);
 
       },
@@ -466,5 +571,58 @@ export class ManageApplicationsComponent {
         });
       }
     });
+  }
+
+  reviewCV(applicationId: number) {
+    if (!applicationId) return;
+
+    this.service.previewCV(applicationId).subscribe({
+      next: (res: Blob) => {
+        if (!res || res.size === 0) {
+          this.toastService.showMessage({
+            messageType: 'warn',
+            messageTitle: 'No File',
+            messageBody: 'No CV found for this application.'
+          });
+          return;
+        }
+
+        const url = window.URL.createObjectURL(res);
+        window.open(url, '_blank');
+      },
+      error: () => {
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Error',
+          messageBody: 'Failed to preview CV.'
+        });
+      }
+    });
+  }
+  // Export selected rows to Excel
+  exportSelectedRows() {
+    if (!this.selectedRows || this.selectedRows.length === 0) {
+      alert('Please select at least one row to export.');
+      return;
+    }
+
+    // Map selected rows to Excel-friendly format
+    const exportData = this.selectedRows.map(app => ({
+      Name: app.fullName,
+      Email: app.email,
+      Mobile: `${app.countryCode} ${app.mobileNumber}`,
+      'System Score': app.systemScore,
+      'Total Score': app.totalScore,
+      'Stage Name': app.currentStageName,
+      'Status': app.status
+    }));
+
+    // Create worksheet and workbook
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Applications');
+
+    // Export file
+    XLSX.writeFile(wb, 'SelectedApplications.xlsx');
   }
 }

@@ -1,4 +1,6 @@
-﻿namespace HireMind.Application.Commands.ManageJobs;
+﻿using HireMind.Domain.Entities.HireMind;
+
+namespace HireMind.Application.Commands.ManageJobs;
 public record CreateJobCommand(CreateJobRequestDto Request) : IRequest<CreateJobResult>;
 public record CreateJobResult(int Id);
 
@@ -66,7 +68,7 @@ public class CreateJobHandler : IRequestHandler<CreateJobCommand, CreateJobResul
             name: "Initiate Application",
             stageOrder: 1,
             isFinalStage: false,
-            isActive: true,
+            isActive: false,
             viaId: 1,
             emailTemplate: !string.IsNullOrWhiteSpace(userInputEmailTemplate) ? userInputEmailTemplate
         : @"

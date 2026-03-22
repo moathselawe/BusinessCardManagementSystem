@@ -1,4 +1,6 @@
-﻿namespace HireMind.Application.Commands.Shared;
+﻿using HireMind.Domain.Entities.Shared;
+
+namespace HireMind.Application.Commands.Shared;
 
 public record CreateLookupCommand(CreateLookUpDto command) : IRequest<CreateLookupResult>;
 public record CreateLookupResult(int Id);

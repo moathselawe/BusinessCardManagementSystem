@@ -1,4 +1,6 @@
 ﻿using HireMind.Application.Commands.ApplicationStage;
+using HireMind.Application.Queries.ApplicationStage;
+using HireMind.Domain.Dtos.ApplicationStage;
 using HireMind.Domain.Dtos.UpdateApplicationStageStatusRequestDto;
 
 namespace HireMind.Api.Controllers.HireMindControllers;
@@ -22,4 +24,12 @@ public class ApplicationStageController : ApiBaseController
         else
             return BadRequest("Failed to Update Application Stage Status for selected applications.");
     }
+
+    [HttpPost("search")]
+    public async Task<IActionResult> Search([FromBody] SearchJobApplicationsRequestDto filters)
+    {
+        var result = await _sender.Send(new SearchJobApplicationQuery(filters));
+        return Ok(result);
+    }
+
 }

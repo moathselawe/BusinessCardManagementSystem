@@ -1,6 +1,6 @@
 ﻿using DocumentFormat.OpenXml.ExtendedProperties;
 using GenerativeAI.Types;
-using HireMind.Domain.Entities;
+using HireMind.Domain.Entities.HireMind;
 using HireMind.Domain.Enum;
 using HireMind.Domain.IRepositories;
 using System.Runtime.ConstrainedExecution;

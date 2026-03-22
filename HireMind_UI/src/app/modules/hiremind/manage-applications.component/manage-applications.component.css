@@ -19,6 +19,19 @@
   background-color: #fff;
 }
 
+.card-modern-actions {
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  background-color: #fff;
+}
+
+.dark-label {
+  color: #333;
+  font-weight: 500;
+}
+
 .stage-step {
   display: flex;
   flex: 1;
@@ -62,9 +75,17 @@
   border-radius: 6px;
 }
 
-.score-badge {
+.system-Score-badge {
   background-color: #e3f2fd;
   color: #0d47a1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.total-score-badge {
+  background-color: #d4edda; /* light green background */
+  color: #155724; /* dark green text */
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
   font-weight: 600;
@@ -87,14 +108,18 @@
   gap: 0.5rem;
 }
 
-
+.selected-stage {
+  background: #e3f2fd;
+  border-radius: 6px;
+  padding: 4px 10px;
+}
 
 /*.stage-clickable {
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 4px;
   transition: all 0.2s;
-}
+}  
 
 .stage-clickable:hover {
   background-color: #e0f2ff;
@@ -104,4 +129,5 @@
   background-color: #2196f3;
   color: #fff;
   font-weight: bold;
-}*/
+}
+*/

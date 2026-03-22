@@ -1,4 +1,6 @@
-﻿namespace HireMind.Application.Commands.ManageJobs;
+﻿using HireMind.Domain.Entities.HireMind;
+
+namespace HireMind.Application.Commands.ManageJobs;
 
 public record UpdateJobCommand(UpdateJobRequestDto request) : IRequest<UpdateJobResult>;
 public record UpdateJobResult(bool IsSuccess);

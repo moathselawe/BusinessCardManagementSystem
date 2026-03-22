@@ -33,10 +33,10 @@ export class JobApplicationService {
     });
   }
 
-  // jobApplication.service.ts
   previewCV(applicationId: number) {
-    return this.httpClient.get(`${this.baseUrl}preview-cv/${applicationId}`, {
-      responseType: 'blob'
-    });
+    return this.httpClient.get(
+      `${this.baseUrl}preview-cv/${applicationId}`,
+      { responseType: 'blob' }
+    );
   }
 }

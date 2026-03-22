@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json;
 using DocumentFormat.OpenXml.Packaging;
 using UglyToad.PdfPig;
-using HireMind.Domain.Entities;
+using HireMind.Domain.Entities.HireMind;
 
 namespace HireMind.Application.Services;
 

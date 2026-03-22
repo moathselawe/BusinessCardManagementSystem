@@ -1,20 +1,35 @@
 <!-- Sticky Header -->
-<div class="panel-heading sticky-header">
-  <h3 style="color: #2196f3;">Manage {{applications[0].jobTitle}} Applications</h3>
+<div class="panel-heading sticky-header" *ngIf="applications?.length">
+  <h3 style="color: #2196f3;">
+    Manage {{ applications[0]?.jobTitle }} Applications
+  </h3>
 </div>
 
 <!-- Hiring Stages -->
 <div class="card card-modern" *ngIf="!loading">
-  <h6>Current Hiring Stages</h6>
-  <p-stepper [value]="activeStep" class="w-full" [linear]="true">
+  <h6>Filter by Hiring Stages</h6>
+  <p-stepper [value]="activeStep" class="w-full">
     <p-step-list>
       <p-step *ngFor="let stage of hiringStages"
               [value]="stage.stageOrder"
-              class="flex flex-row flex-auto gap-2">
+              class="flex flex-row flex-auto gap-2"
+              (click)="onStageClick(stage)"
+              [ngStyle]="{
+              'background-color': selectedStageId === stage.id ? '#cce5ff' : 'transparent',
+              'border-radius': '6px',
+              'padding': '0.25rem 0.5rem'
+            }">
+
         <span class="text-center"
-              [ngStyle]="{'color': stage.isActive ? '#2196f3' : '#040404', 'font-weight': stage.isFinalStage ? 'bold' : 'normal'}">
+              style="cursor:pointer"
+              [ngStyle]="{
+              'color': stage.isActive ? '#2196f3' : '#040404',
+              'font-weight': stage.isFinalStage ? 'bold' : 'normal'
+            }">
           {{ stage.name }}
-          <small *ngIf="stage.isFinalStage" style="color: #ff5722;">(Final)</small>
+          <small *ngIf="stage.isFinalStage" style="color:#ff5722">
+            (Final)
+          </small>
         </span>
       </p-step>
     </p-step-list>
@@ -23,26 +38,74 @@
 
 <!-- Actions & Search -->
 <div class="card card-modern" *ngIf="!loading">
-  <div class="actions-container">
 
-    <!-- Bulk Buttons -->
+  <div class="actions-container">
     <div class="bulk-actions">
-      <p-button label="Mark Selected" (click)="openBulkDialog('Mark Bulk Selected')" severity="success" rounded raised></p-button>
-      <p-button label="Mark Not Selected" (click)="openBulkDialog('Mark Bulk Not Selected')" severity="danger" rounded raised></p-button>
-      <p-button label="Move to Next Stage" (click)="openBulkDialog('Move Bulk to Next Stage')" severity="info" rounded raised></p-button>
+      <p-button label="{{ isFiltersVisibale ? 'Hide Filters' : 'Show Filters' }}"
+                icon="pi pi-filter"
+                (click)="isFiltersVisibale = !isFiltersVisibale"
+                severity="secondary" raised>
+      </p-button>
+      <p-button label="{{ isActionsVisibale ? 'Hide Actions' : 'Show Actions' }}"
+                icon="pi pi-sliders-h"
+                (click)="isActionsVisibale = !isActionsVisibale"
+                severity="secondary" raised>
+      </p-button>
     </div>
+
 
     <!-- Search -->
     <div style="display: flex; justify-content: space-between; gap: 10px; padding: .5rem; margin: 0.2rem; ">
       <input pInputText
              type="text"
+             [(ngModel)]="searchInput"
              placeholder="Search..."
              style="width: 100%;" />
-      <p-button label="Search" icon="pi pi-search" severity="info" rounded></p-button>
-      <p-button label="Clear" icon="pi pi-times" severity="secondary" rounded></p-button>
+      <p-button label="Search" icon="pi pi-search" severity="info" rounded (click)="searchApplications()"></p-button>
+      <p-button label="Clear" icon="pi pi-times" severity="secondary" rounded (click)="clearSearch()"></p-button>
+    </div>
+  </div>
+
+
+  <div class="card-modern-actions" style="display:flex; justify-content:space-between; align-items:center;" *ngIf="isFiltersVisibale">
+    <div class="bulk-actions" style="display:flex; flex-direction:column;">
+      <label class="col-form-label dark-label" style="color:#212121; font-weight:bold;">Total Score Short List</label>
+
+      <input pInputText
+             type="number"
+             min="1"
+             [max]="1000"
+             [value]="shortListCount"
+             (change)="onShortListChange($event.target.value)"
+             placeholder="Enter short list"
+             class="form-control"
+             style="width:200px;" />
     </div>
 
+    <div class="bulk-actions" style="display:flex; flex-direction:column; gap:0.5rem;">
+      <label class="ccol-form-label dark-label" style="color:#212121; font-weight:bold;">Status Filters</label>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+        <p-tag value="New" severity="info" icon="pi pi-info-circle" style="cursor: pointer;" (click)="onStageTagClick(StageStatus.New)"></p-tag>
+        <p-tag value="Selected" severity="info" icon="pi pi-exclamation-triangle" style="cursor: pointer;" (click)="onStageTagClick(StageStatus.Selected)"></p-tag>
+        <p-tag value="Not Selected" severity="danger" icon="pi pi-times" style="cursor: pointer;" (click)="onStageTagClick(StageStatus.NotSelected)"></p-tag>
+        <p-tag value="Approved" severity="success" icon="pi pi-check" rounded raised style="cursor: pointer;" (click)="onStageTagClick(StageStatus.Approved)"></p-tag>
+      </div>
+    </div>
   </div>
+
+  <div class="card-modern-actions" style="display:flex; justify-content:space-between; align-items:center;" *ngIf="isActionsVisibale">
+    <div class="bulk-actions">
+      <p-button label="Export Excel" icon="pi pi-file-export" severity="secondary" raised (click)="exportSelectedRows()"></p-button>
+    </div>
+
+    <div class="bulk-actions">
+      <p-button label="Mark Selected" icon="pi pi-check-circle" (click)="openBulkDialog('Mark Bulk Selected')" severity="success" rounded raised></p-button>
+      <p-button label="Mark Not Selected" icon="pi pi-times-circle" (click)="openBulkDialog('Mark Bulk Not Selected')" severity="danger" rounded raised></p-button>
+      <p-button label="Move to Next Stage" icon="pi pi-arrow-right" (click)="openBulkDialog('Move Bulk to Next Stage')" severity="info" rounded raised></p-button>
+    </div>
+  </div>
+
+  <p-divider></p-divider>
 
   <!-- Applications Table -->
   <p-table [value]="applications"
@@ -61,9 +124,9 @@
         <th>Email</th>
         <th>Mobile</th>
         <th pSortableColumn="systemScore">System Score <p-sortIcon field="systemScore"></p-sortIcon></th>
-        <th>Total Score</th>
-        <th>Stage</th>
-        <th>Status</th>
+        <th pSortableColumn="totalScore">Total Score <p-sortIcon field="totalScore"></p-sortIcon></th>
+        <th>Stage Name</th>
+        <th>Status on Stage</th>
         <th>Actions</th>
       </tr>
     </ng-template>
@@ -74,14 +137,14 @@
         <td>{{ app.fullName }}</td>
         <td>{{ app.email }}</td>
         <td>{{ app.countryCode }} {{ app.mobileNumber }}</td>
-        <td><span class="score-badge">{{ app.systemScore }}</span></td>
-        <td>{{ app.totalScore }}</td>
+        <td><span class="system-Score-badge">{{ app.systemScore }}</span></td>
+        <td><span class="total-score-badge">{{ app.totalScore }}</span></td>
         <td>{{ app.currentStageName }}</td>
         <td>
-          <p-tag *ngIf="app.status === 'New'" value="New" severity="info" rounded></p-tag>
-          <p-tag *ngIf="app.status === 'Selected'" value="Selected" severity="info" rounded></p-tag>
-          <p-tag *ngIf="app.status === 'NotSelected'" value="Not Selected" severity="danger" rounded></p-tag>
-          <p-tag *ngIf="app.status === 'Approved'" value="Approved" severity="success" rounded></p-tag>
+          <p-tag *ngIf="app.status === 'New'" value="New" severity="info" icon="pi pi-info-circle" rounded></p-tag>
+          <p-tag *ngIf="app.status === 'Selected'" value="Selected" severity="info" icon="pi pi-exclamation-triangle" rounded></p-tag>
+          <p-tag *ngIf="app.status === 'NotSelected'" value="Not Selected" severity="danger" icon="pi pi-times" rounded></p-tag>
+          <p-tag *ngIf="app.status === 'Approved'" value="Approved" severity="success" icon="pi pi-check" rounded></p-tag>
         </td>
         <td>
           <div class="flex">
@@ -201,7 +264,7 @@
 
 
 
-    <div class="field col-12" *ngFor="let question of job.questions; let i = index" style="margin-bottom:30px;">
+    <div class="field col-12" *ngFor="let question of job?.questions; let i = index" style="margin-bottom:30px;">
       <label class="col-form-label">
         {{ question.questionText }}
         <span *ngIf="question.isRequired" style="color:red;">*</span>
@@ -319,8 +382,6 @@
   </div>
 </p-dialog>
 
-
-
 <p-dialog header="Final Stage Confirmation"
           [(visible)]="isFinalStageDialogVisible"
           [modal]="true"
@@ -354,5 +415,3 @@
   </div>
 
 </p-dialog>
-
-

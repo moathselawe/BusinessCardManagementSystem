@@ -1,4 +1,6 @@
-﻿namespace HireMind.Application.Interfaces;
+﻿using HireMind.Domain.Entities.HireMind;
+
+namespace HireMind.Application.Interfaces;
 
 public interface IAnalyzeCvService
 {

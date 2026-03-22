@@ -9,5 +9,6 @@ export class HiringStage {
   interviewQuestions?: JobQuestion[]; 
   examQuestions?: JobQuestion[];
   isDisabled: boolean = false;
+  isActive: boolean = false;
   isFinalStage: boolean = false;
 }

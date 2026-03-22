@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'JobApplication/:id', component: JobApplicationAssistantComponent },
   { path: 'CreateJob', component: JobFormComponent },
   { path: 'ModifyJob/:id', component: JobFormComponent },
+  { path: 'ManageStagesAndQuestions/:id', component: JobFormComponent },
   { path: 'PreviewJob/:id', component: JobFormComponent },
   { path: 'ManageApplications/:id', component: ManageApplicationsComponent },
   { path: '', redirectTo: 'JobApplication', pathMatch: 'full' }

@@ -1,4 +1,6 @@
-﻿namespace HireMind.Domain.Dtos.ManageJobs;
+﻿using HireMind.Domain.Entities.HireMind;
+
+namespace HireMind.Domain.Dtos.ManageJobs;
 public class GetJobResponseDto
 {
     public int Id { get; set; }
@@ -79,6 +81,7 @@ public class GetJobResponseDto
                     Name = x.Name,
                     StageOrder = x.StageOrder,
                     ViaId = x.ViaId,
+                    IsActive = x.IsActive,
                     EmailTemplate = x.EmailTemplate ?? string.Empty,
 
                     InterviewQuestions = x.InterviewQuestions?.Select(q => new JobQuestionDto

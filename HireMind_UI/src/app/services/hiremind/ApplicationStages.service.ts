@@ -14,4 +14,8 @@ export class ApplicationStageService {
   updateBulkApplicationsStageStatus(param: { ids: any; newStatus: StageStatus }) {
     return this.httpClient.put(this.baseUrl + 'updateBulkApplicationsStageStatus', param);
   }
+
+  searchApplications(params: any) {
+      return this.httpClient.post(this.baseUrl + 'search', params);
+  }
 }

@@ -1,4 +1,5 @@
-﻿using HireMind.Domain.SeedWork;
+﻿using HireMind.Domain.Entities.HireMind;
+using HireMind.Domain.SeedWork;
 
 namespace HireMind.Application.Commands.JobApplication;
 public record AnalyzeCvCommand(AnalyzeCvRequestDto request) : IRequest<AnalyzeCvResult>;
