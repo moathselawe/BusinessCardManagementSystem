@@ -1,4 +1,6 @@
-﻿namespace HireMind.Domain.IRepositories;
+﻿using HireMind.Domain.Entities.HireMind;
+
+namespace HireMind.Domain.IRepositories;
 
 public interface IAnalyzeCvRepository : IRepository<AnalyzeCv>
 {

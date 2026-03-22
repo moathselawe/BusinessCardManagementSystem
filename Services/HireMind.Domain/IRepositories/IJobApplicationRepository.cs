@@ -1,4 +1,5 @@
 ﻿using HireMind.Domain.Dtos.JobApplication;
+using HireMind.Domain.Entities.HireMind;
 
 namespace HireMind.Domain.IRepositories;
 

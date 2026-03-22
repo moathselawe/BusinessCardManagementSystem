@@ -1,4 +1,6 @@
-﻿namespace HireMind.Domain.IRepositories;
+﻿using HireMind.Domain.Entities.Shared;
+
+namespace HireMind.Domain.IRepositories;
 
 public interface ILookupRepository : IRepository<Lookup>
 {
