@@ -1,0 +1,55 @@
+<div class="page-center">
+  <div class="card d-flex flex-column p-4 rounded shadow" style="width: 700px;">
+    <div class=" col-12 d-flex flex-column justify-content-center align-items-center gap-4" style="margin-top:20px;">
+      <ng-container *ngIf="loading">
+        <p>Verifying...</p>
+      </ng-container>
+
+      <ng-container *ngIf="!isValied && !loading && !isResendEmailSuccess">
+
+        <i class="pi pi-times-circle" style="color:red; font-size: 4rem;"></i>
+
+        <div class="col-12 form-group">
+          <h2 class="text-center mb-4" style="color:red;">
+            {{message}}
+          </h2>
+        </div>
+
+        <div *ngIf="isCanResendVerfication && email">
+          <p-button label="Resend Verification Email" [disabled]="isSending" icon="pi pi-send" severity="secondary" (click)="resendEmail()" />
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="isResendEmailSuccess && !loading">
+
+        <i class="pi pi-envelope" style="color:green; font-size: 4rem;"></i>
+
+        <div class="col-12 form-group">
+          <h2 class="text-center mb-4" style="color:green;">
+            Verification email sent again please check your email
+          </h2>
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="isValied && !loading">
+
+        <i class="pi pi-check-circle" style="color:green; font-size: 4rem;"></i>
+
+        <div class="col-12 form-group">
+          <h2 class="text-center mb-4" style="color:green;">
+            {{message}}
+          </h2>
+        </div>
+
+        <div class="col-12 form-group">
+          <h5 class="text-center">
+            <a routerLink="/login" class="reset-link">login now</a>
+          </h5>
+        </div>
+
+      </ng-container>
+    </div>
+  </div>
+</div>

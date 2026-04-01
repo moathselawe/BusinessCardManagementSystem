@@ -10,7 +10,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DialogModule } from 'primeng/dialog';
-
+import { PasswordModule } from 'primeng/password';
 @NgModule({
   declarations: [LoginComponent],
   imports: [
@@ -24,7 +24,8 @@ import { DialogModule } from 'primeng/dialog';
     CheckboxModule,
     InputGroupModule,
     InputGroupAddonModule,
-    DialogModule
+    DialogModule,
+    PasswordModule
   ]
 })
 export class LoginModule { }

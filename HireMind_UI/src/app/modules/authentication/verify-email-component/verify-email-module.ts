@@ -7,16 +7,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { ResetPasswordComponent } from './reset-password-component';
-import { ResetPasswordRoutingModule } from './reset-password-routing-module';
 import { InputOtpModule } from 'primeng/inputotp';
-import { PasswordModule } from 'primeng/password';
+import { VerifyEmailComponent } from './verify-email-component';
+import { VerifyEmailRoutingModule } from './verify-email-routing-module';
 
 @NgModule({
-  declarations: [ResetPasswordComponent],
+  declarations: [VerifyEmailComponent],
   imports: [
     CommonModule,
-    ResetPasswordRoutingModule,
+    VerifyEmailRoutingModule,
     ButtonModule, 
     FormsModule,
     ButtonModule,
@@ -25,8 +24,7 @@ import { PasswordModule } from 'primeng/password';
     CheckboxModule,
     InputGroupModule,
     InputGroupAddonModule,
-    InputOtpModule,
-    PasswordModule
+    InputOtpModule
   ]
 })
-export class ResetPasswordModule { }
+export class VerifyEmailModule { }

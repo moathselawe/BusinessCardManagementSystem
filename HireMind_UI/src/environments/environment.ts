@@ -10,5 +10,8 @@ export const endpoints = {
   ManageLooks:'LookUps/',
   Lookups: 'LookUps/',
   HiringStage: 'HiringStages/',
-  ApplicationStage: 'ApplicationStage/'
+  ApplicationStage: 'ApplicationStage/',
+  Registration: 'Registration/',
+  ResetPassword: 'ResetPassword/',
+  Token: 'Token/',
 }

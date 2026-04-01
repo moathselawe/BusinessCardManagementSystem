@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ToastMessageService } from '../../../services/shared/toast-message.service';
+import { ResetPasswordService } from '../../../services/hiremind/resetPassword.service';
 
-@Component({
+@Component({ 
   selector: 'app-reset-password-component',
   standalone: false,
   templateUrl: './reset-password-component.html',
@@ -16,10 +19,58 @@ export class ResetPasswordComponent {
   isPasswordSaved: boolean = false;
   resendCountdown: number = 30; 
   otp: any;
+  email: string = '';
+  password: string = '';
+  confirmPassword: string = '';
+  isDisableVerficationSent: boolean = false;
+  constructor(
+    private route: ActivatedRoute,
+    public toastService: ToastMessageService,
+    private service: ResetPasswordService
+  ) { }
 
   sendVerfication() {
-    this.isVerficationSent = true;
-    this.disableResendButton();
+
+    if (!this.email) return;
+
+    this.isDisableVerficationSent = true;
+
+    this.service.sendResetCode(this.email).subscribe({
+      next: (res: any) => {
+
+        if (res.isSuccess) {
+          this.isVerficationSent = true;
+          this.disableResendButton();
+        }
+        else {
+
+          this.isVerficationSent = false;
+          this.isDisableVerficationSent = false;
+
+          this.toastService.showMessage({
+            messageType: 'error',
+            messageTitle: 'Error',
+            messageBody: res.message
+          });
+
+        }
+
+      },
+      error: (err) => {
+
+        this.isVerficationSent = false;
+        this.isDisableVerficationSent = false;
+
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Error',
+          messageBody: 'Something went wrong. Please try again.'
+        });
+
+        console.error(err);
+      }
+    });
+
   }
 
   disableResendButton() {
@@ -39,29 +90,126 @@ export class ResetPasswordComponent {
   }
 
   resendVerification() {
+
     if (this.isResendDisabled) return;
 
-    this.disableResendButton();
+    this.service.sendResetCode(this.email).subscribe({
+      next: (res: any) => {
+
+        if (res.isSuccess) {
+          this.disableResendButton();
+        }
+        else {
+
+          this.toastService.showMessage({
+            messageType: 'error',
+            messageTitle: 'Error',
+            messageBody: res.message
+          });
+
+        }
+
+      },
+      error: () => {
+
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Error',
+          messageBody: 'Failed to resend verification code.'
+        });
+
+      }
+    });
+
   }
 
   confirmVerification() {
-    if (this.otp?.length === 6) {
-      this.isConfirmed = true;
-      this.isInvalidOTP = false;
-    } else {
-      this.isConfirmed = false;
+
+    if (this.otp && this.otp.length !== 6) {
       this.isInvalidOTP = true;
       return;
     }
 
-    // call api here
-    // API will deside
-    this.isCorrectOTP = true; //incase its incorrect
-   // this.isCorrectOTP = false; //incase its correct
+    this.service.verifyResetCode(this.email, this.otp).subscribe({
+      next: (res: any) => {
+
+        if (res.isSuccess) {
+          this.isCorrectOTP = true;
+        }
+        else {
+
+          this.isConfirmed = true;
+          this.isInvalidOTP = true;
+
+          this.toastService.showMessage({
+            messageType: 'error',
+            messageTitle: 'Error',
+            messageBody: res.message
+          });
+
+        }
+
+      },
+      error: () => {
+
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Error',
+          messageBody: 'Verification failed. Please try again.'
+        });
+
+      }
+    });
+
   }
 
   saveNewPassword() {
-    //check password befor assginging true to the next step
-    this.isPasswordSaved = true;
+
+    if (!this.password || this.password !== this.confirmPassword) {
+
+      this.toastService.showMessage({
+        messageType: 'error',
+        messageTitle: 'Error',
+        messageBody: 'Passwords do not match'
+      });
+
+      return;
+    }
+
+    const param = {
+      email: this.email,
+      otp: this.otp,
+      password: this.password,
+      confirmPassword: this.confirmPassword
+    };
+
+    this.service.saveNewPassword(param).subscribe({
+      next: (res: any) => {
+
+        if (res.isSuccess) {
+          this.isPasswordSaved = true;
+        }
+        else {
+
+          this.toastService.showMessage({
+            messageType: 'error',
+            messageTitle: 'Error',
+            messageBody: res.message
+          });
+
+        }
+
+      },
+      error: () => {
+
+        this.toastService.showMessage({
+          messageType: 'error',
+          messageTitle: 'Error',
+          messageBody: 'Password reset failed.'
+        });
+
+      }
+    });
+
   }
 }

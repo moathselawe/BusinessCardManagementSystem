@@ -45,6 +45,13 @@ export class ManageApplicationsComponent {
   questionsCount: number = 0;
   isFinalStageDialogVisible: boolean = false;
   pendingApplicationId!: number;
+  searchInput: string = '';
+  selectedStageId: number | null = null;
+  isActionsVisibale: boolean = false;
+  isFiltersVisibale: boolean = false;
+  selectedStageStatusId: StageStatus | null = null;
+  shortListCount: number | null = null;
+  StageStatus = StageStatus;
   personalInfo: {
     fullName: string;
     emailAddress: string;
@@ -67,20 +74,15 @@ export class ManageApplicationsComponent {
     public toastService: ToastMessageService
   ) { }
 
-
-
   ngOnInit(): void {
-
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.jobId = id;
     this.loading = true;
 
     if (id) {
-
       this.searchApplications();          // load applications
       this.getAllHiringStagesByJobId(id); // load stages
       this.loadJob(id);                   // ⭐ load job (missing)
-
     }
 
     this.serviceLookups.getAllParentsAndChilds().subscribe({
@@ -97,14 +99,6 @@ export class ManageApplicationsComponent {
       }
     });
   }
-
-  searchInput: string = '';
-  selectedStageId: number | null = null;
-  isActionsVisibale: boolean = false;
-  isFiltersVisibale: boolean = false;
-  selectedStageStatusId: StageStatus | null = null;
-  shortListCount: number | null = null;
-  StageStatus = StageStatus;
 
   onStageTagClick(status: StageStatus) {
     if (this.selectedStageStatusId === status) {

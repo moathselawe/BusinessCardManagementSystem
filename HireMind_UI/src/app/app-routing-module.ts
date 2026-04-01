@@ -16,6 +16,12 @@ const routes: Routes = [
         .then(m => m.ResetPasswordModule)
   },
   {
+    path: 'verify-email',
+    loadChildren: () =>
+      import('./modules/authentication/verify-email-component/verify-email-module')
+        .then(m => m.VerifyEmailModule)
+  },
+  {
     path: '',
     component: MainLayout,
     children: [
