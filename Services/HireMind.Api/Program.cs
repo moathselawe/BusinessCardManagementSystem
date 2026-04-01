@@ -1,5 +1,7 @@
 using HireMind.Application.Services;
+using HireMind.Domain.Settings;
 using HireMind.Infrastructure.Services;
+using System.Net.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,29 @@ builder.Services.AddScoped<ILookupRepository, LookupRepository>();
 builder.Services.AddScoped<IAnalyzeCvRepository, AnalyzeCvRepository>();
 builder.Services.AddScoped<IHiringStageRepository, HiringStageRepository>();
 builder.Services.AddScoped<IApplicationStageRepository, ApplicationStageRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
+
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddTransient(sp =>
+{
+    return new SmtpClient("smtp.gmail.com")
+    {
+        Port = 587,
+        Credentials = new System.Net.NetworkCredential("moathselawe12@gmail.com", "bovy vxjj dpbo zhvd"),
+        EnableSsl = true
+    };
+});
+
+builder.Services.AddTransient<INotificationService, NotificationService>();
+
+builder.Services.Configure<EmailVerificationSettings>(
+    builder.Configuration.GetSection("EmailVerification"));
+
 builder.Services.AddHttpClient<IAIService, AIService>(client =>
 {
     client.BaseAddress = new Uri("https://openrouter.ai/");
