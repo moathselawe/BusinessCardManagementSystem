@@ -1,4 +1,6 @@
-﻿namespace HireMind.Domain.Entities;
+﻿using HireMind.Domain.Entities.Shared;
+
+namespace HireMind.Domain.Entities.HireMind;
 public class Job : BaseAuditableEntity
 {
     public string Title { get; private set; } = null!;

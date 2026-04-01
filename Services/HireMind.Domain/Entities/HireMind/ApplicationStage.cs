@@ -1,4 +1,4 @@
-﻿namespace HireMind.Domain.Entities;
+﻿namespace HireMind.Domain.Entities.HireMind;
 public class ApplicationStage : BaseAuditableEntity
 {
     public int JobApplicationId { get; set; }

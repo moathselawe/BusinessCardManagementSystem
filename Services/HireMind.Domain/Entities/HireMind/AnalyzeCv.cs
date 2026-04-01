@@ -1,6 +1,6 @@
 ﻿using System.Net.Mail;
 
-namespace HireMind.Domain.Entities;
+namespace HireMind.Domain.Entities.HireMind;
 
 public class AnalyzeCv : BaseAuditableEntity
 {

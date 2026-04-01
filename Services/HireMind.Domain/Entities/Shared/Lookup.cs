@@ -1,4 +1,4 @@
-﻿namespace HireMind.Domain.Entities;
+﻿namespace HireMind.Domain.Entities.Shared;
 
 public class Lookup : BaseAuditableEntity
 {

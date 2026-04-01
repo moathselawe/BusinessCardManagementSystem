@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HireMind.Application\HireMind.Application.csproj" />
     <ProjectReference Include="..\HireMind.Domain\HireMind.Domain.csproj" />
   </ItemGroup>
 

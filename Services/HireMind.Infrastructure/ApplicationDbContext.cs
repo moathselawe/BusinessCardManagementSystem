@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿using HireMind.Domain.Entities.BCMS;
+using HireMind.Domain.Entities.HireMind;
+using HireMind.Domain.Entities.Security;
+using HireMind.Domain.Entities.Shared;
+using System.Reflection;
 
 namespace HireMind.Infrastructure;
 
@@ -19,6 +23,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<JobApplication> JobApplications { get; set; }
     public DbSet<HiringStage> HiringStages { get; set; }
     public DbSet<ApplicationStage> ApplicationStages { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Privilege> Privileges { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

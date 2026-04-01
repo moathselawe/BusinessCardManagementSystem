@@ -1,4 +1,4 @@
-﻿namespace HireMind.Domain.Entities;
+﻿namespace HireMind.Domain.Entities.BCMS;
 
 public class BusinessCard: BaseAuditableEntity
 {

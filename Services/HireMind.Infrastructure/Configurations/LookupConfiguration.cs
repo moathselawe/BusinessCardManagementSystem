@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using HireMind.Domain.Entities.Shared;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HireMind.Infrastructure.Configurations
 {

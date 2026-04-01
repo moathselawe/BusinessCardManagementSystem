@@ -1,5 +1,6 @@
-﻿
-namespace HireMind.Domain.Entities;
+﻿using HireMind.Domain.Entities.Shared;
+
+namespace HireMind.Domain.Entities.HireMind;
 public class JobApplication : BaseAuditableEntity
 {
     public int JobId { get; private set; }
