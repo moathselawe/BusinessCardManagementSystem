@@ -1,9 +1,8 @@
-﻿using HireMind.Application.Queries.Shared;
-using HireMind.Domain.Dtos.BusinessCard;
-using HireMind.Domain.Dtos.SharedDtos;
+﻿using HireMind.Domain.Dtos.BusinessCard;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HireMind.Api.Controllers.HireMindControllers;
-
+[Authorize]
 public class BusinessCardsController : ApiBaseController
 {
     private readonly ISender _sender;

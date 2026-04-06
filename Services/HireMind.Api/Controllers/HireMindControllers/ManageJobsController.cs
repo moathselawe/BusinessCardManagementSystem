@@ -1,4 +1,7 @@
-﻿namespace HireMind.Api.Controllers.HireMindControllers;
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace HireMind.Api.Controllers.HireMindControllers;
+[Authorize]
 
 public class ManageJobsController : ApiBaseController
 {

@@ -1,8 +1,8 @@
-﻿using HireMind.Application.Commands.ApplicationStage;
-using HireMind.Application.Queries.JobApplication;
-using HireMind.Domain.Dtos.UpdateApplicationStageStatusRequestDto;
+﻿using HireMind.Application.Queries.JobApplication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HireMind.Api.Controllers.HireMindControllers;
+[Authorize]
 
 public class JobApplicationController : ApiBaseController
 {

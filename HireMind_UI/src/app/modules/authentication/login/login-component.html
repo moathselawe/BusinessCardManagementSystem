@@ -41,7 +41,7 @@
 
           <div class="col-8 form-group">
             <div class="flex">
-              <p-button label="Login" icon="pi pi-user" severity="info" [style]="{ width: '375px' }" [(ngModel)]="rememberMe"/>
+              <p-button label="Login" icon="pi pi-user" severity="info" [style]="{ width: '375px' }" (onClick)="login()"/>
             </div>
           </div>
 

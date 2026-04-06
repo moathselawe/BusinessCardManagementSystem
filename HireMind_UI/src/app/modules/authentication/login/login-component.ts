@@ -151,13 +151,12 @@ export class LoginComponent {
 
   }
 
-
   email: string = '';
   password: string = '';
   rememberMe: boolean = false;
 
   isLoading: boolean = false;
-
+    
   login() {
 
     if (!this.email || !this.password) {
@@ -171,36 +170,34 @@ export class LoginComponent {
 
     this.isLoading = true;
 
+    //const payload = {
+    //  email: this.email,
+    //  password: this.password
+    //};
     const payload = {
-      email: this.email,
-      password: this.password
+      body: {
+        email: this.email,
+        password: this.password
+      }
     };
 
     this.tokenService.login(payload).subscribe({
-      next: (res: any) => {
+      next: (res: any) => { 
         this.isLoading = false;
+
         if (res.isSuccess) {
+          const token = res.accessToken;
+          const refreshToken = res.refreshToken;
 
-          const token = res.data.accessToken;
-          const refreshToken = res.data.refreshToken;
+          this.tokenService.saveTokens(token, refreshToken, this.rememberMe);
 
-          // Save tokens
+          // Save login credentials if needed
           if (this.rememberMe) {
-
-            localStorage.setItem('access_token', token);
-            localStorage.setItem('refresh_token', refreshToken);
-
-            // Save login credentials
             localStorage.setItem('remember_login', JSON.stringify({
               email: this.email,
               password: this.password
             }));
-
           } else {
-            sessionStorage.setItem('access_token', token);
-            sessionStorage.setItem('refresh_token', refreshToken);
-
-            // Remove saved login
             localStorage.removeItem('remember_login');
           }
 

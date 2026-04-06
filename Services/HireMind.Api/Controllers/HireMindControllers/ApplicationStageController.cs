@@ -2,8 +2,10 @@
 using HireMind.Application.Queries.ApplicationStage;
 using HireMind.Domain.Dtos.ApplicationStage;
 using HireMind.Domain.Dtos.UpdateApplicationStageStatusRequestDto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HireMind.Api.Controllers.HireMindControllers;
+[Authorize]
 
 public class ApplicationStageController : ApiBaseController
 {

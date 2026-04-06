@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HireMind.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260323190142_addsecuritytables")]
-    partial class addsecuritytables
+    [Migration("20260406173514_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -412,10 +412,15 @@ namespace HireMind.Infrastructure.Migrations
                     b.ToTable("JobApplications");
                 });
 
-            modelBuilder.Entity("HireMind.Domain.Entities.Security.Privilege", b =>
+            modelBuilder.Entity("HireMind.Domain.Entities.Security.Permission", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
@@ -438,7 +443,7 @@ namespace HireMind.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Privileges");
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("HireMind.Domain.Entities.Security.RefreshToken", b =>
@@ -466,8 +471,8 @@ namespace HireMind.Infrastructure.Migrations
                     b.Property<string>("UserAgent")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -478,8 +483,9 @@ namespace HireMind.Infrastructure.Migrations
 
             modelBuilder.Entity("HireMind.Domain.Entities.Security.Role", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
@@ -497,10 +503,6 @@ namespace HireMind.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.PrimitiveCollection<string>("PrivilegeIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -509,10 +511,26 @@ namespace HireMind.Infrastructure.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("HireMind.Domain.Entities.Security.RolePermission", b =>
+                {
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RoleId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("RolePermissions");
+                });
+
             modelBuilder.Entity("HireMind.Domain.Entities.Security.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -570,12 +588,14 @@ namespace HireMind.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PasswordResetOtp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PasswordResetOtpExpiresAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<byte[]>("ProfileImage")
                         .HasColumnType("varbinary(max)");
-
-                    b.PrimitiveCollection<string>("RoleIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TokenVersion")
                         .HasColumnType("int");
@@ -583,13 +603,24 @@ namespace HireMind.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.Security.UserRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("HireMind.Domain.Entities.Shared.Lookup", b =>
@@ -800,10 +831,51 @@ namespace HireMind.Infrastructure.Migrations
 
             modelBuilder.Entity("HireMind.Domain.Entities.Security.RefreshToken", b =>
                 {
-                    b.HasOne("HireMind.Domain.Entities.Security.User", null)
+                    b.HasOne("HireMind.Domain.Entities.Security.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.Security.RolePermission", b =>
+                {
+                    b.HasOne("HireMind.Domain.Entities.Security.Permission", "Permission")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HireMind.Domain.Entities.Security.Role", "Role")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.Security.UserRole", b =>
+                {
+                    b.HasOne("HireMind.Domain.Entities.Security.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HireMind.Domain.Entities.Security.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HireMind.Domain.Entities.Shared.Lookup", b =>
@@ -835,9 +907,23 @@ namespace HireMind.Infrastructure.Migrations
                     b.Navigation("ApplicationStages");
                 });
 
+            modelBuilder.Entity("HireMind.Domain.Entities.Security.Permission", b =>
+                {
+                    b.Navigation("RolePermissions");
+                });
+
+            modelBuilder.Entity("HireMind.Domain.Entities.Security.Role", b =>
+                {
+                    b.Navigation("RolePermissions");
+
+                    b.Navigation("UserRoles");
+                });
+
             modelBuilder.Entity("HireMind.Domain.Entities.Security.User", b =>
                 {
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("HireMind.Domain.Entities.Shared.Lookup", b =>

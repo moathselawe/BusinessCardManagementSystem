@@ -126,7 +126,7 @@ internal class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Regist
 
             await _unitOfWork.SaveWorkAsync(cancellationToken);
 
-            return new RegisterUserResult(userId);
+            return new RegisterUserResult(userId.ToString());
         }
         catch (Exception ex)
         {

@@ -1,5 +1,7 @@
-﻿namespace HireMind.Api.Controllers.NewFolder;
+﻿using Microsoft.AspNetCore.Authorization;
 
+namespace HireMind.Api.Controllers.NewFolder;
+[Authorize]
 public class LookUpsController : ApiBaseController
 {
     private readonly ISender _sender;

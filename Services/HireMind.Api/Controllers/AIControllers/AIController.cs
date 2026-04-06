@@ -1,8 +1,9 @@
 ﻿using HireMind.Application.Commands.Chatbot;
 using HireMind.Domain.Dtos.AI;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HireMind.Api.Controllers.AIControllers;
-
+[Authorize]
 public class AIController : ApiBaseController
 {
     private readonly ISender _sender;
