@@ -50,6 +50,18 @@ const routes: Routes = [
     component: MainLayout,
     children: [
       {
+        path: 'Auth',
+        loadChildren: () =>
+          import('./modules/admin/admin-module')
+            .then(m => m.AdminModule)
+      }
+    ]
+  },
+  {
+    path: '',
+    component: MainLayout,
+    children: [
+      {
         path: 'Shared',
         loadChildren: () =>
           import('./modules/reusable/reusable-module')

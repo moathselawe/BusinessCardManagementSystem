@@ -33,8 +33,16 @@ public class TokenService : ITokenService
             new Claim("tokenVersion", user.TokenVersion.ToString())
         };
 
-        foreach (var role in user.RoleIds)
-            claims.Add(new Claim(ClaimTypes.Role, role));
+        foreach (var role in user.UserRoles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
+
+            // permissions
+            foreach (var permission in role.Role.RolePermissions)
+            {
+                claims.Add(new Claim("permission", permission.Permission.Code));
+            }
+        }
 
         var token = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,

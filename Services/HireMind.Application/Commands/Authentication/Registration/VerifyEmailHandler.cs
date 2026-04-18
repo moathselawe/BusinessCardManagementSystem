@@ -1,6 +1,8 @@
-﻿namespace HireMind.Application.Commands.Authentication.Registration;
+﻿using HireMind.Domain.Entities.Security;
+
+namespace HireMind.Application.Commands.Authentication.Registration;
 public record VerifyEmailCommand(string PlainToken) : IRequest<VerifyEmailResult>;
-public record VerifyEmailResult(string Message, bool IsSuccess, bool IsCanResendVerfication,string? email = null);
+public record VerifyEmailResult(string Message, bool IsSuccess, bool IsCanResendVerfication, string? email = null);
 
 public class VerifyEmailCommandValidator : AbstractValidator<VerifyEmailCommand>
 {
@@ -12,12 +14,14 @@ public class VerifyEmailCommandValidator : AbstractValidator<VerifyEmailCommand>
 }
 internal class VerifyEmailHandler : IRequestHandler<VerifyEmailCommand, VerifyEmailResult>
 {
+    private readonly IRoleRepository _roleRepository;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public VerifyEmailHandler(IPasswordHasher passwordHasher, IUserRepository userRepository, IUnitOfWork unitOfWork)
+    public VerifyEmailHandler(IRoleRepository roleRepository, IPasswordHasher passwordHasher, IUserRepository userRepository, IUnitOfWork unitOfWork)
     {
+        _roleRepository = roleRepository;
         _passwordHasher = passwordHasher;
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
@@ -26,7 +30,7 @@ internal class VerifyEmailHandler : IRequestHandler<VerifyEmailCommand, VerifyEm
     {
         var userFromDB = await _userRepository.GetUserByPlainToken(request.PlainToken, cancellationToken);
 
-        if(userFromDB == null)
+        if (userFromDB == null)
         {
             return new VerifyEmailResult("Invalid link or User already verified", false, false);
         }
@@ -36,16 +40,24 @@ internal class VerifyEmailHandler : IRequestHandler<VerifyEmailCommand, VerifyEm
             return new VerifyEmailResult("Link expired, Email not verified", false, true, userFromDB.Email);
 
         var isVerifiedToken = _passwordHasher.Verify(request.PlainToken, userFromDB.EmailVerificationToken);
-        
+
         if (!isVerifiedToken)
             return new VerifyEmailResult("Invalid or expired link", false, true, userFromDB.Email);
+
+       
+        var defaultRole = await _roleRepository.GetByName("User", cancellationToken);
+
+        if (defaultRole is null)
+            throw new Exception("Default role not found");
+
+        userFromDB.AddRole(defaultRole.Id);
 
         userFromDB.UpdateVerifiedUser();
 
         var isUserVerified = await _userRepository.ModifyUser(userFromDB, cancellationToken);
 
         if (!isUserVerified)
-            return new VerifyEmailResult("Error while verifying email", false, true,userFromDB.Email);
+            return new VerifyEmailResult("Error while verifying email", false, true, userFromDB.Email);
 
         await _unitOfWork.SaveWorkAsync(cancellationToken);
 

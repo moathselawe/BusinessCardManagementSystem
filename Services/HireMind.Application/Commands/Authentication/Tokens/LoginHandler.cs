@@ -21,6 +21,7 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResult>
     private readonly ITokenService _tokenService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly SecuritySettings _securitySettings;
 
     public LoginHandler(
         IUserRepository userRepository,
@@ -28,7 +29,9 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResult>
         IPasswordHasher passwordHasher,
         ITokenService tokenService,
         IUnitOfWork unitOfWork,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IOptions<SecuritySettings> securitySettings
+        )
     {
         _userRepository = userRepository;
         _tokenRepository = tokenRepository;
@@ -36,6 +39,7 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResult>
         _tokenService = tokenService;
         _unitOfWork = unitOfWork;
         _httpContextAccessor = httpContextAccessor;
+        _securitySettings = securitySettings.Value;
     }
 
     public async Task<LoginResult> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -53,21 +57,32 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResult>
             return new LoginResult(new LoginRsDto("", "", false, "Email not verified"));
 
         if (user.IsLocked)
+        {
             return new LoginResult(new LoginRsDto("", "", false, "Account locked"));
+        }
 
         var passwordValid = _passwordHasher.Verify(
             request.Body.Password,
             user.PasswordHash);
 
+
         if (!passwordValid)
+        {
+            user.IncrementFailedAttempts();
+
+            if (user.FailedLoginAttempts >= _securitySettings.LoginAttemptTries)
+                user.LockAccount();
+
+            await _userRepository.ModifyUser(user, cancellationToken);
+            await _unitOfWork.SaveWorkAsync(cancellationToken);
+
             return new LoginResult(new LoginRsDto("", "", false, "Invalid credentials"));
-
-        //not allow multiple device login: Revoke all old refresh tokens
-        //foreach (var t in user.RefreshTokens.Where(x => x.IsActive))
-        //    t.Revoked = true;
-
-        // Increase token version to invalidate old access tokens
-        //user.IncrementTokenVersion();
+        }
+        else
+        {
+            user.ResetFailedAttempts();
+            await _userRepository.ModifyUser(user, cancellationToken);
+        }
 
         var accessToken = _tokenService.GenerateAccessToken(user);
 

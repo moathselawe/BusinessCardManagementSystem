@@ -1,0 +1,85 @@
+<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;" *ngIf="isDisabled && user">Manage {{user.nameEnglish}} Roles</h2>
+  <h2 style="color: #2196f3;" *ngIf="!isDisabled">Manage Users Roles</h2>
+</div>
+
+<div class="card role-permissions-card">
+  <div class="col-4 form-group">
+    <label class="col-form-label dark-label">Users</label>
+    <div class="card flex justify-center">
+
+      <p-select [options]="users"
+                [(ngModel)]="userId"
+                optionLabel="nameEnglish"
+                optionValue="id"
+                (onChange)="onUserChange($event.value)"
+                #userIdsCtrl="ngModel"
+                nameEnglish="userId"
+                placeholder="Select User"
+                [filter]="true"
+                filterBy="nameEnglish"
+                [showClear]="true"
+                appendTo="body"
+                class="w-full md:w-80"
+                [disabled]="isDisabled"
+                required>
+
+        <ng-template let-selectedOption pTemplate="selectedItem">
+          <div class="flex items-center gap-2">
+            <div>{{ selectedOption?.nameEnglish }}</div>
+          </div>
+        </ng-template>
+
+        <ng-template let-user pTemplate="item">
+          <div class="flex items-center gap-2">
+            <div>{{ user.nameEnglish }}</div>
+          </div>
+        </ng-template>
+
+      </p-select>
+    </div>
+  </div>
+
+  <div class="text-danger mt-1"
+       *ngIf="userIdsCtrl.invalid && (userIdsCtrl.touched)">
+    <small *ngIf="userIdsCtrl.errors?.['required']">User is required.</small>
+  </div>
+</div>
+
+<div class="card role-permissions-card">
+  <div class="col-12 form-group">
+    <label class="col-form-label dark-label">Assign Roles to User</label>
+
+    <p-picklist [source]="sourceRoles"
+                [target]="targetRoles"
+                [dragdrop]="true"
+                [responsive]="true"
+                filterBy="name"
+                sourceFilterPlaceholder="Search roles"
+                targetFilterPlaceholder="Selected roles"
+                scrollHeight="24rem">
+
+      <ng-template let-role pTemplate="item">
+        <div class="flex flex-column">
+          <span class="font-medium">{{ role.name }}</span>
+          <small class="text-color-secondary">{{ role.code }}</small>
+        </div>
+      </ng-template>
+
+    </p-picklist>
+  </div>
+
+  <div class="button-bar">
+    <p-button label="Cancel"
+              icon="pi pi-times"
+              severity="secondary"
+              (click)="cancel()">
+    </p-button>
+
+    <p-button label="Save"
+              icon="pi pi-save"
+              severity="success"
+              (click)="saveUserRoles()">
+    </p-button>
+  </div>
+</div>

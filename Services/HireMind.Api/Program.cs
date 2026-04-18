@@ -1,9 +1,4 @@
-using HireMind.Domain.Settings;
-using HireMind.Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Net.Mail;
-using System.Text;
+using HireMind.Infrastructure.SeedWork.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +33,8 @@ builder.Services.AddScoped<IAnalyzeCvRepository, AnalyzeCvRepository>();
 builder.Services.AddScoped<IHiringStageRepository, HiringStageRepository>();
 builder.Services.AddScoped<IApplicationStageRepository, ApplicationStageRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.Configure<JwtSettings>(
@@ -68,6 +65,10 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
+
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+
+builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -126,10 +127,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "HireMind API V1");
-        c.RoutePrefix = string.Empty; // Swagger at root
+        c.RoutePrefix = string.Empty; 
     });
 }
 
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    await RoleSeeder.SeedAsync(db);
+    await PermissionSeeder.SeedAsync(db);
+    await RoleSeeder.AssignAdminPermissions(db);
+}
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAngular");

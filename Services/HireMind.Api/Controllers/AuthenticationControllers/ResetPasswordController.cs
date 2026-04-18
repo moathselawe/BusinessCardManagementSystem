@@ -1,7 +1,6 @@
-﻿using HireMind.Domain.Dtos.Authentication;
+﻿namespace HireMind.Api.Controllers.AuthenticationControllers;
 
-namespace HireMind.Api.Controllers.AuthenticationControllers;
-
+[AllowAnonymous]
 public class ResetPasswordController : ApiBaseController
 {
     private readonly ISender _sender;

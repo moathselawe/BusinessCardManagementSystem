@@ -1,0 +1,228 @@
+<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;">Manage Users</h2>
+</div>
+
+<app-template-table [title]="'Users List'"
+                    [withoutImportAndExport]="true"
+                    [disableSpecificButton]="false"  
+                    [data]="data"
+                    [columns]="columns"
+                    [totalRecords]="totalCount"
+                    [actionsModel]="actionsModel"
+                    [isLoading]="isLoading"
+                    (onPreview)="preview($event)"
+                    (onEdit)="edit($event)"
+                    (onEditUserRoles)="editUserRoles($event)"
+                    (onApply)="apply($event)"
+                    (onDelete)="openConfirmationDialog($event)"
+                    (onLazyLoad)="search($event)"
+                    (onToggleLocked)="toggleLocked($event)"
+                    (onAdd)="Add()"
+                    (onSearch)="searchFromTable($event)">
+</app-template-table>
+
+<app-template-confirmation-dialog [(visible)]="visibleConfirmation"
+                                  [message]="'Are you sure you want to delete the User?'"
+                                  (onCancel)="closeConfirmationDialog()"
+                                  (onConfirm)="deleteEntity(deleteId)">
+</app-template-confirmation-dialog>
+
+
+<p-dialog header="{{ entity.id ? 'Edit User' : 'Add User' }}"
+          [(visible)]="visibleDetails"
+          [modal]="true"
+          [style]="{ width: '500px' }"
+          [closable]="true"
+          (onHide)="closeDialog(f)">
+
+  <form #f="ngForm">
+
+    <div class="p-fluid grid">
+
+      <!-- Name Arabic -->
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Name Arabic</label>
+        <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-user"></i>
+            </p-inputgroup-addon>
+
+            <input pInputText
+                   placeholder="Enter Arabic Name"
+                   name="nameArabic"
+                   #nameArabicCtrl="ngModel"
+                   minlength="3"
+                   maxlength="100"
+                   required
+                   [(ngModel)]="entity.nameArabic"
+                   [disabled]="isPreviewMode || isDialogLoading || isSaving"/>
+          </p-inputgroup>
+        </div>
+
+        <div class="text-danger mt-1"
+             *ngIf="nameArabicCtrl.invalid && (nameArabicCtrl.touched || f.submitted)">
+          <small *ngIf="nameArabicCtrl.errors?.['required']">Arabic name is required.</small>
+          <small *ngIf="nameArabicCtrl.errors?.['minlength']">Minimum 3 characters.</small>
+          <small *ngIf="nameArabicCtrl.errors?.['maxlength']">Maximum 100 characters.</small>
+        </div>
+      </div>
+
+
+      <!-- Name English -->
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Name English</label>
+        <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-user"></i>
+            </p-inputgroup-addon>
+
+            <input pInputText
+                   placeholder="Enter English Name"
+                   name="nameEnglish"
+                   #nameEnglishCtrl="ngModel"
+                   minlength="3"
+                   maxlength="100"
+                   required
+                   [(ngModel)]="entity.nameEnglish"
+                   [disabled]="isPreviewMode || isDialogLoading || isSaving"/>
+          </p-inputgroup>
+        </div>
+
+        <div class="text-danger mt-1"
+             *ngIf="nameEnglishCtrl.invalid && (nameEnglishCtrl.touched || f.submitted)">
+          <small *ngIf="nameEnglishCtrl.errors?.['required']">English name is required.</small>
+          <small *ngIf="nameEnglishCtrl.errors?.['minlength']">Minimum 3 characters.</small>
+          <small *ngIf="nameEnglishCtrl.errors?.['maxlength']">Maximum 100 characters.</small>
+        </div>
+      </div>
+
+
+      <!-- Email -->
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Email</label>
+        <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-envelope"></i>
+            </p-inputgroup-addon>
+
+            <input pInputText
+                   placeholder="Enter Email"
+                   name="email"
+                   #emailCtrl="ngModel"
+                   required
+                   email
+                   [(ngModel)]="entity.email"
+                   [disabled]="isPreviewMode || isDialogLoading || isSaving"/>
+          </p-inputgroup>
+        </div>
+
+        <div class="text-danger mt-1"
+             *ngIf="emailCtrl.invalid && (emailCtrl.touched || f.submitted)">
+          <small *ngIf="emailCtrl.errors?.['required']">Email is required.</small>
+          <small *ngIf="emailCtrl.errors?.['email']">Invalid email format.</small>
+        </div>
+      </div>
+
+
+      <!-- Mobile -->
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Mobile</label>
+        <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-phone"></i>
+            </p-inputgroup-addon>
+
+            <input pInputText
+                   placeholder="Enter Mobile"
+                   name="mobile"
+                   #mobileCtrl="ngModel"
+                   minlength="8"
+                   maxlength="15"
+                   required
+                   [(ngModel)]="entity.mobile"
+                   [disabled]="isPreviewMode || isDialogLoading || isSaving"/>
+          </p-inputgroup>
+        </div>
+
+        <div class="text-danger mt-1"
+             *ngIf="mobileCtrl.invalid && (mobileCtrl.touched || f.submitted)">
+          <small *ngIf="mobileCtrl.errors?.['required']">Mobile is required.</small>
+          <small *ngIf="mobileCtrl.errors?.['minlength']">Minimum 8 digits.</small>
+          <small *ngIf="mobileCtrl.errors?.['maxlength']">Maximum 15 digits.</small>
+        </div>
+      </div>
+
+
+      <!-- Address -->
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Address</label>
+        <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-map-marker"></i>
+            </p-inputgroup-addon>
+
+            <input pInputText
+                   placeholder="Enter Address"
+                   name="address"
+                   #addressCtrl="ngModel"
+                   minlength="3"
+                   maxlength="200"
+                   required
+                   [(ngModel)]="entity.address"
+                   [disabled]="isPreviewMode || isDialogLoading || isSaving"/>
+          </p-inputgroup>
+        </div>
+
+        <div class="text-danger mt-1"
+             *ngIf="addressCtrl.invalid && (addressCtrl.touched || f.submitted)">
+          <small *ngIf="addressCtrl.errors?.['required']">Address is required.</small>
+          <small *ngIf="addressCtrl.errors?.['minlength']">Minimum 3 characters.</small>
+          <small *ngIf="addressCtrl.errors?.['maxlength']">Maximum 200 characters.</small>
+        </div>
+      </div>
+
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Roles</label>
+        <div class="card flex justify-center">
+          <p-multiselect [options]="roles"
+                         optionLabel="name"
+                         optionValue="id"
+                         #roleIdsCtrl="ngModel"
+                         name="roleIds"
+                         [(ngModel)]="entity.roleIds"
+                         placeholder="Select Roles"
+                         required
+                         appendTo="body"
+                         class="w-full md:w-80"
+                         [disabled]="isPreviewMode || isDialogLoading || isSaving"/>
+        </div>
+        <div class="text-danger mt-1"
+             *ngIf="roleIdsCtrl.invalid && (roleIdsCtrl.touched || f.submitted)">
+          <small *ngIf="roleIdsCtrl.errors?.['required']">Address is required.</small>
+        </div>
+      </div>
+
+    </div>
+
+  </form>
+  <ng-template pTemplate="footer">
+
+    <p-button label="Cancel"
+              severity="secondary"
+              (click)="closeDialog(f)">
+    </p-button>
+
+    <p-button label="Save"
+              severity="info"
+              (click)="submit(entity)"
+              *ngIf="!isPreviewMode"
+              [disabled]="f.invalid  || isDialogLoading || isSaving">
+    </p-button>
+
+  </ng-template>
+</p-dialog>

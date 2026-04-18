@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-
-namespace HireMind.Infrastructure.SeedWork;
+﻿namespace HireMind.Infrastructure.SeedWork;
 public abstract class BaseRepository : IRepository
 {
     private bool _disposed;
@@ -61,13 +58,17 @@ public abstract class BaseRepository<TEntity> : BaseRepository where TEntity : c
             query = query.AsNoTracking();
 
         if (_isAuditableEntityType && excludeDeleted)
-            query = query.Where(x => !(x as BaseAuditableEntity)!.IsDeleted);
+            // query = query.Where(x => !(x as BaseAuditableEntity)!.IsDeleted);
+            query = query.Where(x => !EF.Property<bool>(x, "IsDeleted"));
 
         return query;
     }
 
     public virtual IQueryable<TEntity> GetByIdQuery(int id, bool excludeDeleted = true, bool asNoTracking = true)
         => GetQuery(excludeDeleted, asNoTracking).Where(x => (x as BaseEntity<int>)!.Id == id);
+
+    public virtual IQueryable<TEntity> GetByIdQuery(Guid id, bool excludeDeleted = true, bool asNoTracking = true)
+    => GetQuery(excludeDeleted, asNoTracking).Where(x => (x as BaseEntity<Guid>)!.Id == id);
 
     public virtual void Add(TEntity entity)
     {

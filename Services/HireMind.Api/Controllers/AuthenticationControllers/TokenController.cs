@@ -1,7 +1,6 @@
-﻿using HireMind.Application.Commands.Authentication.Tokens;
+﻿namespace HireMind.Api.Controllers.AuthenticationControllers;
 
-namespace HireMind.Api.Controllers.AuthenticationControllers;
-
+[AllowAnonymous]
 public class TokenController : ApiBaseController
 {
     private readonly ISender _sender;

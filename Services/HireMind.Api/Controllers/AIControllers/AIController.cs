@@ -1,8 +1,4 @@
-﻿using HireMind.Application.Commands.Chatbot;
-using HireMind.Domain.Dtos.AI;
-using Microsoft.AspNetCore.Authorization;
-
-namespace HireMind.Api.Controllers.AIControllers;
+﻿namespace HireMind.Api.Controllers.AIControllers;
 [Authorize]
 public class AIController : ApiBaseController
 {
@@ -13,12 +9,14 @@ public class AIController : ApiBaseController
         _sender = sender;
     }
 
+    [Authorize(Policy = PermissionConstants.AI.Chat)]
     [HttpPost("chatbot")]
     public async Task<ChatbotResult> Chatbot([FromBody] ChatbotRequestDto command)
     {
         return await _sender.Send(new ChatbotCommand(command));
     }
 
+    [Authorize(Policy = PermissionConstants.AI.Suggest)]
     [HttpPost("suggestions")]
     public async Task<AISuggestionsResult> Suggestions([FromBody] AISuggestionsRequestDto command)
     {

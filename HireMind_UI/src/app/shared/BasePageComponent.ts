@@ -38,7 +38,7 @@ export abstract class BasePageComponent<T> implements OnInit {
       pageNumber: page,
       pageSize: event.rows
     };
-    this.service.GetAll().subscribe({
+    this.service.search().subscribe({
       next: (res: any) => {
         this.data = res.response;
         this.totalCount = res.response.length;
@@ -55,16 +55,23 @@ export abstract class BasePageComponent<T> implements OnInit {
   }
 
   getById(id: any) {
+
+    this.isDialogLoading = true;
+
     this.service.GetById(id).subscribe({
       next: (res: any) => {
         this.entity = res.response;
+        this.isDialogLoading = false;
       },
       error: (err: any) => {
+        this.isDialogLoading = false;
+
         this.toastService.showMessage({
           messageType: 'error',
           messageTitle: 'Fetch Failed',
           messageBody: `Failed to fetch ${this.entityName}.`
         });
+
         console.error('Get by id failed', err);
       }
     });
@@ -74,8 +81,11 @@ export abstract class BasePageComponent<T> implements OnInit {
     const request = { ...this.entity };
     this.service.Add(request).subscribe({
       next: () => {
+        this.isLoading = false;
+        this.isSaving = false;
+
         this.clearDialog();
-        this.loadData();
+        this.search({ first: 0, rows: 5 });
         this.toastService.showMessage({
           messageType: 'success',
           messageTitle: 'Added',
@@ -83,7 +93,10 @@ export abstract class BasePageComponent<T> implements OnInit {
         });
       },
       error: (err: any) => {
-        this.toastService.showMessage({
+        this.isLoading = false;
+        this.isSaving = false;
+
+        this.toastService.showMessage({ 
           messageType: 'error',
           messageTitle: 'Add Failed',
           messageBody: `Failed to add ${this.entityName}.`
@@ -93,12 +106,15 @@ export abstract class BasePageComponent<T> implements OnInit {
     });
   }
 
-  updateEntity() {
+  updateEntity() {    
     const request = { ...this.entity };
     this.service.Update(request).subscribe({
       next: () => {
+        this.isLoading = false;
+        this.isSaving = false;
+
         this.clearDialog();
-        this.loadData();
+        this.search({ first: 0, rows: 5 });
         this.toastService.showMessage({
           messageType: 'success',
           messageTitle: 'Updated',
@@ -106,6 +122,8 @@ export abstract class BasePageComponent<T> implements OnInit {
         });
       },
       error: (err: any) => {
+        this.isSaving = false;
+        this.isLoading = false;
         this.toastService.showMessage({
           messageType: 'error',
           messageTitle: 'Update Failed',
@@ -181,36 +199,8 @@ export abstract class BasePageComponent<T> implements OnInit {
   }
 
   isLoading: boolean = false;
-  //search(event: any = { first: 0, rows: 5 }) {
-  //  this.isLoading = true;
-  //  const filter = new SearchFilters();
-  //  filter.pageNumber = event.first / event.rows + 1;
-  //  filter.pageSize = event.rows;
-  //  filter.searchTerm = this.searchValue;
-
-  //  if (this.dateSearch) {
-  //    const date = new Date(this.dateSearch);
-  //    const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  //    filter.dateSearch = utcDate;
-  //  }
-
-  //  this.service.Search(filter).subscribe({
-  //    next: (res: any) => {
-  //      this.data = res.items;
-  //      this.totalCount = res.totalCount || res.items.length;
-  //      this.isLoading = false; 
-  //    },
-  //    error: (err: any) => {
-  //      this.isLoading = false;
-  //      this.toastService.showMessage({
-  //        messageType: 'error',
-  //        messageTitle: 'Search Failed',
-  //        messageBody: `Failed to search ${this.entityName}.`
-  //      });
-  //      console.error('Search failed', err);
-  //    }
-  //  });
-  //}
+  isDialogLoading: boolean = false; // loading getById
+  isSaving: boolean = false;        // loading save
 
   search(event: any = { first: 0, rows: 5 }) {
 
@@ -259,8 +249,15 @@ export abstract class BasePageComponent<T> implements OnInit {
   }
 
   submit(updatedModel: any) {
-    if (this.entity.id) this.updateEntity();
-    else this.addEntity();
+
+    if (this.isSaving) return;
+
+    this.isSaving = true;
+
+    if (this.entity.id)
+      this.updateEntity();
+    else
+      this.addEntity();
   }
 
   editEntity(item: T) {
@@ -282,13 +279,18 @@ export abstract class BasePageComponent<T> implements OnInit {
   }
 
 
-
   showImageDialog(...args: any[]) {
     const title = args.length === 1 ? args[0] : args.slice(0, -1).join(' / ');
     const image = args[args.length - 1] as string;
     this.nameImageDialog = title;
     this.imageDialog = image;
     this.visibleImage = true;
+  }
+
+  resetForm(form: any) {
+    form.resetForm();
+    this.entity = this.createNewEntity();
+    this.imagePreview = null;
   }
 }
 

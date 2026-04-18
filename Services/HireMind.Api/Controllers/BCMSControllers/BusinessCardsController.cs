@@ -1,7 +1,4 @@
-﻿using HireMind.Domain.Dtos.BusinessCard;
-using Microsoft.AspNetCore.Authorization;
-
-namespace HireMind.Api.Controllers.HireMindControllers;
+﻿namespace HireMind.Api.Controllers.HireMindControllers;
 [Authorize]
 public class BusinessCardsController : ApiBaseController
 {
@@ -12,6 +9,7 @@ public class BusinessCardsController : ApiBaseController
         _sender = sender;
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.View)]
     [HttpPost("search")]
     public async Task<IActionResult> Search([FromBody] SearchFiltersRqDto filters)
     {
@@ -19,6 +17,7 @@ public class BusinessCardsController : ApiBaseController
         return Ok(result);
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.View)]
     [HttpGet("getAll")] 
     public async Task<GetAllBusinessCardsResult> GetAllCards()
     {
@@ -26,6 +25,7 @@ public class BusinessCardsController : ApiBaseController
         return result;
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.Create)]
     [HttpPost("add")] 
     public async Task<IActionResult> CreateCard([FromBody] CreateBusinessCardDto command)
     {
@@ -37,6 +37,7 @@ public class BusinessCardsController : ApiBaseController
             return BadRequest("Failed to create business card.");
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.View)]
     [HttpGet("get/{id}")] 
     public async Task<GetBusinessCardByIdResult> GetCardById(int id)
     {
@@ -45,6 +46,7 @@ public class BusinessCardsController : ApiBaseController
         return result;
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.Delete)]
     [HttpPut("update")] 
     public async Task<IActionResult> UpdateCard([FromBody] UpdateBusinessCardDto command)
     {
@@ -56,6 +58,7 @@ public class BusinessCardsController : ApiBaseController
             return BadRequest("Failed to update business card.");
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.Delete)]
     [HttpDelete("delete/{id}")] 
     public async Task<IActionResult> DeleteCard(int id)
     {
@@ -67,18 +70,21 @@ public class BusinessCardsController : ApiBaseController
         return NotFound(new { message = $"Business card {id} not found." });
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.View)]
     [HttpPost("preview")] 
     public async Task<IActionResult> PreviewFile(IFormFile file)
     {
         return Ok(await _sender.Send(new PreviewBusinessCardsCommand(file)));
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.Create)]
     [HttpPost("createMany")]
     public async Task<IActionResult> CreateMany([FromBody] List<CreateBusinessCardDto> cards)
     {
         return Ok(await _sender.Send(new CreateManyBusinessCardsCommand(cards))); 
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.View)]
     [HttpPost("exportfile")]
     public async Task<IActionResult> ExportFile([FromBody] ExportRequestDto request)
     {
@@ -86,6 +92,7 @@ public class BusinessCardsController : ApiBaseController
         return File(result.FileContent, result.ContentType, result.FileName);
     }
 
+    [Authorize(Policy = PermissionConstants.BusinessCards.View)]
     [HttpPost("printpdf")]
     public async Task<IActionResult> GeneratePdf([FromBody] GeneratePdfCommand command)
     {

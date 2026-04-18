@@ -1,4 +1,9 @@
-﻿namespace HireMind.Domain.Entities.Security;
+﻿using HireMind.Domain.Entities.HireMind;
+using HireMind.Domain.Enum;
+using System.Net;
+using System.Reflection;
+
+namespace HireMind.Domain.Entities.Security;
 public class User : Entity<Guid>
 {
     public string NameArabic { get; private set; } = null!;
@@ -42,11 +47,23 @@ public class User : Entity<Guid>
             Email = email,
             PasswordHash = passwordHash,
             IsActive = false,
-            CreatedBy = 1,
+            CreatedBy = null,
             CreatedDate = DateTime.Now,
             EmailVerificationToken = emailVerificationToken,
             EmailVerificationTokenExpiresAt = emailVerificationTokenExpiresAt
         };
+    }
+
+    public void AddRole(Guid roleId)
+    {
+        if (UserRoles.Any(r => r.RoleId == roleId))
+            return;
+
+        UserRoles.Add(new UserRole
+        {
+            UserId = Id,
+            RoleId = roleId
+        });
     }
 
     public void UpdateVerifiedUser()
@@ -56,7 +73,7 @@ public class User : Entity<Guid>
         //RoleIds = ["Default"];
         IsActive = true;
     }
- 
+
     public void UpdateUserEmailReVerification(string token, DateTime expiresAt)
     {
         EmailVerificationToken = token;
@@ -68,12 +85,88 @@ public class User : Entity<Guid>
         PasswordResetOtp = otp;
         PasswordResetOtpExpiresAt = expiresAt;
     }
-   
+
     public void UpdateUserPassword(string newPasswordHash)
     {
         PasswordHash = newPasswordHash;
         PasswordResetOtp = null;
         PasswordResetOtpExpiresAt = null;
         TokenVersion++;
+    }
+
+    public void IncrementFailedAttempts()
+    {
+        FailedLoginAttempts++;
+    }
+
+    public void ResetFailedAttempts()
+    {
+        FailedLoginAttempts = 0;
+        LockedDate = null;
+    }
+
+    public void LockAccount()
+    {
+        IsLocked = true;
+        LockedDate = DateTime.UtcNow;
+    }
+
+    public void UpdateLockStatus(Guid id, bool isLocked)
+    {
+        Id = id;
+        IsLocked = isLocked;
+        LockedDate = IsLocked ? DateTime.UtcNow : null;
+    }
+
+    public void ClearRoles()
+    {
+        UserRoles.Clear();
+    }
+
+    public void ClearUserRoles()
+    {
+        foreach (var role in UserRoles.ToList())
+        {
+            UserRoles.Remove(role);
+        }
+    }
+
+    public void Update(
+        string nameArabic,
+        string nameEnglish,
+        string mobile,
+        string address,
+        string email,
+        Gender gender,
+        bool isLocked,
+        int failedLoginAttempts,
+        DateTime? lockedDate)
+    {
+        NameArabic = nameArabic;
+        NameEnglish = nameEnglish;
+        Mobile = mobile;
+        Address = address;
+        Email = email;
+        Gender = gender;
+        IsLocked = isLocked;
+        FailedLoginAttempts = failedLoginAttempts;
+        LockedDate = lockedDate;
+        UpdatedDate = DateTime.Now;
+    }
+
+    public static User CreateByAdmin(string nameArabic, string nameEnglish, string mobile, string email, string passwordHash)
+    {
+        return new User
+        {
+            Id = Guid.NewGuid(),
+            NameEnglish = nameEnglish,
+            NameArabic = nameArabic,
+            Mobile = mobile,
+            Email = email,
+            PasswordHash = passwordHash,
+            IsActive = true,
+            CreatedBy = 1,
+            CreatedDate = DateTime.Now
+        };
     }
 }

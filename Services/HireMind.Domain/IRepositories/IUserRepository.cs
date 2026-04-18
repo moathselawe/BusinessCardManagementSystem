@@ -1,6 +1,4 @@
-﻿using HireMind.Domain.Entities.HireMind;
-
-namespace HireMind.Domain.IRepositories;
+﻿namespace HireMind.Domain.IRepositories;
 
 public interface IUserRepository : IRepository<User>
 {
@@ -11,10 +9,9 @@ public interface IUserRepository : IRepository<User>
     Task<User> GetUserByEmail(string email, CancellationToken cancellationToken);
     Task<User> GetUserByEmailWithTokens(string email, CancellationToken cancellationToken);
     Task<User?> GetUserByRefreshTokenHash(string tokenHash, CancellationToken cancellationToken);
-    Task<User> GetUserById(Guid id, CancellationToken cancellationToken);
-    //Task<User> GetUserByIdentifier(string identifier, CancellationToken cancellationToken);
-    //Task Delete(string id, CancellationToken cancellationToken);
-    //Task<List<User>> GetAll(CancellationToken cancellationToken);
-    //Task<User> GetUserByEmail(string email, CancellationToken cancellationToken);
-    //Task<User> GetUserById(string id, CancellationToken cancellationToken);
+    Task<User> GetUserById(Guid id, CancellationToken cancellationToken = default);
+    Task<SearchFiltersRsDto<GetUserResponseDto>> SearchAsync(SearchFiltersRqDto filters, CancellationToken cancellationToken);
+    Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken);
+    Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<List<User>> GetAllAsync(CancellationToken cancellationToken);
 }

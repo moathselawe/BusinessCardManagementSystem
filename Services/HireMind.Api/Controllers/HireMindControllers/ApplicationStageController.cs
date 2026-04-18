@@ -1,12 +1,6 @@
-﻿using HireMind.Application.Commands.ApplicationStage;
-using HireMind.Application.Queries.ApplicationStage;
-using HireMind.Domain.Dtos.ApplicationStage;
-using HireMind.Domain.Dtos.UpdateApplicationStageStatusRequestDto;
-using Microsoft.AspNetCore.Authorization;
+﻿namespace HireMind.Api.Controllers.HireMindControllers;
 
-namespace HireMind.Api.Controllers.HireMindControllers;
 [Authorize]
-
 public class ApplicationStageController : ApiBaseController
 {
     private readonly ISender _sender;
@@ -16,6 +10,7 @@ public class ApplicationStageController : ApiBaseController
         _sender = sender;
     }
 
+    [Authorize(Policy = PermissionConstants.ApplicationStages.Update)]
     [HttpPut("updateBulkApplicationsStageStatus")]
     public async Task<IActionResult> updateBulkApplicationsStageStatus([FromBody] UpdateBulkApplicationsStageStatusRequestDto command)
     {
@@ -27,6 +22,7 @@ public class ApplicationStageController : ApiBaseController
             return BadRequest("Failed to Update Application Stage Status for selected applications.");
     }
 
+    [Authorize(Policy = PermissionConstants.ApplicationStages.View)]
     [HttpPost("search")]
     public async Task<IActionResult> Search([FromBody] SearchJobApplicationsRequestDto filters)
     {

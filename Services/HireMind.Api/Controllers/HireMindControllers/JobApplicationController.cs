@@ -1,9 +1,6 @@
-﻿using HireMind.Application.Queries.JobApplication;
-using Microsoft.AspNetCore.Authorization;
+﻿namespace HireMind.Api.Controllers.HireMindControllers;
 
-namespace HireMind.Api.Controllers.HireMindControllers;
 [Authorize]
-
 public class JobApplicationController : ApiBaseController
 {
     private readonly ISender _sender;
@@ -13,6 +10,7 @@ public class JobApplicationController : ApiBaseController
         _sender = sender;
     }
 
+    [Authorize(Policy = PermissionConstants.Applications.Apply)]
     [HttpPost("analyze")]
     [Consumes("multipart/form-data")]
     public async Task<ActionResult<AnalyzeCvResult>> Analyze([FromForm] AnalyzeCvRequestDto request)
@@ -28,6 +26,7 @@ public class JobApplicationController : ApiBaseController
         }
     }
 
+    [Authorize(Policy = PermissionConstants.Applications.Apply)]
     [HttpPost("submit")]
     public async Task<IActionResult> Submit([FromBody] SubmitJobApplicationRequestDto request)
     {
@@ -36,7 +35,7 @@ public class JobApplicationController : ApiBaseController
         return Ok(result.Id);
     }
 
-
+    [Authorize(Policy = PermissionConstants.Applications.View)]
     [HttpGet("GetAllByJobId/{jobId}")]
     public async Task<GetAllJobApplicationsByJobIdResult> GetAllJobApplicationsByJobId(int jobId)
     {
@@ -44,6 +43,7 @@ public class JobApplicationController : ApiBaseController
         return result;
     }
 
+    [Authorize(Policy = PermissionConstants.Applications.View)]
     [HttpGet("getJobApplicationById/{id}")]
     public async Task<GetJobApplicationByIdResult> getJobApplicationById(int id)
     {
@@ -51,6 +51,7 @@ public class JobApplicationController : ApiBaseController
         return result;
     }
 
+    [Authorize(Policy = PermissionConstants.Applications.View)]
     [HttpGet("download-cv/{applicationId}")]
     public async Task<IActionResult> DownloadCv(int applicationId)
     {

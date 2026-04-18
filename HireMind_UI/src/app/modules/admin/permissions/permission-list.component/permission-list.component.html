@@ -1,0 +1,18 @@
+<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;">Manage Permissions</h2>
+</div>
+
+<app-template-table [title]="'Permissions List'"
+                    [withoutImportAndExport]="true"
+                    [disableSpecificButton]="true"
+                    [disableCreateButton]="true"
+                    [disableActionsButton]="true"
+                    [data]="data"
+                    [columns]="columns"
+                    [totalRecords]="totalCount"
+                    [actionsModel]="actionsModel"
+                    [isLoading]="isLoading"
+                    (onLazyLoad)="search($event)"
+                    (onSearch)="searchFromTable($event)">
+</app-template-table>
+

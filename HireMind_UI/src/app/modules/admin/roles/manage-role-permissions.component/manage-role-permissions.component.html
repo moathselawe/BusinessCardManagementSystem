@@ -1,0 +1,83 @@
+<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;" *ngIf="isDisabled && role">Manage {{role.name}} Permissions</h2>
+  <h2 style="color: #2196f3;" *ngIf="!isDisabled">Manage Roles Permissions</h2>
+</div>
+
+<div class="card role-permissions-card">
+  <div class="col-4 form-group">
+    <label class="col-form-label dark-label">Roles</label>
+    <div class="card flex justify-center">
+
+      <p-select [options]="roles"
+                [(ngModel)]="roleId"
+                optionLabel="name"
+                optionValue="id"
+                (onChange)="onRoleChange($event.value)"
+                #roleIdsCtrl="ngModel"
+                name="roleId"
+                placeholder="Select Role"
+                [filter]="true"
+                filterBy="name"
+                [showClear]="true"
+                appendTo="body"
+                class="w-full md:w-80"
+                [disabled]="isDisabled"
+                required>
+
+        <ng-template let-selectedOption pTemplate="selectedItem">
+          <div class="flex items-center gap-2">
+            <div>{{ selectedOption?.name }}</div>
+          </div>
+        </ng-template>
+
+        <ng-template let-role pTemplate="item">
+          <div class="flex items-center gap-2">
+            <div>{{ role.name }}</div>
+          </div>
+        </ng-template>
+
+      </p-select>
+    </div>
+  </div>
+
+
+  <div class="text-danger mt-1"
+       *ngIf="roleIdsCtrl.invalid && (roleIdsCtrl.touched)">
+    <small *ngIf="roleIdsCtrl.errors?.['required']">Role is required.</small>
+  </div>
+</div>
+
+<div class="card role-permissions-card">
+  <div class="col-12 form-group">
+    <label class="col-form-label dark-label">Assgin Permissions to Role</label>
+    <p-picklist [source]="sourcePermissions"
+                [target]="targetPermissions"
+                [dragdrop]="true"
+                [responsive]="true"
+                filterBy="name"
+                sourceFilterPlaceholder="Search permissions"
+                targetFilterPlaceholder="Selected permissions"
+                scrollHeight="24rem">
+      <ng-template let-permission pTemplate="item">
+        <div class="flex flex-column">
+          <span class="font-medium">{{ permission.name }}</span>
+          <small class="text-color-secondary">{{ permission.code }}</small>
+        </div>
+      </ng-template>
+    </p-picklist>
+  </div>
+
+  <div class="button-bar">
+    <p-button label="Cancel"
+              icon="pi pi-times"
+              severity="secondary"
+              (click)="cancel()">
+    </p-button>
+
+    <p-button label="Save"
+              icon="pi pi-save"
+              severity="success"
+              (click)="saveRolePermissions()">
+    </p-button>
+  </div>
+</div>

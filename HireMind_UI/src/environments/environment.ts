@@ -14,4 +14,7 @@ export const endpoints = {
   Registration: 'Registration/',
   ResetPassword: 'ResetPassword/',
   Token: 'Token/',
+  ManageUsers: 'ManageUsers/',
+  ManageRoles: 'ManageRoles/',
+  ManagePermissions: 'ManagePermissions/',
 }

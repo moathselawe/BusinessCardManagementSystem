@@ -1,0 +1,151 @@
+<div class="panel-heading sticky-header">
+  <h2 style="color: #2196f3;">Manage Roles</h2>
+</div>
+
+<app-template-table [title]="'Roles List'"
+                    [withoutImportAndExport]="true"
+                    [data]="data"
+                    [columns]="columns"
+                    [totalRecords]="totalCount"
+                    [actionsModel]="actionsModel"
+                    [isLoading]="isLoading"
+                    (onPreview)="preview($event)"
+                    (onEditRolePermissions)="editRolePermissions($event)"
+                    (onEdit)="edit($event)"
+                    (onApply)="apply($event)"
+                    (onDelete)="openConfirmationDialog($event)"
+                    (onLazyLoad)="search($event)"
+                    (onAdd)="Add()"
+                    (onSearch)="searchFromTable($event)">
+</app-template-table>
+
+<app-template-confirmation-dialog [(visible)]="visibleConfirmation"
+                                  [message]="'Are you sure you want to delete the Role?'"
+                                  (onCancel)="closeConfirmationDialog()"
+                                  (onConfirm)="deleteEntity(deleteId)">
+</app-template-confirmation-dialog>
+
+
+<p-dialog header="{{ entity.id ? 'Edit Role' : 'Add Role' }}"
+          [(visible)]="visibleDetails"
+          [modal]="true"
+          [style]="{ width: '500px' }"
+          [closable]="true"
+          (onHide)="closeDialog(f)">
+
+  <form #f="ngForm">
+
+    <div class="p-fluid grid">
+
+      <!-- Name -->
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Name</label>
+
+        <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p-inputgroup>
+
+            <p-inputgroup-addon>
+              <i class="pi pi-user"></i>
+            </p-inputgroup-addon>
+
+            <input pInputText
+                   placeholder="Enter Role Name"
+                   name="name"
+                   #nameCtrl="ngModel"
+                   minlength="3"
+                   maxlength="100"
+                   required
+                   [(ngModel)]="entity.name"
+                   [disabled]="isPreviewMode || isDialogLoading || isSaving" />
+
+          </p-inputgroup>
+        </div>
+
+        <div class="text-danger mt-1"
+             *ngIf="nameCtrl.invalid && (nameCtrl.touched || f.submitted)">
+          <small *ngIf="nameCtrl.errors?.['required']">Role name is required.</small>
+          <small *ngIf="nameCtrl.errors?.['minlength']">Minimum 3 characters.</small>
+          <small *ngIf="nameCtrl.errors?.['maxlength']">Maximum 100 characters.</small>
+        </div>
+
+      </div>
+
+
+      <!-- Description -->
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Description</label>
+
+        <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p-inputgroup>
+
+            <p-inputgroup-addon>
+              <i class="pi pi-align-left"></i>
+            </p-inputgroup-addon>
+
+            <input pInputText
+                   placeholder="Enter Description"
+                   name="description"
+                   #descriptionCtrl="ngModel"
+                   minlength="3"
+                   maxlength="200"
+                   [(ngModel)]="entity.description"
+                   [disabled]="isPreviewMode || isDialogLoading || isSaving" />
+
+          </p-inputgroup>
+        </div>
+
+        <div class="text-danger mt-1"
+             *ngIf="descriptionCtrl.invalid && (descriptionCtrl.touched || f.submitted)">
+          <small *ngIf="descriptionCtrl.errors?.['minlength']">Minimum 3 characters.</small>
+          <small *ngIf="descriptionCtrl.errors?.['maxlength']">Maximum 200 characters.</small>
+        </div>
+
+      </div>
+
+
+      <!-- Permissions -->
+      <div class="col-12 form-group">
+        <label class="col-form-label dark-label">Permissions</label>
+
+        <div class="card flex justify-center">
+          <p-multiselect [options]="permissions"
+                         optionLabel="name"
+                         optionValue="id"
+                         #permissionIdsCtrl="ngModel"
+                         name="permissionIds"
+                         [(ngModel)]="entity.permissionIds"
+                         placeholder="Select Permissions"
+                         required
+                         appendTo="body"
+                         class="w-full md:w-80"
+                         [disabled]="isPreviewMode || isDialogLoading || isSaving" />
+        </div>
+
+        <div class="text-danger mt-1"
+             *ngIf="permissionIdsCtrl.invalid && (permissionIdsCtrl.touched || f.submitted)">
+          <small *ngIf="permissionIdsCtrl.errors?.['required']">Permissions are required.</small>
+        </div>
+
+      </div>
+
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+
+    <p-button label="Cancel"
+              severity="secondary"
+              (click)="closeDialog(f)">
+    </p-button>
+
+    <p-button label="Save"
+              severity="info"
+              (click)="submit(entity)"
+              *ngIf="!isPreviewMode"
+              [disabled]="f.invalid || isDialogLoading || isSaving">
+    </p-button>
+
+  </ng-template>
+
+</p-dialog>

@@ -16,6 +16,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ToolbarModule } from 'primeng/toolbar';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
+import { Gender } from '../../enum/Gender';
 
 @Component({
   selector: 'app-template-table',
@@ -49,11 +50,17 @@ export class TemplateTable {
   @Input() data: any[] = [];
   @Input() columns: { field: string, header: string, isImage?: boolean, isColor?: boolean }[] = []; // 👈 أضف isColor هنا
   @Input() totalRecords: number = 0;
-  @Input() title!: string;
+  @Input() title!: string; 
   @Input() isLoading: boolean = false;
   @Input() withoutImportAndExport: boolean = false;
 
+  @Input() disableSpecificButton: boolean = false;
+  @Input() disableCreateButton: boolean = false;
+  @Input() disableActionsButton: boolean = false;
+
   @Output() onEdit = new EventEmitter<any>();
+  @Output() onEditRolePermissions = new EventEmitter<any>();
+  @Output() onEditUserRoles = new EventEmitter<any>();
   @Output() onEditManageStagesAndQuestions = new EventEmitter<any>();
   @Output() onApply = new EventEmitter<any>();
   @Output() onManageApplications = new EventEmitter<any>();
@@ -65,6 +72,7 @@ export class TemplateTable {
   @Output() onImageClick = new EventEmitter<{ item: any }>();
   @Output() onLazyLoad = new EventEmitter<any>();
   @Output() onToggleActive = new EventEmitter<any>();
+  @Output() onToggleLocked = new EventEmitter<any>();
   @Output() onAdd = new EventEmitter<void>();
   @Output() onSearch = new EventEmitter<{ searchValue: string; dateSearch: Date | null }>();
 
@@ -72,7 +80,7 @@ export class TemplateTable {
   searchValue: string = '';
   dateSearch: Date | null = null;
 
-  currentRowData: any;
+  currentRowData: any; 
 
   delete(id: number) {
     this.onDelete.emit(id);
@@ -129,6 +137,10 @@ export class TemplateTable {
       command: () => {
         if (item.label === 'Edit') {
           this.onEdit.emit(this.currentRowData.id);
+        } else if (item.label === 'Edit Role Permissions') {
+          this.onEditRolePermissions.emit(this.currentRowData.id);
+        } else if (item.label === 'Edit User Roles') {
+          this.onEditUserRoles.emit(this.currentRowData.id);
         } else if (item.label === 'Manage Stages & Questions') {
           this.onEditManageStagesAndQuestions.emit(this.currentRowData.id);
         }else if (item.label === 'Preview') {
@@ -150,10 +162,13 @@ export class TemplateTable {
     this.menu.toggle(event);
   }
 
+  getGenderName(value: number): string {
+    return Gender[value];
+  }
+
   add() {
     this.onAdd.emit();
   }
-
 
   fileSelected(event: any) {
     const file: File = event.files[0];

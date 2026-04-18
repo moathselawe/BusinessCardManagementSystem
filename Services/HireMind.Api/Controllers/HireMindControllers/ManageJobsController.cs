@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿namespace HireMind.Api.Controllers.HireMindControllers;
 
-namespace HireMind.Api.Controllers.HireMindControllers;
 [Authorize]
-
 public class ManageJobsController : ApiBaseController
 {
     private readonly ISender _sender;
@@ -12,12 +10,14 @@ public class ManageJobsController : ApiBaseController
         _sender = sender;
     }
 
+    [Authorize(Policy = PermissionConstants.Jobs.Create)]
     [HttpPost("create")]
     public async Task<CreateJobResult> Create([FromBody] CreateJobRequestDto request)
     {
         return await _sender.Send(new CreateJobCommand(request));
     }
 
+    [Authorize(Policy = PermissionConstants.Jobs.View)]
     [HttpGet("get/{id}")]
     public async Task<GetJobByIdResult> GetJobById(int id)
     {
@@ -26,6 +26,7 @@ public class ManageJobsController : ApiBaseController
         return result;
     }
 
+    [Authorize(Policy = PermissionConstants.Jobs.Update)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateJob([FromBody] UpdateJobRequestDto command)
     {
@@ -37,6 +38,7 @@ public class ManageJobsController : ApiBaseController
             return BadRequest("Failed to update Job.");
     }
 
+    [Authorize(Policy = PermissionConstants.Jobs.Update)]
     [HttpPut("updateJobActivation")]
     public async Task<IActionResult> updateJobActivation([FromBody] UpdateJobActivationRequestDto command)
     {
@@ -48,6 +50,7 @@ public class ManageJobsController : ApiBaseController
             return BadRequest("Failed to update Job.");
     }
 
+    [Authorize(Policy = PermissionConstants.Jobs.View)]
     [HttpPost("search")]
     public async Task<IActionResult> Search([FromBody] SearchFiltersRqDto filters)
     {
@@ -55,6 +58,7 @@ public class ManageJobsController : ApiBaseController
         return Ok(result);
     }
 
+    [Authorize(Policy = PermissionConstants.Jobs.Delete)]
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(int id)
     {

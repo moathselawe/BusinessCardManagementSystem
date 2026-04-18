@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿namespace HireMind.Api.Controllers.NewFolder;
 
-namespace HireMind.Api.Controllers.NewFolder;
 [Authorize]
 public class LookUpsController : ApiBaseController
 {
@@ -11,6 +10,7 @@ public class LookUpsController : ApiBaseController
         _sender = sender;
     }
 
+    [Authorize(Policy = PermissionConstants.Lookups.View)]
     [HttpPost("search")]
     public async Task<IActionResult> Search([FromBody] SearchFiltersRqDto filters)
     {
@@ -18,6 +18,7 @@ public class LookUpsController : ApiBaseController
         return Ok(result);
     }
 
+    [Authorize(Policy = PermissionConstants.Lookups.View)]
     [HttpGet("getById/{id}")]
     public async Task<GetLookupByIdResult> GetJobById(int id)
     {
@@ -26,6 +27,7 @@ public class LookUpsController : ApiBaseController
         return result;
     }
 
+    [Authorize(Policy = PermissionConstants.Lookups.View)]
     [HttpGet("getAllByName")]
     public async Task<GetLookupByNameResult> GetAllByName(string name)
     {
@@ -33,6 +35,7 @@ public class LookUpsController : ApiBaseController
         return result;
     }
 
+    [Authorize(Policy = PermissionConstants.Lookups.View)]
     [HttpGet("getAllParents")]
     public async Task<GetAllLookupParentsResult> getAllParents()
     {
@@ -40,6 +43,7 @@ public class LookUpsController : ApiBaseController
         return result;
     }
 
+    [Authorize(Policy = PermissionConstants.Lookups.View)]
     [HttpGet("getAllParentsAndChilds")]
     public async Task<GetAllParentsAndChildsLookupsResult> getAllParentsAndChilds()
     {
@@ -47,6 +51,7 @@ public class LookUpsController : ApiBaseController
         return result;
     }
 
+    [Authorize(Policy = PermissionConstants.Lookups.Create)]
     [HttpPost("createLookup")]
     public async Task<IActionResult> Create([FromBody] CreateLookUpDto command)
     {
@@ -58,6 +63,7 @@ public class LookUpsController : ApiBaseController
             return BadRequest("Failed to create lookup.");
     }
 
+    [Authorize(Policy = PermissionConstants.Lookups.Update)]
     [HttpPut("updateLookup")]
     public async Task<IActionResult> Update([FromBody] UpdateLookUpDto command)
     {
@@ -70,6 +76,7 @@ public class LookUpsController : ApiBaseController
     
     }
 
+    [Authorize(Policy = PermissionConstants.Lookups.Delete)]
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(int id)
     {

@@ -21,7 +21,7 @@
           <h3 style="font-size: 1.6rem; padding-right:8px; color: #2196f3;" class="mb-0 mr-2">
             {{ title }}
           </h3>
-          <p-button icon="pi pi-plus" rounded [pTooltip]="'Create new'" size="small" severity="info" tooltipPosition="bottom" (click)="onAdd.emit()" />
+          <p-button *ngIf="!disableCreateButton" icon="pi pi-plus" rounded [pTooltip]="'Create new'" size="small" severity="info" tooltipPosition="bottom" (click)="onAdd.emit()" />
         </div>
         <div style="max-width: fit-content; max-height: fit-content;">
           <p-toolbar *ngIf="showToolbar" class="mb-6" style="overflow: hidden;">
@@ -78,7 +78,7 @@
         </th>
 
         <th style="font-weight: bold;" *ngFor="let col of columns">{{ col.header }}</th>
-        <th style="font-weight: bold;">Actions</th>
+        <th style="font-weight: bold;" *ngIf="!disableActionsButton">Actions</th>
       </tr>
     </ng-template>
 
@@ -115,10 +115,47 @@
           </ng-template>
 
           <!-- Boolean / Toggle Column -->
+          <!--<ng-template #checkBoolean>
+            <ng-container *ngIf="col.field === 'isActive' || col.field === 'isLocked'; else textCell">
+
+              <ng-container *ngIf="col.field === 'isActive' &&; else textCell">
+                <p-toggleswitch [(ngModel)]="rowData.isActive"
+                                (onChange)="onToggleActive.emit(rowData)" />
+              </ng-container>
+
+              <ng-container *ngIf="col.field === 'isLocked';">
+                <p-toggleswitch [(ngModel)]="rowData.isLocked"
+                                (onChange)="onToggleLocked.emit(rowData)" />
+              </ng-container>
+
+            </ng-container>
+          </ng-template>-->
+
           <ng-template #checkBoolean>
-            <ng-container *ngIf="col.field === 'isActive'; else textCell">
-              <p-toggleswitch [(ngModel)]="rowData.isActive"
-                              (onChange)="onToggleActive.emit(rowData)" />
+            <ng-container *ngIf="col.field === 'isActive' || col.field === 'isLocked'; else textCell">
+
+              <!-- isActive -->
+              <ng-container *ngIf="col.field === 'isActive'">
+
+                <!-- إذا بدنا Toggle -->
+                <ng-container *ngIf="!disableActionsButton; else activeText">
+                  <p-toggleswitch [(ngModel)]="rowData.isActive"
+                                  (onChange)="onToggleActive.emit(rowData)" />
+                </ng-container>
+
+                <!-- إذا disableSpecificButton = true اعرض Text -->
+                <ng-template #activeText>
+                  {{ rowData.isActive ? 'Active' : 'Inactive' }}
+                </ng-template>
+
+              </ng-container>
+
+              <!-- isLocked -->
+              <ng-container *ngIf="col.field === 'isLocked'">
+                <p-toggleswitch [(ngModel)]="rowData.isLocked"
+                                (onChange)="onToggleLocked.emit(rowData)" />
+              </ng-container>
+
             </ng-container>
           </ng-template>
 
@@ -136,21 +173,41 @@
                 {{ rowData.endDate | date:'dd/MM/yyyy HH:mm' }}
               </ng-container>
 
+              <ng-container *ngSwitchCase="'lockedDate'">
+                <ng-container *ngIf="!rowData.lockedDate">
+                  {{ 'No Value' }}
+                </ng-container>
+                <ng-container *ngIf="rowData.lockedDate">
+                  {{ rowData.lockedDate | date:'dd/MM/yyyy HH:mm' }}
+                </ng-container>
+              </ng-container>
+
               <!-- Date of Birth (if used in other pages) -->
               <ng-container *ngSwitchCase="'dateOfBirth'">
                 {{ calculateAge(rowData[col.field]) }}
               </ng-container>
 
+              <ng-container *ngSwitchCase="'gender'">
+                {{ getGenderName(rowData.gender) }}
+              </ng-container>
+
               <!-- Default Text Field -->
+              <!--<ng-container *ngSwitchDefault>
+    {{ rowData[col.field] ?? 'No Value' }}
+  </ng-container>-->
+
               <ng-container *ngSwitchDefault>
-                {{ rowData[col.field] ?? 'No Value' }}
+                <ng-container *ngIf="rowData[col.field] as val; else noValue">
+                  {{ (val + '') | slice:0:20 }}<ng-container *ngIf="(val + '').length > 20">...</ng-container>
+                </ng-container>
+                <ng-template #noValue>No Value</ng-template>
               </ng-container>
 
             </ng-container>
           </ng-template>
         </td>
 
-        <td>
+        <td *ngIf="!disableSpecificButton">
           <div class="flex">
             <p-menu #menu [popup]="true" [model]="actionsModel" appendTo="body"></p-menu>
 
@@ -167,7 +224,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td [attr.colspan]="columns.length + (!withoutImportAndExport ? 2 : 1)" >
+        <td [attr.colspan]="columns.length + (!withoutImportAndExport ? 2 : 1)">
           No record found
         </td>
       </tr>
