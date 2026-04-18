@@ -1,5 +1,4 @@
 .sticky-header {
-  position: sticky;
   top: 0;
   background-color: white;
   padding: 15px 20px;
@@ -31,7 +30,7 @@
 }
 
 .section-card {
-  margin: 10px;
+  margin-top: 10px;
   background-color: #fefbfbd9;
   border-radius: 10px;
   padding: 20px;

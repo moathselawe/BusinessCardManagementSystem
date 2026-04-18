@@ -9,7 +9,7 @@
   <p-progressSpinner></p-progressSpinner>
 </div>
 
-<div [ngClass]="cards.length > 1 ? 'card' : ''" style="margin: 5px;" *ngIf="!isLoadingEditPage">
+<div [ngClass]="cards.length > 1 ? 'card' : ''" *ngIf="!isLoadingEditPage">
   <div class="card" style="margin: 5px; background-color: #fefbfbd9; overflow: hidden;" *ngIf="cards.length > 1">
     <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px;">
 
@@ -31,7 +31,7 @@
   </div>
 
 
-  <div class="card" style="margin: 5px; background-color:#fefbfbd9; overflow: hidden;" *ngFor="let c of cards; let i = index">
+  <div class="card" style="margin-top: 5px; background-color:#fefbfbd9; overflow: hidden;" *ngFor="let c of cards; let i = index">
     <div class="panel col-12">
       <div class="card-body">
 

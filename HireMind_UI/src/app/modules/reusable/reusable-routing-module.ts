@@ -4,11 +4,7 @@ import { ManageLookupsComponent } from './manage-lookups-component/manage-lookup
 
 const routes: Routes = [
   { path: 'ManageLookups', component: ManageLookupsComponent },
-  //{ path: 'JobApplication/:id', component: JobApplicationAssistantComponent },
-  //{ path: 'CreateJob', component: JobFormComponent },
-  //{ path: 'ModifyJob/:id', component: JobFormComponent },
-  //{ path: 'PreviewJob/:id', component: JobFormComponent },
-  { path: '', redirectTo: 'JobApplication', pathMatch: 'full' }
+  { path: '', redirectTo: 'ManageLookups', pathMatch: 'full' }
 ];
 
 @NgModule({

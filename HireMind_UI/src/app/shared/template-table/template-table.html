@@ -1,10 +1,11 @@
-<div class="card" style="border: 1px solid #ccc; border-radius: 8px; background-color: #fff; margin: 8px;">
+<div class="card" style="border: 1px solid #ccc; border-radius: 8px; background-color: #fff;">
   <p-table class="blue-theme-table"
            [value]="data"
            [lazy]="true"
            (onLazyLoad)="onLazyLoad.emit($event)"
            [paginator]="true"
            [rows]="5"
+           stripedRows
            [scrollable]="true" scrollHeight="550px" [resizableColumns]="true"
            [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -17,12 +18,14 @@
 
     <ng-template #caption>
       <div class="row align-items-center w-100" style="display: flex; justify-content: space-between; align-items: center; overflow: hidden;">
+
         <div class="col-md-6 d-flex align-items-center" style="overflow: hidden;">
           <h3 style="font-size: 1.6rem; padding-right:8px; color: #2196f3;" class="mb-0 mr-2">
             {{ title }}
           </h3>
           <p-button *ngIf="!disableCreateButton" icon="pi pi-plus" rounded [pTooltip]="'Create new'" size="small" severity="info" tooltipPosition="bottom" (click)="onAdd.emit()" />
         </div>
+
         <div style="max-width: fit-content; max-height: fit-content;">
           <p-toolbar *ngIf="showToolbar" class="mb-6" style="overflow: hidden;">
             <ng-template #start *ngIf="!withoutImportAndExport">
@@ -69,6 +72,8 @@
           </p-toolbar>
         </div>
       </div>
+
+
     </ng-template>
 
     <ng-template pTemplate="header">
@@ -77,7 +82,7 @@
           <p-tableHeaderCheckbox class="p-checkbox-info"></p-tableHeaderCheckbox>
         </th>
 
-        <th style="font-weight: bold;" *ngFor="let col of columns">{{ col.header }}</th>
+        <th style="font-weight: bold;" *ngFor="let col of selectedColumns">{{ col.header }}</th>
         <th style="font-weight: bold;" *ngIf="!disableActionsButton">Actions</th>
       </tr>
     </ng-template>
@@ -88,7 +93,7 @@
           <p-tableCheckbox [value]="rowData" class="p-checkbox-info"></p-tableCheckbox>
         </td>
 
-        <td *ngFor="let col of columns">
+        <td *ngFor="let col of selectedColumns">
           <!-- Image Column -->
           <ng-container *ngIf="col.isImage; else checkColor">
             <img [src]="defaultUserIcon"
@@ -116,20 +121,20 @@
 
           <!-- Boolean / Toggle Column -->
           <!--<ng-template #checkBoolean>
-            <ng-container *ngIf="col.field === 'isActive' || col.field === 'isLocked'; else textCell">
+          <ng-container *ngIf="col.field === 'isActive' || col.field === 'isLocked'; else textCell">
 
-              <ng-container *ngIf="col.field === 'isActive' &&; else textCell">
-                <p-toggleswitch [(ngModel)]="rowData.isActive"
-                                (onChange)="onToggleActive.emit(rowData)" />
-              </ng-container>
-
-              <ng-container *ngIf="col.field === 'isLocked';">
-                <p-toggleswitch [(ngModel)]="rowData.isLocked"
-                                (onChange)="onToggleLocked.emit(rowData)" />
-              </ng-container>
-
+            <ng-container *ngIf="col.field === 'isActive' &&; else textCell">
+              <p-toggleswitch [(ngModel)]="rowData.isActive"
+                              (onChange)="onToggleActive.emit(rowData)" />
             </ng-container>
-          </ng-template>-->
+
+            <ng-container *ngIf="col.field === 'isLocked';">
+              <p-toggleswitch [(ngModel)]="rowData.isLocked"
+                              (onChange)="onToggleLocked.emit(rowData)" />
+            </ng-container>
+
+          </ng-container>
+        </ng-template>-->
 
           <ng-template #checkBoolean>
             <ng-container *ngIf="col.field === 'isActive' || col.field === 'isLocked'; else textCell">
@@ -193,8 +198,8 @@
 
               <!-- Default Text Field -->
               <!--<ng-container *ngSwitchDefault>
-    {{ rowData[col.field] ?? 'No Value' }}
-  </ng-container>-->
+              {{ rowData[col.field] ?? 'No Value' }}
+            </ng-container>-->
 
               <ng-container *ngSwitchDefault>
                 <ng-container *ngIf="rowData[col.field] as val; else noValue">
@@ -224,10 +229,26 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td [attr.colspan]="columns.length + (!withoutImportAndExport ? 2 : 1)">
+        <td [attr.colspan]="selectedColumns.length + (!withoutImportAndExport ? 2 : 1)">
           No record found
         </td>
       </tr>
+    </ng-template>
+
+    <ng-template pTemplate="paginatorright">
+      <div>
+        <p-multiSelect [options]="allColumns"
+                       [(ngModel)]="selectedColumns"
+                       optionLabel="header"
+                       display="chip"
+                       selectedItemsLabel="{0} columns selected"
+                       [style]="{ 'min-width': '250px' }"
+                       placeholder="Select Columns">
+        </p-multiSelect>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="paginatorleft">
     </ng-template>
   </p-table>
 </div>

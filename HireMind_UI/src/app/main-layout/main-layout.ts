@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './main-layout.css'
 })
 export class MainLayout {
+  sidebarCollapsed = false;
 
+  toggleSidebar() {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
 }

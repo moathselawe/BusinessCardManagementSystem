@@ -1,2 +1,19 @@
-<!--<toast-message></toast-message>-->
-<router-outlet></router-outlet>
+<app-app-top-menu (toggleSidebar)="toggleSidebar()"></app-app-top-menu>
+
+<div class="layout-container">
+
+  <div class="sidebar"
+       [class.collapsed]="sidebarCollapsed">
+
+    <!-- pass state -->
+    <app-app-side-menu
+      [collapsed]="sidebarCollapsed">
+    </app-app-side-menu>
+
+  </div>
+
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -8,16 +8,67 @@ import { MenuItem } from 'primeng/api';
   styleUrl: './app-side-menu.css'
 })
 export class AppSideMenu {
+  @Input() collapsed = false;
+
+  originalItems: MenuItem[] = [];
   items: MenuItem[] = [];
+
+  collapsedGroups: { [key: string]: boolean } = {};
+
   ngOnInit() {
-    this.items = [
+    this.originalItems = [
       {
-        label: 'Inputs Manager',
-        icon: 'pi pi-shopping-cart',
+        label: 'BCMS',
         items: [
-          { label: '', icon: 'pi pi-list', routerLink: ['/'] }
-        ],
+          { label: 'Business Cards', icon: 'pi pi-id-card', routerLink: ['/BCMS/ManageBusinesscards'] },
+          { label: 'Create Business Card', icon: 'pi pi-plus', routerLink: ['/BCMS/CreateBusinesscard'] }
+        ]
+      },
+      {
+        label: 'HIREMIND',
+        items: [
+          { label: 'Jobs', icon: 'pi pi-briefcase', routerLink: ['/HireMind/ManageJobs'] },
+          { label: 'Create Job', icon: 'pi pi-plus-circle', routerLink: ['/HireMind/CreateJob'] },
+          { label: 'Applications', icon: 'pi pi-inbox', routerLink: ['/HireMind/ManageApplications'] }
+        ]
+      },
+      {
+        label: 'ADMIN',
+        items: [
+          { label: 'Users', icon: 'pi pi-users', routerLink: ['/Auth/users'] },
+          { label: 'Roles', icon: 'pi pi-shield', routerLink: ['/Auth/Roles'] },
+          { label: 'Permissions', icon: 'pi pi-lock', routerLink: ['/Auth/Permissions'] },
+          { label: 'User Roles', icon: 'pi pi-user-edit', routerLink: ['/Auth/ManageUserRoles'] },
+          { label: 'Role Permissions', icon: 'pi pi-key', routerLink: ['/Auth/ManageRolePermissions'] }
+        ]
+      },
+      {
+        label: 'SYSTEM',
+        items: [
+          { label: 'Lookups', icon: 'pi pi-list', routerLink: ['/Shared/ManageLookups'] }
+        ]
       }
     ];
+
+    this.items = [...this.originalItems];
   }
+
+  toggleGroup(label: string) {
+    this.collapsedGroups[label] = !this.collapsedGroups[label];
+
+    this.items = this.originalItems.map(group => {
+      if (group.label === label) {
+        return {
+          ...group,
+          items: this.collapsedGroups[label] ? [] : group.items
+        };
+      }
+      return group;
+    });
+  }
+
+  isCollapsed(label: string): boolean {
+    return !!this.collapsedGroups[label];
+  }
+
 }

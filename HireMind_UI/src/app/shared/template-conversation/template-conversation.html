@@ -5,6 +5,15 @@
       <i class="pi pi-comments mr-2"></i>
       <span class="title">{{ title }}</span>
     </div>
+
+    <div class="p-toolbar-group-end">
+      <button pButton
+              type="button"
+              icon="pi pi-times"
+              class="p-button-text p-button-sm"
+              (click)="closed.emit()">
+      </button>
+    </div>
   </p-toolbar>
 
   <div class="chat-body" #chatBody>

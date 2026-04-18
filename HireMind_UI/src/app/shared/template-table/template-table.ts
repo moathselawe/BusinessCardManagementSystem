@@ -17,6 +17,8 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { Gender } from '../../enum/Gender';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-template-table',
@@ -39,7 +41,9 @@ import { Gender } from '../../enum/Gender';
     CheckboxModule,
     ToolbarModule,
     FileUploadModule,
-    ToastModule
+    ToastModule,
+    MultiSelectModule,
+    PaginatorModule  
   ]
 })
 export class TemplateTable {
@@ -75,6 +79,18 @@ export class TemplateTable {
   @Output() onToggleLocked = new EventEmitter<any>();
   @Output() onAdd = new EventEmitter<void>();
   @Output() onSearch = new EventEmitter<{ searchValue: string; dateSearch: Date | null }>();
+
+  allColumns: any[] = [];
+  selectedColumns: any[] = [];
+
+  ngOnChanges() {
+    if (this.columns && this.columns.length) {
+      this.allColumns = [...this.columns];
+
+      // default first 5 columns
+      this.selectedColumns = this.allColumns.slice(0, 5);
+    }
+  }
 
   selectedRows: any[] = [];
   searchValue: string = '';

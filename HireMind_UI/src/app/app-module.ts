@@ -19,15 +19,20 @@ import { DialogModule } from 'primeng/dialog';
 import { TemplateConversation } from './shared/template-conversation/template-conversation';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { AppTopMenu } from './menus/app-top-menu/app-top-menu';
+import { MenubarModule } from 'primeng/menubar';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
     App,
     AppSideMenu,
+    AppTopMenu,
     MainLayout,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule, DragDropModule, TooltipModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     MenuModule,
@@ -38,6 +43,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     ButtonModule,
     DialogModule,
     TemplateConversation,
+    MenubarModule
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

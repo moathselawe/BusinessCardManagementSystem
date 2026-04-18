@@ -2,10 +2,19 @@
 
 <router-outlet />
 
-<div class="floating-btn">
-  <p-button (onClick)="visible ? visible = false : visible = true"
-            icon="pi pi-microchip-ai" severity="info"
-            styleClass="p-button-rounded p-button-lg" />
+<div class="floating-btn"
+     cdkDrag
+     cdkDragBoundary="body"
+     (cdkDragStarted)="isDragging = true"
+     (cdkDragEnded)="isDragging = false">
+
+  <p-button (onClick)="handleClick()"
+            icon="pi pi-microchip-ai"
+            severity="info"
+            styleClass="p-button-rounded p-button-lg"
+            [pTooltip]="'AI Assistant'">
+  </p-button>
+
 </div>
 
 <p-dialog [(visible)]="visible"
@@ -20,7 +29,8 @@
 
   <app-template-conversation [title]="'AI Assistant'"
                              [messages]="aiMessages"
-                             (messageSent)="onAiMessage($event)">
+                             (messageSent)="onAiMessage($event)"
+                             (closed)="visible = false">
   </app-template-conversation>
 
 </p-dialog>

@@ -33,7 +33,7 @@ export interface ChatMessage {
 export class TemplateConversation {
   @Input() title: string = 'Chatbot Assistant';
   @Input() messages: ChatMessage[] = [];
-
+  @Output() closed = new EventEmitter<void>();
   @Output() messageSent = new EventEmitter<string>();
 
   @ViewChild('chatBody') private chatBody!: ElementRef<HTMLDivElement>;

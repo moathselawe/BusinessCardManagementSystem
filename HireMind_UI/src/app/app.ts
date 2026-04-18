@@ -16,10 +16,17 @@ export class App {
   ) { }
   protected readonly title = signal('HireMind_UI');
   visible = false;
+  isDragging = false;
 
-  aiMessages: ChatMessage[] = [
+  aiMessages: ChatMessage[] = [ 
     { sender: 'bot', text: 'Hello! How can I assist you today?' }
   ];
+
+  handleClick() {
+    if (this.isDragging) return; // 👈 block click after drag
+
+    this.visible = !this.visible;
+  }
 
   onAiMessage(msg: string) {
     if (!msg?.trim()) return;

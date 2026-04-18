@@ -21,6 +21,7 @@ const routes: Routes = [
       import('./modules/authentication/verify-email-component/verify-email-module')
         .then(m => m.VerifyEmailModule)
   },
+
   {
     path: '',
     component: MainLayout,
@@ -30,48 +31,30 @@ const routes: Routes = [
         loadChildren: () =>
           import('./modules/bcms/bcms-module')
             .then(m => m.BCMSModule)
-      }
-    ]
-  },
-  {
-    path: '',
-    component: MainLayout,
-    children: [
+      },
       {
         path: 'HireMind',
         loadChildren: () =>
           import('./modules/hiremind/hiremind-module')
             .then(m => m.HireMindModule)
-      }
-    ]
-  },
-  {
-    path: '',
-    component: MainLayout,
-    children: [
+      },
       {
         path: 'Auth',
         loadChildren: () =>
           import('./modules/admin/admin-module')
             .then(m => m.AdminModule)
-      }
-    ]
-  },
-  {
-    path: '',
-    component: MainLayout,
-    children: [
+      },
       {
         path: 'Shared',
         loadChildren: () =>
           import('./modules/reusable/reusable-module')
             .then(m => m.ReusableModule)
-      }
-    ]
-  },
-  { path: '', redirectTo: 'BCMS/ManageBusinesscards', pathMatch: 'full' }
-];
+      },
 
+      { path: '', redirectTo: 'BCMS/ManageBusinesscards', pathMatch: 'full' }
+    ]
+  }
+];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

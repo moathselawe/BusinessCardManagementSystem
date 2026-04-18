@@ -1,0 +1,27 @@
+.layout-container {
+  display: flex;
+  height: calc(100vh - 60px);
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  transition: width 0.1s ease;
+  overflow: hidden; /* 🔥 IMPORTANT */
+}
+
+  .sidebar.collapsed {
+    width: 0px;
+  }
+
+/* CONTENT */
+.main-content {
+  flex: 1;
+  padding: 1rem;
+  overflow: auto;
+}
+
+.app-app-top-menu {
+  display: block;
+  height: 60px;
+}
