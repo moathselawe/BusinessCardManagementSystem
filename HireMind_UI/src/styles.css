@@ -1,1 +1,337 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+}
+
+:root {
+  --primary-color: indigo;
+  --primary-light: #d0cfcf;
+  --primary-lighter: #e6e3e3;
+}
+
+/* Dark mode styles */
+html.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+  html.dark * {
+    background-color: #1e1e1e;
+    color: #ffffff;
+  }
+
+  html.dark p-menubar {
+    background-color: #212121 !important;
+    border-color: #333 !important;
+  }
+
+  html.dark .p-button-text {
+    color: #ffffff !important;
+  }
+
+    html.dark .p-button-text:hover {
+      background-color: #333 !important;
+    }
+
+  html.dark .topbar {
+    background-color: #1a1a1a !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+/* Color theming */
+:root[style*="--primary-color: indigo"] .p-button {
+  --primary-color: #6366f1;
+}
+
+:root[style*="--primary-color: blue"] .p-button {
+  --primary-color: #3b82f6;
+}
+
+:root[style*="--primary-color: purple"] .p-button {
+  --primary-color: #a855f7;
+}
+
+:root[style*="--primary-color: teal"] .p-button {
+  --primary-color: #14b8a6;
+}
+
+:root[style*="--primary-color: green"] .p-button {
+  --primary-color: #22c55e;
+}
+
+:root[style*="--primary-color: cyan"] .p-button {
+  --primary-color: #06b6d4;
+}
+
+:root[style*="--primary-color: orange"] .p-button {
+  --primary-color: #f97316;
+}
+
+:root[style*="--primary-color: pink"] .p-button {
+  --primary-color: #ec4899;
+}
+
+/* Light mode (default) */
+html {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.topbar {
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+
+:root {
+  /* default primary color (used by topbar/button) */
+  --primary-color: indigo;
+}
+
+/* topbar uses the CSS variable, so toggleColor shows an immediate change */
+.topbar {
+  background-color: var(--primary-color) !important;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+  /* ensure p-button-text inside topbar is visible */
+  .topbar .p-button-text {
+    color: #ffffff !important;
+  }
+
+/* dark-mode rules (toggleDarkMode toggles html.dark) */
+html.dark {
+  background-color: #121212;
+  color: #e6e6e6;
+}
+
+  html.dark .topbar {
+    filter: brightness(0.85);
+  }
+
+/* debug helper (temporary) — shows the clickable area of the palette button */
+.topbar .p-button-text[icon="pi pi-palette"] {
+  outline: none;
+  /* uncomment next line if you want a visible border for debugging */
+  /* border: 1px dashed rgba(255,255,255,0.3); */
+}
+
+/* color swatch buttons used in overlay */
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.7);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+}
+
+  .color-swatch:hover {
+    transform: scale(1.08);
+  }
+
+
+/* CHECKBOX BORDER */
+.p-checkbox .p-checkbox-box {
+  border-color: var(--primary-color) !important;
+}
+
+/* CHECKED STATE BACKGROUND */
+.p-checkbox.p-highlight .p-checkbox-box {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* CHECK ICON COLOR */
+.p-checkbox .p-checkbox-icon {
+  color: #ffffff !important;
+}
+
+/* FOCUS STATE */
+.p-checkbox .p-checkbox-box:focus {
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
+
+/* SELECTED + FOCUSED OPTION */
+.p-multiselect-panel .p-multiselect-option.p-multiselect-option-selected.p-focus {
+  background: var(--primary-color) !important;
+  color: #ffffff !important;
+}
+
+/* SELECTED OPTION (NOT ONLY FOCUS) */
+.p-multiselect-panel .p-multiselect-option.p-multiselect-option-selected {
+  background: var(--primary-color) !important;
+  color: #ffffff !important;
+}
+
+/* HOVER OVER OPTIONS */
+.p-multiselect-panel .p-multiselect-option:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #000 !important;
+}
+
+/* CHECK ICON COLOR */
+.p-multiselect-panel .p-multiselect-option-selected .p-checkbox-icon {
+  color: #ffffff !important;
+}
+
+/* SELECTED OPTION (normal) */
+.p-multiselect-option.p-multiselect-option-selected {
+  background: var(--primary-light) !important;
+  color: var(--primary-color) !important;
+}
+
+  /* SELECTED + FOCUSED OPTION */
+  .p-multiselect-option.p-multiselect-option-selected.p-focus {
+    background: var(--primary-lighter) !important;
+    color: var(--primary-color) !important;
+  }
+
+/* FOCUS ONLY (not selected) */
+.p-multiselect-option.p-focus {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* HOVER */
+.p-multiselect-option:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+}
+
+
+/* SELECTED OPTION */
+.p-select-option.p-select-option-selected {
+  background: var(--primary-light) !important;
+  color: var(--primary-color) !important;
+}
+
+  /* SELECTED + FOCUSED */
+  .p-select-option.p-select-option-selected.p-focus {
+    background: var(--primary-lighter) !important;
+    color: var(--primary-color) !important;
+  }
+
+/* FOCUS ONLY (not selected) */
+.p-select-option.p-focus {
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: #000 !important;
+}
+
+/* HOVER */
+.p-select-option:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+}
+
+
+/* DEFAULT BORDER */
+.p-select {
+  border: 1px solid #d1d5db !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+  /* FOCUS STATE (PRIMARY COLOR) */
+  .p-select.p-focus,
+  .p-select:focus-within {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px var(--primary-lighter) !important;
+  }
+
+  /* HOVER (optional subtle effect) */
+  .p-select:hover {
+    border-color: var(--primary-color) !important;
+  }
+
+/* SELECTED PAGE */
+.p-paginator .p-paginator-page.p-paginator-page-selected {
+  background: var(--primary-light) !important;
+  color: var(--primary-color) !important;
+  border-radius: 6px;
+}
+
+/* HOVER PAGE */
+.p-paginator .p-paginator-page:hover {
+  background: var(--primary-lighter) !important;
+  color: var(--primary-color) !important;
+}
+
+/* NAV BUTTONS (next, prev, first, last) */
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-last {
+  color: var(--primary-color) !important;
+}
+
+  /* NAV BUTTON HOVER */
+  .p-paginator .p-paginator-next:hover,
+  .p-paginator .p-paginator-prev:hover,
+  .p-paginator .p-paginator-first:hover,
+  .p-paginator .p-paginator-last:hover {
+    background: var(--primary-lighter) !important;
+    color: var(--primary-color) !important;
+  }
+
+
+/* DEFAULT INPUT */
+.p-inputtext {
+  border: 1px solid #d1d5db !important;
+  transition: all 0.2s ease;
+}
+
+  /* FOCUS STATE */
+  .p-inputtext:focus,
+  .p-inputtext.p-focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px var(--primary-lighter) !important;
+    outline: none !important;
+  }
+
+/* ICON INPUT WRAPPER FOCUS (p-iconfield) */
+.p-iconfield:focus-within .p-inputtext {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px var(--primary-lighter) !important;
+}
+
+
+/* DEFAULT */
+.p-multiselect {
+  border: 1px solid #d1d5db !important;
+  transition: all 0.2s ease;
+}
+
+  /* FOCUS STATE */
+  .p-multiselect.p-focus,
+  .p-multiselect:focus-within {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px var(--primary-lighter) !important;
+    outline: none !important;
+  }
+
+  /* HOVER (optional subtle effect) */
+  .p-multiselect:hover {
+    border-color: var(--primary-color) !important;
+  }
+
+
+/* SELECTED OPTION */
+.p-listbox .p-listbox-list .p-listbox-option.p-listbox-option-selected {
+  background: var(--primary-light) !important;
+  color: var(--primary-color) !important;
+}
+
+  /* SELECTED + FOCUS */
+  .p-listbox .p-listbox-list .p-listbox-option.p-listbox-option-selected.p-focus {
+    background: var(--primary-light) !important;
+    color: var(--primary-color) !important;
+  }
+
+/* HOVER OPTION */
+.p-listbox .p-listbox-list .p-listbox-option:hover {
+  background: var(--primary-lighter) !important;
+  color: var(--primary-color) !important;
+}
+
+.p-menubar-submenu {
+  z-index: 10000 !important;
+}

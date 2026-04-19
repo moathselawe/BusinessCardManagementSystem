@@ -19,6 +19,7 @@ export class AppSideMenu {
     this.originalItems = [
       {
         label: 'BCMS',
+        icon: 'pi pi-briefcase', 
         items: [
           { label: 'Business Cards', icon: 'pi pi-id-card', routerLink: ['/BCMS/ManageBusinesscards'] },
           { label: 'Create Business Card', icon: 'pi pi-plus', routerLink: ['/BCMS/CreateBusinesscard'] }
@@ -26,6 +27,7 @@ export class AppSideMenu {
       },
       {
         label: 'HIREMIND',
+        icon: 'pi pi-briefcase', 
         items: [
           { label: 'Jobs', icon: 'pi pi-briefcase', routerLink: ['/HireMind/ManageJobs'] },
           { label: 'Create Job', icon: 'pi pi-plus-circle', routerLink: ['/HireMind/CreateJob'] },
@@ -34,6 +36,7 @@ export class AppSideMenu {
       },
       {
         label: 'ADMIN',
+        icon: 'pi pi-briefcase', 
         items: [
           { label: 'Users', icon: 'pi pi-users', routerLink: ['/Auth/users'] },
           { label: 'Roles', icon: 'pi pi-shield', routerLink: ['/Auth/Roles'] },
@@ -44,6 +47,7 @@ export class AppSideMenu {
       },
       {
         label: 'SYSTEM',
+        icon: 'pi pi-briefcase', 
         items: [
           { label: 'Lookups', icon: 'pi pi-list', routerLink: ['/Shared/ManageLookups'] }
         ]
@@ -70,5 +74,4 @@ export class AppSideMenu {
   isCollapsed(label: string): boolean {
     return !!this.collapsedGroups[label];
   }
-
 }

@@ -21,7 +21,7 @@
 
 
         <div class="d-flex align-items-center">
-          <h3 style="font-size: 1.6rem; padding-right:8px; color: #2196f3;" class="mb-0 mr-2">
+          <h3 style="font-size: 1.6rem; padding-right: 8px; color: var(--primary-color);" class="mb-0 mr-2">
             {{ title }}
           </h3>
           <p-button *ngIf="!disableCreateButton" icon="pi pi-plus" rounded [pTooltip]="'Create new'" size="small" severity="info" tooltipPosition="bottom" (click)="onAdd.emit()" />

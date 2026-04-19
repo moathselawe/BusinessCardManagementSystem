@@ -1,49 +1,53 @@
-<div class="panel-heading sticky-header">
-  <h2 style="color: #2196f3;" *ngIf="isDisabled && role">Manage {{role.name}} Permissions</h2>
-  <h2 style="color: #2196f3;" *ngIf="!isDisabled">Manage Roles Permissions</h2>
-</div>
-
 <div class="card role-permissions-card">
-  <div class="col-4 form-group">
-    <label class="col-form-label dark-label">Roles</label>
-    <div class="card flex justify-center">
+  <div class="grid">
+    <div class="row col-12">
+      <div class="col-8 form-group">
+        <div class="role-permissions">
+          <h2 style="color: var(--primary-color);" *ngIf="isDisabled && role">Manage {{role.name}} Permissions</h2>
+          <h2 style="color: var(--primary-color);" *ngIf="!isDisabled">Manage Roles Permissions</h2>
+        </div>
+      </div>
 
-      <p-select [options]="roles"
-                [(ngModel)]="roleId"
-                optionLabel="name"
-                optionValue="id"
-                (onChange)="onRoleChange($event.value)"
-                #roleIdsCtrl="ngModel"
-                name="roleId"
-                placeholder="Select Role"
-                [filter]="true"
-                filterBy="name"
-                [showClear]="true"
-                appendTo="body"
-                class="w-full md:w-80"
-                [disabled]="isDisabled"
-                required>
+      <div class="col-4 form-group">
+        <label class="col-form-label dark-label">Roles</label>
+        <div class="card flex justify-center">
+          <p-select [options]="roles"
+                    [(ngModel)]="roleId"
+                    optionLabel="name"
+                    optionValue="id"
+                    (onChange)="onRoleChange($event.value)"
+                    #roleIdsCtrl="ngModel"
+                    name="roleId"
+                    placeholder="Select Role"
+                    [filter]="true"
+                    filterBy="name"
+                    [showClear]="true"
+                    appendTo="body"
+                    class="w-full md:w-80"
+                    [disabled]="isDisabled"
+                    required>
 
-        <ng-template let-selectedOption pTemplate="selectedItem">
-          <div class="flex items-center gap-2">
-            <div>{{ selectedOption?.name }}</div>
-          </div>
-        </ng-template>
+            <ng-template let-selectedOption pTemplate="selectedItem">
+              <div class="flex items-center gap-2">
+                <div>{{ selectedOption?.name }}</div>
+              </div>
+            </ng-template>
 
-        <ng-template let-role pTemplate="item">
-          <div class="flex items-center gap-2">
-            <div>{{ role.name }}</div>
-          </div>
-        </ng-template>
+            <ng-template let-role pTemplate="item">
+              <div class="flex items-center gap-2">
+                <div>{{ role.name }}</div>
+              </div>
+            </ng-template>
 
-      </p-select>
+          </p-select>
+
+        </div>
+        <div class="text-danger mt-1" *ngIf="roleIdsCtrl.invalid && (roleIdsCtrl.touched)">
+          <small *ngIf="roleIdsCtrl.errors?.['required']">Role is required.</small>
+        </div>
+      </div>
+
     </div>
-  </div>
-
-
-  <div class="text-danger mt-1"
-       *ngIf="roleIdsCtrl.invalid && (roleIdsCtrl.touched)">
-    <small *ngIf="roleIdsCtrl.errors?.['required']">Role is required.</small>
   </div>
 </div>
 

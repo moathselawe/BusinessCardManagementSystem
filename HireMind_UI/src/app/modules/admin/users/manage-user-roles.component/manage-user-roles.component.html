@@ -1,48 +1,53 @@
-<div class="panel-heading sticky-header">
-  <h2 style="color: #2196f3;" *ngIf="isDisabled && user">Manage {{user.nameEnglish}} Roles</h2>
-  <h2 style="color: #2196f3;" *ngIf="!isDisabled">Manage Users Roles</h2>
-</div>
-
 <div class="card role-permissions-card">
-  <div class="col-4 form-group">
-    <label class="col-form-label dark-label">Users</label>
-    <div class="card flex justify-center">
+  <div class="grid">
+    <div class="row col-12">
+      <div class="col-6 form-group">
+        <div class="role-permissions">
+          <h2 style="color: var(--primary-color);" *ngIf="isDisabled && user">Manage {{user.nameEnglish}} Roles</h2>
+          <h2 style="color: var(--primary-color);" *ngIf="!isDisabled">Manage Users Roles</h2>
+        </div>
+      </div>
 
-      <p-select [options]="users"
-                [(ngModel)]="userId"
-                optionLabel="nameEnglish"
-                optionValue="id"
-                (onChange)="onUserChange($event.value)"
-                #userIdsCtrl="ngModel"
-                nameEnglish="userId"
-                placeholder="Select User"
-                [filter]="true"
-                filterBy="nameEnglish"
-                [showClear]="true"
-                appendTo="body"
-                class="w-full md:w-80"
-                [disabled]="isDisabled"
-                required>
+      <div class="col-6 form-group">
+        <label class="col-form-label dark-label">Users</label>
+        <div class="card flex justify-center">
+          <p-select [options]="users"
+                    [(ngModel)]="userId"
+                    optionLabel="nameEnglish"
+                    optionValue="id"
+                    (onChange)="onUserChange($event.value)"
+                    #userIdsCtrl="ngModel"
+                    nameEnglish="userId"
+                    placeholder="Select User"
+                    [filter]="true"
+                    filterBy="nameEnglish"
+                    [showClear]="true"
+                    appendTo="body"
+                    class="w-full md:w-80"
+                    [disabled]="isDisabled"
+                    required>
 
-        <ng-template let-selectedOption pTemplate="selectedItem">
-          <div class="flex items-center gap-2">
-            <div>{{ selectedOption?.nameEnglish }}</div>
-          </div>
-        </ng-template>
+            <ng-template let-selectedOption pTemplate="selectedItem">
+              <div class="flex items-center gap-2">
+                <div>{{ selectedOption?.nameEnglish }}</div>
+              </div>
+            </ng-template>
 
-        <ng-template let-user pTemplate="item">
-          <div class="flex items-center gap-2">
-            <div>{{ user.nameEnglish }}</div>
-          </div>
-        </ng-template>
+            <ng-template let-user pTemplate="item">
+              <div class="flex items-center gap-2">
+                <div>{{ user.nameEnglish }}</div>
+              </div>
+            </ng-template>
 
-      </p-select>
+          </p-select>
+
+        </div>
+        <div class="text-danger mt-1" *ngIf="userIdsCtrl.invalid && (userIdsCtrl.touched)">
+          <small *ngIf="userIdsCtrl.errors?.['required']">User is required.</small>
+        </div>
+      </div>
+
     </div>
-  </div>
-
-  <div class="text-danger mt-1"
-       *ngIf="userIdsCtrl.invalid && (userIdsCtrl.touched)">
-    <small *ngIf="userIdsCtrl.errors?.['required']">User is required.</small>
   </div>
 </div>
 

@@ -23,6 +23,7 @@ import { AppTopMenu } from './menus/app-top-menu/app-top-menu';
 import { MenubarModule } from 'primeng/menubar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TooltipModule } from 'primeng/tooltip';
+import { PopoverModule } from 'primeng/popover';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { TooltipModule } from 'primeng/tooltip';
     ButtonModule,
     DialogModule,
     TemplateConversation,
-    MenubarModule
+    MenubarModule,
+    PopoverModule
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

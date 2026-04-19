@@ -7,6 +7,30 @@
 .logo {
   font-weight: bold;
   font-size: 18px;
-  color: var(--primary-color);
+  color: white;
   padding-left: 10px;
 }
+
+
+/* MAKE MENU ITEMS BACKGROUND WHITE */
+:host ::ng-deep .p-menubar .p-menubar-item-link {
+  background: rgba(255, 255, 255, 0.5) !important;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+/* TEXT COLOR */
+/*:host ::ng-deep .p-menubar .p-menubar-item-label,
+:host ::ng-deep .p-menubar .p-menubar-item-icon {
+  color: #0f172a !important;
+}*/
+
+/* HOVER STATE */
+/*:host ::ng-deep .p-menubar .p-menubar-item-link:hover {
+  background: #f1f5f9 !important;
+}*/
+
+/* ACTIVE / OPEN ITEM */
+/*:host ::ng-deep .p-menubar .p-menubar-item.p-highlight > .p-menubar-item-link {
+  background: #e2e8f0 !important;
+}*/

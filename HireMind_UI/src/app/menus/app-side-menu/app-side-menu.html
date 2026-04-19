@@ -7,13 +7,15 @@
       <span>HireMind</span>
     </div>
   </div>
-
+       
   <!-- MENU -->
   <p-menu [model]="items" styleClass="sidebar-menu">
 
     <!-- SECTION HEADER -->
     <ng-template pTemplate="submenuheader" let-item>
       <div class="menu-section">
+
+        <i [class]="item.icon" style="margin-right:7px;"></i>
 
         <span class="section-title">
           {{ item.label }}

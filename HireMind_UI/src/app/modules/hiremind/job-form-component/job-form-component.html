@@ -1,6 +1,6 @@
 <div class="sticky-header">
-  <h2 style="color:#2196f3;" *ngIf="!isManageStagesAndQuestions">{{ readonly ? 'Preview Job' : (isEditMode ? 'Edit Job' : 'Create Job') }}</h2>
-  <h2 style="color:#2196f3;" *ngIf="isManageStagesAndQuestions && !loading">{{job.title}} Manage Stages & Questions</h2>
+  <h2 style="color: var(--primary-color);" *ngIf="!isManageStagesAndQuestions">{{ readonly ? 'Preview Job' : (isEditMode ? 'Edit Job' : 'Create Job') }}</h2>
+  <h2 style="color: var(--primary-color);" *ngIf="isManageStagesAndQuestions && !loading">{{job.title}} Manage Stages & Questions</h2>
   <button pButton
           type="button"
           label="Back"
@@ -361,7 +361,7 @@
 
               <!-- Stage Order -->
               <div class="col-1 form-group" *ngIf="stage.stageOrder != job.hiringStages.length">
-                <label class="col-form-label dark-label" style="color:#2196f3; font-size:16px; font-weight:bold;">
+                <label class="col-form-label dark-label" style="color: var(--primary-color); font-size: 16px; font-weight: bold; ">
                   Order #{{ i + 1 }}
                 </label>
                 <input pInputText
@@ -539,7 +539,7 @@
 
               <div class="col-1 form-group">
 
-                <label class="col-form-label dark-label" style="color:#2196f3; font-size:16px; font-weight:bold;">
+                <label class="col-form-label dark-label" style="color: var(--primary-color);; font-size: 16px; font-weight: bold;">
                   Question #{{ i + 1 }}
                 </label>
 

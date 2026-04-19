@@ -71,17 +71,17 @@
 
 /* checkbox theme */
 
-:host ::ng-deep .p-checkbox-info .p-checkbox-box {
+/*:host ::ng-deep .p-checkbox-info .p-checkbox-box {
   --p-checkbox-border-color: #0ea5e9;
   --p-checkbox-checked-background: #0ea5e9;
   --p-checkbox-checked-border-color: #0ea5e9;
   --p-checkbox-checked-hover-background: #0b79c1;
   --p-checkbox-checked-hover-border-color: #0b79c1;
-}
+}*/
 
 /* table theme */
 
-.blue-theme-table {
+/*.blue-theme-table {
   --p-paginator-nav-button-selected-background: var(--p-sky-500);
   --p-paginator-nav-button-selected-color: #fff;
   --p-paginator-nav-button-hover-background: #cfe2ff;
@@ -93,4 +93,4 @@
   border-radius: 6px;
   background: var(--surface-card);
   border: 1px solid var(--surface-border);
-}
+}*/

@@ -1,24 +1,47 @@
 <p-menubar [model]="items" class="topbar">
 
-  <!-- LEFT LOGO -->
   <ng-template pTemplate="start">
     <button pButton
             icon="pi pi-bars"
             class="p-button-text"
             (click)="toggleSidebar.emit()">
     </button>
+
     <div class="logo">
       <span>HireMind</span>
     </div>
   </ng-template>
 
-  <!-- RIGHT SIDE -->
   <ng-template pTemplate="end">
     <div class="flex items-center gap-3">
 
-      <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+      <button pButton
+              class="p-button-text"
+              [icon]="isDark ? 'pi pi-sun' : 'pi pi-moon'"
+              (click)="toggleDarkMode()">
+      </button>
+
+      <!-- open popover via template reference -->
+      <button pButton
+              icon="pi pi-palette"
+              class="p-button-text"
+              (click)="op.toggle($event)">
+      </button>
+
+      <!--<p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
                 shape="circle">
-      </p-avatar>
+      </p-avatar>-->
+
+      <p-popover #op>
+        <div style="display:flex; gap:8px; padding:8px;">
+          <button *ngFor="let c of colors"
+                  class="color-swatch"
+                  [title]="c"
+                  [style.background]="colorMap[c]"
+                  (click)="selectColor(c)">
+          </button>
+        </div>
+      </p-popover>
 
     </div>
   </ng-template>
