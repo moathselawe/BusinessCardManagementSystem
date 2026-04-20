@@ -4,7 +4,7 @@
   <div class="sidebar-header">
     <div class="logo">
       <i class="pi pi-box"></i>
-      <span>HireMind</span>
+      <span class="system-header" >HireMind</span>
     </div>
   </div>
        
@@ -15,7 +15,7 @@
     <ng-template pTemplate="submenuheader" let-item>
       <div class="menu-section">
 
-        <i [class]="item.icon" style="margin-right:7px;"></i>
+        <i [class]="item.icon" style="margin-right:13px;"></i>
 
         <span class="section-title">
           {{ item.label }}
@@ -42,8 +42,8 @@
          routerLinkActive="active"
          [routerLinkActiveOptions]="{ exact: true }">
 
-        <i [class]="item.icon"></i>
-        <span class="label">{{ item.label }}</span>
+        <i [class]="item.icon"  style="margin-right:5px;"></i>
+        <span class="label" *ngIf="!collapsed">{{ item.label }}</span>
 
         <p-badge *ngIf="item.badge"
                  [value]="item.badge"

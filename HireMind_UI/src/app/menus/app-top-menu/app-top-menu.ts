@@ -1,5 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { Gender } from '../../enum/Gender';
+import { User } from '../../models/Security/User';
 
 @Component({
   selector: 'app-app-top-menu',
@@ -30,65 +32,6 @@ export class AppTopMenu implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.items = [
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-        routerLink: ['/BCMS/ManageBusinesscards']
-      },
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-        routerLink: ['/BCMS/ManageBusinesscards']
-      },
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-        routerLink: ['/BCMS/ManageBusinesscards']
-      },
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-        routerLink: ['/BCMS/ManageBusinesscards']
-      },
-      {
-        label: 'Modules',
-        icon: 'pi pi-th-large',
-        items: [
-          {
-            label: 'BCMS',
-            icon: 'pi pi-id-card',
-            routerLink: ['/BCMS']
-          },
-          {
-            label: 'HireMind',
-            icon: 'pi pi-briefcase',
-            routerLink: ['/HireMind']
-          },
-          {
-            label: 'Admin',
-            icon: 'pi pi-shield',
-            routerLink: ['/Auth']
-          },
-          {
-            label: 'BCMS',
-            icon: 'pi pi-id-card',
-            routerLink: ['/BCMS']
-          },
-          {
-            label: 'HireMind',
-            icon: 'pi pi-briefcase',
-            routerLink: ['/HireMind']
-          },
-          {
-            label: 'Admin',
-            icon: 'pi pi-shield',
-            routerLink: ['/Auth']
-          }
-        ]
-      }
-    ];
-
     const defaultColor = '#0ea5e9';
     this.applyGlobalPrimary(defaultColor);
   }
@@ -167,4 +110,21 @@ a, .link-primary {
     }
     style.innerHTML = css;
   }
+
+  userDialogVisible = false;
+
+  user: User = {
+    id: '1',
+    nameArabic: 'محمد',
+    nameEnglish: 'Moath Selawe',
+    mobile: '+971 50 000 0000',
+    address: 'Abu Dhabi',
+    email: 'moath@email.com',
+    gender: Gender.Male,
+    isActive: true,
+    isLocked: false,
+    lockedDate: new Date(),
+    failedLoginAttempts: 0,
+    roleIds: ["Admin", "Developer"]
+  };
 }

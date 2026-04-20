@@ -58,19 +58,21 @@ export class AppSideMenu {
   }
 
   toggleGroup(label: string) {
+
     this.collapsedGroups[label] = !this.collapsedGroups[label];
 
     this.items = this.originalItems.map(group => {
-      if (group.label === label) {
-        return {
-          ...group,
-          items: this.collapsedGroups[label] ? [] : group.items
-        };
-      }
-      return group;
-    });
-  }
 
+      const collapsed = this.collapsedGroups[group.label!];
+
+      return {
+        ...group,
+        items: collapsed ? [] : group.items
+      };
+
+    });
+
+  }
   isCollapsed(label: string): boolean {
     return !!this.collapsedGroups[label];
   }
