@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-public-home.component',
@@ -99,4 +99,33 @@ export class PublicHomeComponent {
     'assets/images/partner3.png',
     'assets/images/partner4.png'
   ];
+
+  isAtTop = true;
+
+  @HostListener('window:scroll')
+  onScroll() {
+    this.isAtTop = window.scrollY < 200; // threshold
+  }
+
+  handleScrollClick() {
+    if (this.isAtTop) {
+      this.scrollToBottom();
+    } else {
+      this.scrollToTop();
+    }
+  }
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  scrollToBottom() {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  }
 }

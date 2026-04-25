@@ -27,6 +27,7 @@ import { TemplateConversation } from './shared/template-conversation/template-co
 import { AppSideMenu } from './menus/admin-menus/admin-side-bar/admin-side-bar';
 import { AppTopMenu } from './menus/admin-menus/admin-top-bar/admin-top-bar';
 import { PublicTopbar } from './menus/public-top-bar/public-top-bar';
+import { TemplateTopBar } from './shared/template-top-bar/template-top-bar';
 
 
 @NgModule({
@@ -39,7 +40,9 @@ import { PublicTopbar } from './menus/public-top-bar/public-top-bar';
     PublicLayout
   ],
   imports: [
-    BrowserModule, DragDropModule, TooltipModule,
+    BrowserModule,
+    DragDropModule,
+    TooltipModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     MenuModule,
@@ -52,6 +55,7 @@ import { PublicTopbar } from './menus/public-top-bar/public-top-bar';
     TemplateConversation,
     MenubarModule,
     PopoverModule,
+    TemplateTopBar,
 
     TranslateModule.forRoot({
       loader: provideTranslateHttpLoader({

@@ -16,7 +16,7 @@
           <p class="hero-desc">{{ banner.description }}</p>
         </div>
 
-        <div class="hero-image"> 
+        <div class="hero-image">
           <img [src]="banner.image" />
         </div>
 
@@ -136,8 +136,6 @@
     </div>
 
   </section>-->
-
-
   <!-- ================= PARTNERS ================= -->
   <section class="partners-section my-6">
 
@@ -165,4 +163,16 @@
 
   </section>
 
+
+  <!-- SCROLL BUTTONS -->
+  <div class="scroll-button">
+
+    <p-button [icon]="isAtTop ? 'pi pi-arrow-down' : 'pi pi-arrow-up'"
+              severity="contrast"
+              rounded="true"
+              raised="true"
+              (onClick)="handleScrollClick()">
+    </p-button>
+
+  </div>
 </div>

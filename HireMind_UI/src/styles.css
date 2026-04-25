@@ -331,10 +331,10 @@ html.dark {
   background: var(--primary-lighter) !important;
   color: var(--primary-color) !important;
 }
-
+/*
 .p-menubar-submenu {
   z-index: 10000 !important;
-}
+}*/
 
 html[dir="rtl"] {
   direction: rtl;
@@ -342,9 +342,12 @@ html[dir="rtl"] {
 
 html[dir="ltr"] {
   direction: ltr;
+  background: #fafaf9 !important;
 }
 
 
 .auto-start {
   margin-inline-start: auto;
 }
+
+

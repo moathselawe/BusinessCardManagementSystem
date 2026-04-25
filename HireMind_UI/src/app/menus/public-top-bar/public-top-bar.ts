@@ -10,45 +10,36 @@ import { MenuItem } from 'primeng/api';
 })
 export class PublicTopbar {
   items: MenuItem[] = [];
-  currentLang: string = 'en';
+  currentLang: 'en' | 'ar' = 'en';
 
   constructor(private translate: TranslateService) { }
 
   ngOnInit() {
-    const savedLang = localStorage.getItem('lang');
+    const savedLang = localStorage.getItem('lang') as 'en' | 'ar';
     this.currentLang = savedLang || this.translate.currentLang || 'en';
+
     this.translate.use(this.currentLang);
+    document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
 
     this.buildMenu();
   }
 
   buildMenu() {
     this.items = [
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-        routerLink: '/home'
-      },
-      {
-        label: 'About Us',
-        icon: 'pi pi-info-circle',
-        routerLink: '/aboutUs'
-      },
-      {
-        label: 'FAQs',
-        icon: 'pi pi-question-circle',
-        routerLink: '/FQAS'
-      }
+      { label: 'Home', icon: 'pi pi-home', routerLink: '/home' },
+      { label: 'About Us', icon: 'pi pi-info-circle', routerLink: '/aboutUs' },
+      { label: 'FAQs', icon: 'pi pi-question-circle', routerLink: '/FQAS' }
     ];
   }
 
   toggleLanguage() {
     this.currentLang = this.currentLang === 'en' ? 'ar' : 'en';
+
     this.translate.use(this.currentLang);
+    document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
     localStorage.setItem('lang', this.currentLang);
 
-    // rebuild menu if you want translated labels later
-    this.buildMenu();
+    this.buildMenu(); // if later you translate labels
   }
-
 }

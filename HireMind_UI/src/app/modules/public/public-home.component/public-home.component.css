@@ -313,3 +313,22 @@
 ::ng-deep .p-carousel-indicator-active .p-carousel-indicator-button {
   background: var(--primary-color);
 }
+
+.scroll-button {
+  position: fixed;
+  left: 30px;
+  bottom: 30px;
+  z-index: 1000;
+}
+
+/*::ng-deep .p-tablist .p-tab.p-tab-active {
+  color: color-mix(in srgb, var(--primary-color) 80%, white);
+}
+
+::ng-deep .p-tablist .p-tablist-active-bar {
+  background: var(--primary-color);
+}
+
+::ng-deep .p-carousel-indicator-active .p-carousel-indicator-button {
+  background: color-mix(in srgb, var(--primary-color) 60%, black);
+}*/

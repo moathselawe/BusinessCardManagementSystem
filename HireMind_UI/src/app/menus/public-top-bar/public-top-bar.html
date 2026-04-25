@@ -1,49 +1,33 @@
-<p-menubar [model]="items" class="public-topbar">
+<app-template-top-bar [items]="items">
 
-  <!-- LEFT / BRAND -->
-  <ng-template pTemplate="start">
-    <div class="flex items-center gap-2">
-
-      <!-- Logo -->
-      <img src="assets/images/logo.png"
-           alt="Logo"
-           style="height:32px;">
-
-      <span style="font-size:18px; font-weight:600;">
-        HireMind
-      </span>
-
+  <!-- START -->
+  <div topbar-start class="flex items-center gap-2">
+    <div class="menu-header">
+      <div class="logo">
+        <i class="pi pi-box"></i>
+        <span class="system-header">HireMind</span>
+      </div>
     </div>
-  </ng-template>
+  </div>
 
-  <!-- RIGHT ACTIONS -->
-  <ng-template pTemplate="end">
-    <div class="flex items-center gap-3">
+  <!-- END -->
+  <div topbar-end class="flex items-center gap-2 topbar-links">
 
-      <!-- Language -->
-      <button pButton
-              type="button"
-              class="lang-toggle-circle p-button-text"
-              (click)="toggleLanguage()"
-              [label]="currentLang === 'en' ? 'AR' : 'EN'">
-      </button>
+    <!-- Language -->
+    <span class="topbar-link" style="border: 1px solid var(--primary-color);"
+          (click)="toggleLanguage()">
+      {{ currentLang === 'en' ? 'AR' : 'EN' }}
+      <i class="pi pi-globe"></i>
+    </span>
 
-      <!-- LOGIN -->
-      <button pButton
-              label="Login"
-              icon="pi pi-sign-in"
-              class="p-button-text"
-              routerLink="/login">
-      </button>
+    <!-- Login -->
+    <!-- Login -->
+    <span class="topbar-link topbar-login"
+          routerLink="/login">
+      <i class="pi pi-sign-in"></i>
+      Login
+    </span>
 
-      <!-- REGISTER -->
-      <button pButton
-              label="Register"
-              icon="pi pi-user-plus"
-              routerLink="/register">
-      </button>
+  </div>
 
-    </div>
-  </ng-template>
-
-</p-menubar>
+</app-template-top-bar>

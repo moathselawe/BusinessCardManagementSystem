@@ -1,0 +1,13 @@
+<p-menubar [model]="items" class="app-topbar">
+
+  <!-- START SLOT -->
+  <ng-template pTemplate="start">
+    <ng-content select="[topbar-start]"></ng-content>
+  </ng-template>
+
+  <!-- END SLOT -->
+  <ng-template pTemplate="end">
+    <ng-content select="[topbar-end]"></ng-content>
+  </ng-template>
+
+</p-menubar>

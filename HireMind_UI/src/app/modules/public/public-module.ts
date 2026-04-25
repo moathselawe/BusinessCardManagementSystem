@@ -10,22 +10,26 @@ import { AboutUsComponent } from './about-us.component/about-us.component';
 import { FqasComponent } from './fqas.component/fqas.component';
 import { PublicHomeComponent } from './public-home.component/public-home.component';
 import { PublicRoutingModule } from './public-routing-module';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   declarations: [
+    PublicHomeComponent,
     AboutUsComponent,
-     FqasComponent,
-     PublicHomeComponent,
+    FqasComponent
   ],
   imports: [
     CommonModule,
     HttpClientModule,
     PublicRoutingModule,
     TranslateModule,
-    CarouselModule ,
+    CarouselModule,
     AccordionModule,
     TabsModule,
-    ScrollerModule
+    ScrollerModule,
+    SkeletonModule,
+    ButtonModule
   ]
 })
 export class PublicModule { }

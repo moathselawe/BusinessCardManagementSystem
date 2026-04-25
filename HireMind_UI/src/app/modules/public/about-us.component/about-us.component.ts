@@ -11,19 +11,25 @@ import { AboutUs } from '../../../models/content/aboutUs';
 export class AboutUsComponent {
   constructor(private service: AboutUsService) { }
 
+
   aboutUsList: AboutUs[] = [];
+  isLoading = true;
 
   ngOnInit(): void {
     this.getAboutUs();
   }
 
   getAboutUs(): void {
+    this.isLoading = true;
+
     this.service.GetAll().subscribe({
       next: (res) => {
         this.aboutUsList = res.response;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Error loading About Us:', err);
+        this.isLoading = false;
       }
     });
   }
