@@ -1,0 +1,58 @@
+<p-menubar [model]="items" class="topbar">
+
+  <ng-template pTemplate="start">
+    <div class="flex items-center gap-2" *ngIf="selectedLabel">
+      <span style="font-size:18px; font-weight:600;" class="selected-page-label">
+        <i [class]="selectedIcon" style="margin-left: 8px;"></i>
+        {{ selectedLabel }}
+      </span>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <div class="flex items-center gap-3">
+
+      <button pButton
+              type="button"
+              class="lang-toggle-circle p-button-text"
+              (click)="toggleLanguage()"
+              [label]="currentLang === 'en' ? 'AR' : 'EN'">
+      </button>
+
+      <button pButton
+              class="p-button-text"
+              [icon]="isDark ? 'pi pi-sun' : 'pi pi-moon'"
+              (click)="toggleDarkMode()">
+      </button>
+
+      <button pButton
+              icon="pi pi-palette"
+              class="p-button-text"
+              (click)="op.toggle($event)">
+      </button>
+
+
+      <!-- USER PROFILE BUTTON -->
+      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200"
+           class="user-avatar"
+           alt="User Avatar">
+      <!--(click)="userDialogVisible = true"-->
+
+
+      <!--icon if user press on it show the dialog-->
+
+      <p-popover #op>
+        <div style="display:flex; gap:8px; padding:8px;">
+          <button *ngFor="let c of colors"
+                  class="color-swatch"
+                  [title]="c"
+                  [style.background]="colorMap[c]"
+                  (click)="selectColor(c)">
+          </button>
+        </div>
+      </p-popover>
+
+    </div>
+  </ng-template>
+
+</p-menubar>

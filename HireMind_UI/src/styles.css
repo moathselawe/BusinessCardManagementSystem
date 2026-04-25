@@ -335,3 +335,16 @@ html.dark {
 .p-menubar-submenu {
   z-index: 10000 !important;
 }
+
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="ltr"] {
+  direction: ltr;
+}
+
+
+.auto-start {
+  margin-inline-start: auto;
+}

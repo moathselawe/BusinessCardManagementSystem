@@ -24,6 +24,7 @@ global using System.Security.Cryptography;
 global using System.Text;
 global using System.Text.Json;
 global using UglyToad.PdfPig;
+global using HireMind.Domain.Dtos.Public;
 global using applicationStage = HireMind.Domain.Entities.HireMind.ApplicationStage;
 global using businessCardModel = HireMind.Domain.Entities.BCMS.BusinessCard;
 global using jobApplication = HireMind.Domain.Entities.HireMind.JobApplication;

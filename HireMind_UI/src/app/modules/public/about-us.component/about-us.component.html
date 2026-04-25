@@ -1,0 +1,17 @@
+<div class="container my-4h">
+  <div class="row">
+    <div class="col-12" *ngFor="let card of aboutUsList">
+      <div class="card shadow border-0 rounded-4 mb-3">
+        <div class="card-body">
+          <h6 class="fw-semibold fs-sm text-primary mb-2">
+            {{ card.title }}
+          </h6>
+          <p class="fs-xs-2 text-neutral-500">
+            {{ card.description }}
+          </p>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

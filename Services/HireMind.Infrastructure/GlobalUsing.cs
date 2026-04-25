@@ -10,4 +10,5 @@ global using Microsoft.EntityFrameworkCore.Storage;
 global using Microsoft.Extensions.DependencyInjection;
 global using HireMind.Application.Interfaces;
 global using HireMind.Domain.Entities.Security;
+global using HireMind.Domain.Entities.Content;
 global using RoleModel = HireMind.Domain.Entities.Security.Role;

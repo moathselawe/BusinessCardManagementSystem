@@ -1,0 +1,49 @@
+<p-menubar [model]="items" class="public-topbar">
+
+  <!-- LEFT / BRAND -->
+  <ng-template pTemplate="start">
+    <div class="flex items-center gap-2">
+
+      <!-- Logo -->
+      <img src="assets/images/logo.png"
+           alt="Logo"
+           style="height:32px;">
+
+      <span style="font-size:18px; font-weight:600;">
+        HireMind
+      </span>
+
+    </div>
+  </ng-template>
+
+  <!-- RIGHT ACTIONS -->
+  <ng-template pTemplate="end">
+    <div class="flex items-center gap-3">
+
+      <!-- Language -->
+      <button pButton
+              type="button"
+              class="lang-toggle-circle p-button-text"
+              (click)="toggleLanguage()"
+              [label]="currentLang === 'en' ? 'AR' : 'EN'">
+      </button>
+
+      <!-- LOGIN -->
+      <button pButton
+              label="Login"
+              icon="pi pi-sign-in"
+              class="p-button-text"
+              routerLink="/login">
+      </button>
+
+      <!-- REGISTER -->
+      <button pButton
+              label="Register"
+              icon="pi pi-user-plus"
+              routerLink="/register">
+      </button>
+
+    </div>
+  </ng-template>
+
+</p-menubar>

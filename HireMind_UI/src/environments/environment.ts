@@ -17,4 +17,5 @@ export const endpoints = {
   ManageUsers: 'ManageUsers/',
   ManageRoles: 'ManageRoles/',
   ManagePermissions: 'ManagePermissions/',
+  AboutUs: 'AboutUs/',
 }

@@ -1,0 +1,168 @@
+<div class="container my-5">
+
+  <!-- ================= HERO BANNER ================= -->
+  <p-carousel [value]="banners"
+              [numVisible]="1"
+              [circular]="true"
+              [autoplayInterval]="4000"
+              styleClass="hero-carousel">
+
+    <ng-template pTemplate="item" let-banner>
+
+      <div class="hero-card">
+
+        <div class="hero-content">
+          <h1 class="hero-title">{{ banner.title }}</h1>
+          <p class="hero-desc">{{ banner.description }}</p>
+        </div>
+
+        <div class="hero-image"> 
+          <img [src]="banner.image" />
+        </div>
+
+      </div>
+
+    </ng-template>
+  </p-carousel>
+
+
+  <!-- ================= FEATURES ================= -->
+  <section class="my-6">
+
+    <h2 class="section-title">HireMind Features</h2>
+
+    <p-tabs value="0">
+
+      <p-tablist>
+        <p-tab value="0">Job Seekers</p-tab>
+        <p-tab value="1">Employers</p-tab>
+      </p-tablist>
+
+      <p-tabpanels>
+
+        <!-- USER -->
+        <p-tabpanel value="0">
+          <div class="grid">
+
+            <div class="col-12 md:col-4" *ngFor="let f of userFeatures">
+              <div class="feature-card">
+
+                <div class="feature-img">
+                  <img [src]="f.image" />
+                </div>
+
+                <h3>{{ f.title }}</h3>
+                <p>{{ f.desc }}</p>
+
+              </div>
+            </div>
+
+          </div>
+        </p-tabpanel>
+
+
+        <!-- EMPLOYER -->
+        <p-tabpanel value="1">
+          <div class="grid">
+
+            <div class="col-12 md:col-4" *ngFor="let f of employerFeatures">
+              <div class="feature-card">
+
+                <div class="feature-img">
+                  <img [src]="f.image" />
+                </div>
+
+                <h3>{{ f.title }}</h3>
+                <p>{{ f.desc }}</p>
+
+              </div>
+            </div>
+
+          </div>
+        </p-tabpanel>
+
+      </p-tabpanels>
+
+    </p-tabs>
+
+  </section>
+
+
+  <!-- ================= STEPS ================= -->
+  <section class="steps-section">
+
+    <h2 class="section-title text-center">How HireMind Works</h2>
+
+    <div class="steps-wrapper">
+
+      <div class="step-item" *ngFor="let step of steps; let i = index">
+
+        <div class="step-circle">
+          <span>{{ i + 1 }}</span>
+        </div>
+
+        <div class="step-content">
+          <i [class]="step.icon"></i>
+          <p>{{ step.title }}</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= INTEGRATION ================= -->
+  <!--<section class="my-6">
+
+    <h2 class="section-title">Integration Options</h2>
+
+    <div class="flex flex-column gap-4">
+
+      <div *ngFor="let option of integrations" class="integration-card-wide">
+
+        <div class="integration-img">
+          <img [src]="option.image" />
+        </div>
+
+        <div class="integration-content">
+          <h3>{{ option.title }}</h3>
+          <p>{{ option.desc }}</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>-->
+
+
+  <!-- ================= PARTNERS ================= -->
+  <section class="partners-section my-6">
+
+    <section class="partners-section my-6">
+
+      <h2 class="section-title">Trusted By</h2>
+
+      <p-scroller [items]="partners"
+                  [itemSize]="200"
+                  scrollHeight="200px"
+                  styleClass="w-full"
+                  [showLoader]="false"
+                  [delay]="0"
+                  orientation="horizontal">
+
+        <ng-template pTemplate="item" let-p>
+          <div class="partner-card flex-shrink-0">
+            <img [src]="p" />
+          </div>
+        </ng-template>
+
+      </p-scroller>
+
+    </section>
+
+  </section>
+
+</div>

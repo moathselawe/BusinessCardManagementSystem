@@ -1,6 +1,14 @@
 <div class="panel-heading sticky-header">
-  <h2 style="color: var(--primary-color);">{{ isEditMode ? 'Edit Business Card' : 'Create Business Card' }}</h2>
-  <button pButton type="button" label="Back" icon="pi pi-arrow-left" severity="info" style="margin-left: auto;" (click)="goBack()"></button>
+  <h2 style="color: var(--primary-color);">
+    {{ isEditMode ? ('businessCard.editTitle' | translate) : ('businessCard.createTitle' | translate) }}
+  </h2>
+
+  <button pButton type="button"
+          class="auto-start"
+          [label]="'businessCard.back' | translate"
+          icon="pi pi-arrow-left"
+          severity="info"
+          (click)="goBack()"></button>
 </div>
 
 <div *ngIf="isLoadingEditPage"
@@ -11,15 +19,26 @@
 
 <div [ngClass]="cards.length > 1 ? 'card' : ''" *ngIf="!isLoadingEditPage">
   <div class="card" style="margin: 5px; background-color: #fefbfbd9; overflow: hidden;" *ngIf="cards.length > 1">
+
     <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px;">
 
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h4 style="padding:5px;">Cards List</h4>
-        <p-button icon="pi pi-plus" (click)="addCard()" rounded [pTooltip]="'Add card manually'" size="small" severity="info" tooltipPosition="top" />
+        <h4 style="padding:5px;">{{ 'businessCard.cardsList' | translate }}</h4>
+
+        <p-button icon="pi pi-plus"
+                  (click)="addCard()"
+                  rounded
+                  [pTooltip]="'businessCard.addCard' | translate"
+                  size="small"
+                  severity="info"
+                  tooltipPosition="top" />
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h4 class="col-form-label" style="padding:5px;" for="Theme">Select Theme</h4>
+        <h4 class="col-form-label" style="padding:5px;" for="Theme">
+          {{ 'businessCard.selectTheme' | translate }}
+        </h4>
+
         <p-autocomplete [(ngModel)]="selectedThemeName"
                         [dropdown]="true"
                         [suggestions]="filteredThemes"
@@ -27,33 +46,54 @@
                         [inputStyle]="{'width':'150px'}">
         </p-autocomplete>
       </div>
+
     </div>
   </div>
 
-
   <div class="card" style="margin-top: 5px; background-color:#fefbfbd9; overflow: hidden;" *ngFor="let c of cards; let i = index">
+
     <div class="panel col-12">
       <div class="card-body">
 
         <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
-          <h4 style="color: var(--primary-color);" *ngIf="cards.length > 1">Card #{{ i + 1 }}</h4>
+
+          <h4 style="color: var(--primary-color);" *ngIf="cards.length > 1">
+            {{ 'businessCard.card' | translate:{index: i + 1} }}
+          </h4>
 
           <div style="display: flex; justify-content: space-between; align-items: center;" *ngIf="cards.length <= 1">
-            <h4 style="padding: 5px; color: var(--primary-color);">Card Details</h4>
+            <h4 style="padding: 5px; color: var(--primary-color);">
+              {{ 'businessCard.cardDetails' | translate }}
+            </h4>
           </div>
 
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <i class="pi pi-refresh" *ngIf="cards.length > 1" (click)="resetCardByIndex(i)" style="font-size: 1.5rem; color: gray; padding-right: 5px;" [pTooltip]="'Reset card'" size="small" severity="info" tooltipPosition="left"></i>
-            <i class="pi pi-trash" *ngIf="cards.length > 1" (click)="removeCard(i)" style="font-size: 1.5rem; color: #2196f3;" [pTooltip]="'Remove card'" size="small" severity="info" tooltipPosition="left"></i>
+
+            <i class="pi pi-refresh"
+               *ngIf="cards.length > 1"
+               (click)="resetCardByIndex(i)"
+               style="font-size: 1.5rem; color: gray; padding-right: 5px;"
+               [pTooltip]="'businessCard.resetCard' | translate"
+               tooltipPosition="left"></i>
+
+            <i class="pi pi-trash"
+               *ngIf="cards.length > 1"
+               (click)="removeCard(i)"
+               style="font-size: 1.5rem; color: #2196f3;"
+               [pTooltip]="'businessCard.removeCard' | translate"
+               tooltipPosition="left"></i>
+
           </div>
         </div>
+
         <form #form="ngForm" class="searchForm" novalidate>
           <fieldset [disabled]="readonly" style="border: none; padding: 0;">
             <div class="row">
-              <div class="col-3 form-group">
-                <label class="col-form-label dark-label">Arabic Name</label>
 
-                <!-- Input -->
+              <!-- Arabic Name -->
+              <div class="col-3 form-group">
+                <label class="col-form-label dark-label">{{ 'businessCard.arabicName' | translate }}</label>
+
                 <input type="text"
                        pInputText
                        [(ngModel)]="c.arabicName"
@@ -61,30 +101,21 @@
                        class="form-control"
                        required
                        minlength="5"
-                       placeholder="Enter Arabic Name"
+                       [placeholder]="'businessCard.enterArabicName' | translate"
                        pattern="^[\u0600-\u06FF\s]+$"
                        #arabicName="ngModel"
                        (input)="fetchAISuggestions(2, c.arabicName)" />
 
-                <div style="display:flex; gap:5px; margin-top: 2px;" *ngIf="cards?.length === 1">
-                  <p-button *ngFor="let suggestion of arabicNameSuggestions"
-                            label="{{suggestion}}"
-                            variant="outlined"
-                            severity="help"
-                            size="small"
-                            (onClick)="applySuggestion(i, 2, suggestion, c.arabicName)">
-                  </p-button>
-                </div>
-
                 <div class="text-danger" *ngIf="arabicName.invalid && (arabicName.touched || isEdit)">
-                  <small *ngIf="arabicName.errors?.['required']">Arabic Name is required.</small>
-                  <small *ngIf="arabicName.errors?.['minlength']">Minimum 5 characters required.</small>
-                  <small *ngIf="arabicName.errors?.['pattern']">Only Arabic letters are allowed.</small>
+                  <small *ngIf="arabicName.errors?.['required']">{{ 'validation.required' | translate }}</small>
+                  <small *ngIf="arabicName.errors?.['minlength']">{{ 'validation.min5' | translate }}</small>
+                  <small *ngIf="arabicName.errors?.['pattern']">{{ 'validation.arabicOnly' | translate }}</small>
                 </div>
               </div>
 
+              <!-- English Name -->
               <div class="col-3 form-group">
-                <label class="col-form-label dark-label">English Name</label>
+                <label class="col-form-label dark-label">{{ 'businessCard.englishName' | translate }}</label>
 
                 <input type="text"
                        pInputText
@@ -92,132 +123,113 @@
                        name="englishName{{i}}"
                        class="form-control"
                        required
-                       placeholder="Enter English Name"
                        minlength="5"
+                       [placeholder]="'businessCard.enterEnglishName' | translate"
                        pattern="^[A-Za-z\s]+$"
                        #englishName="ngModel"
                        (input)="fetchAISuggestions(3, c.englishName)" />
 
-                <div style="display:flex; gap:5px; margin-top: 2px;" *ngIf="cards?.length === 1">
-                  <p-button *ngFor="let suggestion of englishNameSuggestions"
-                            label="{{suggestion}}"
-                            variant="outlined"
-                            severity="help"
-                            size="small"
-                            (onClick)="applySuggestion(i, 3, suggestion, c.englishName)">
-                  </p-button>
-                </div>
-
                 <div class="text-danger" *ngIf="englishName.invalid && (englishName.touched || isEdit)">
-                  <small *ngIf="englishName.errors?.['required']">English Name is required.</small>
-                  <small *ngIf="englishName.errors?.['minlength']">Minimum 5 characters required.</small>
-                  <small *ngIf="englishName.errors?.['pattern']">Only English letters are allowed.</small>
+                  <small *ngIf="englishName.errors?.['required']">{{ 'validation.required' | translate }}</small>
+                  <small *ngIf="englishName.errors?.['minlength']">{{ 'validation.min5' | translate }}</small>
+                  <small *ngIf="englishName.errors?.['pattern']">{{ 'validation.englishOnly' | translate }}</small>
                 </div>
               </div>
 
+              <!-- Email -->
               <div class="col-3 form-group">
-                <label class="col-form-label dark-label">Email</label>
+                <label class="col-form-label dark-label">{{ 'businessCard.email' | translate }}</label>
 
                 <input type="email"
                        pInputText
                        [(ngModel)]="c.email"
                        name="email{{i}}"
                        class="form-control"
-                       placeholder="Enter Email Address"
                        required
                        email
+                       [placeholder]="'businessCard.enterEmail' | translate"
                        #email="ngModel"
                        (input)="fetchAISuggestions(4, c.email)" />
 
-                <div style="display:flex; gap:5px; margin-top: 2px;" *ngIf="cards?.length === 1">
-                  <p-button *ngFor="let suggestion of emailSuggestions"
-                            label="{{suggestion}}"
-                            variant="outlined"
-                            severity="help"
-                            size="small"
-                            (onClick)="applySuggestion(i, 4, suggestion, c.email)">
-                  </p-button>
-                </div>
-
                 <div class="text-danger" *ngIf="email.invalid && (email.touched || isEdit)">
-                  <small *ngIf="email.errors?.['required']">Email is required.</small>
-                  <small *ngIf="email.errors?.['email']">Enter a valid email.</small>
+                  <small *ngIf="email.errors?.['required']">{{ 'validation.required' | translate }}</small>
+                  <small *ngIf="email.errors?.['email']">{{ 'validation.validEmail' | translate }}</small>
                 </div>
               </div>
 
+              <!-- DOB -->
               <div class="col-3 form-group">
-                <label class="col-form-label dark-label">Date of Birth</label>
+                <label class="col-form-label dark-label">{{ 'businessCard.dob' | translate }}</label>
+
                 <p-datepicker [(ngModel)]="c.dateOfBirth"
                               name="dob{{i}}"
                               dateFormat="yy-mm-dd"
-                              placeholder="Select date of birth"
+                              [placeholder]="'businessCard.dob' | translate"
                               style="width: 100%;"
                               required
                               [maxDate]="today"
                               #dob="ngModel">
                 </p-datepicker>
+
                 <div class="text-danger" *ngIf="dob.invalid && (dob.touched|| isEdit)">
-                  <small *ngIf="dob.errors?.['required']">Date of Birth is required.</small>
+                  <small *ngIf="dob.errors?.['required']">{{ 'validation.dobRequired' | translate }}</small>
                 </div>
               </div>
 
+              <!-- Phone -->
               <div class="col-3 form-group">
-                <label class="col-form-label dark-label">Phone</label>
+                <label class="col-form-label dark-label">{{ 'businessCard.phone' | translate }}</label>
+
                 <input type="text"
                        pInputText
                        [(ngModel)]="c.phone"
                        name="phone{{i}}"
                        class="form-control"
                        required
-                       placeholder="Enter Phone Number"
+                       [placeholder]="'businessCard.enterPhone' | translate"
                        pattern="^\+?[0-9]{7,15}$"
                        #phone="ngModel"
                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+
                 <div class="text-danger" *ngIf="phone.invalid && (phone.touched || isEdit)">
-                  <small *ngIf="phone.errors?.['required']">Phone number is required.</small>
-                  <small *ngIf="phone.errors?.['pattern']">Enter a valid phone number (at least 7 digits).</small>
+                  <small *ngIf="phone.errors?.['required']">{{ 'validation.required' | translate }}</small>
+                  <small *ngIf="phone.errors?.['pattern']">{{ 'validation.validPhone' | translate }}</small>
                 </div>
               </div>
 
+              <!-- Address -->
               <div class="col-3 form-group">
-                <label class="col-form-label dark-label">Address</label>
+                <label class="col-form-label dark-label">{{ 'businessCard.address' | translate }}</label>
 
                 <input type="text"
                        pInputText
                        [(ngModel)]="c.address"
                        name="address{{i}}"
                        class="form-control"
-                       placeholder="Enter Address"
                        required
                        minlength="10"
+                       [placeholder]="'businessCard.enterAddress' | translate"
                        #address="ngModel"
                        (input)="fetchAISuggestions(5, c.address)" />
 
-                <div style="display:flex; gap:5px; margin-top: 2px;" *ngIf="cards?.length === 1">
-                  <p-button *ngFor="let suggestion of addressSuggestions"
-                            label="{{suggestion}}"
-                            variant="outlined"
-                            severity="help"
-                            size="small"
-                            (onClick)="applySuggestion(i, 5, suggestion, c.address)">
-                  </p-button>
-                </div>
-
                 <div class="text-danger" *ngIf="address.invalid && (address.touched || isEdit)">
-                  <small *ngIf="address.errors?.['required']">Address is required.</small>
-                  <small *ngIf="address.errors?.['minlength']">Minimum 10 characters required.</small>
+                  <small *ngIf="address.errors?.['required']">{{ 'validation.required' | translate }}</small>
+                  <small *ngIf="address.errors?.['minlength']">{{ 'validation.min10' | translate }}</small>
                 </div>
               </div>
 
+              <!-- Image -->
               <div class="col-3 form-group">
-                <label class="col-form-label dark-label">Image</label>
+                <label class="col-form-label dark-label">{{ 'businessCard.image' | translate }}</label>
+
                 <input type="file"
                        accept="image/*"
                        (change)="fileSelected($event)"
                        class="form-control"
                        #fileInput />
+
                 <div class="text-danger" *ngIf="imageError">
-                  <small>Image must not exceed 1MB.</small>
+                  <small>{{ 'validation.imageSize' | translate }}</small>
                 </div>
               </div>
 
@@ -227,47 +239,71 @@
       </div>
     </div>
 
+    <!-- Preview -->
     <div class="card-body">
-      <h4 style="color: var(--primary-color);">Preview</h4>
+      <h4 style="color: var(--primary-color);">{{ 'businessCard.preview' | translate }}</h4>
 
       <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; padding:20px;">
+
         <div class="business-card-preview"
              [ngStyle]="{'background': selectedTheme.background, 'color': selectedTheme.fontColor}">
+
           <div class="logo">
-            <img [src]="c.logo && c.logo.startsWith('data:image/') ? c.logo : defaultUserIcon" alt="Logo" />
+            <img [src]="c.logo && c.logo.startsWith('data:image/') ? c.logo : defaultUserIcon" />
           </div>
+
           <div class="info">
-            <h2>{{ c.englishName || 'Name' }}</h2>
-            <h4>Channel Business Manager</h4>
+            <h2>{{ c.englishName || ('businessCard.placeholders.name' | translate) }}</h2>
+            <h4>{{ 'businessCard.channelManager' | translate }}</h4>
+
             <div class="contact">
-              <p><i class="pi pi-map-marker"></i> {{ c.address || '123 Main St, City' }}</p>
-              <p><i class="pi pi-phone"></i> {{ c.phone || '+123 456 7890' }}</p>
-              <p><i class="pi pi-envelope"></i> {{ c.email || 'email@example.com' }}</p>
+              <p><i class="pi pi-map-marker"></i> {{ c.address || ('businessCard.placeholders.address' | translate) }}</p>
+              <p><i class="pi pi-phone"></i> {{ c.phone || ('businessCard.placeholders.phone' | translate) }}</p>
+              <p><i class="pi pi-envelope"></i> {{ c.email || ('businessCard.placeholders.email' | translate) }}</p>
             </div>
           </div>
+
         </div>
-        <div *ngIf="cards.length === 0 || cards.length === 1">
-          <h5 class="col-form-label" for="Theme">Select Theme</h5>
-          <p-autocomplete [(ngModel)]="selectedThemeName"
-                          [dropdown]="true"
-                          [suggestions]="filteredThemes"
-                          (completeMethod)="search($event)"
-                          [inputStyle]="{'width':'150px'}">
-          </p-autocomplete>
-        </div> 
+
       </div>
-      <div class="formAction mt-3" style="display: flex; justify-content: flex-end; gap: 5px;" *ngIf="cards.length === 0 || cards?.length === 1">
-        <button pButton label="Save" icon="pi pi-check" (click)="saveCard()" severity="info" [disabled]="form.invalid || !!imageError || readonly"> </button>
-        <button pButton label="Reset" icon="pi pi-undo" severity="secondary" (click)="resetCard(form)" [disabled]="readonly"> </button>
+
+      <div class="formAction mt-3"
+           style="display: flex; justify-content: flex-end; gap: 5px;"
+           *ngIf="cards.length === 0 || cards?.length === 1">
+
+        <button pButton
+                [label]="'businessCard.save' | translate"
+                icon="pi pi-check"
+                (click)="saveCard()"
+                severity="info"
+                [disabled]="form.invalid || !!imageError || readonly">
+        </button>
+
+        <button pButton
+                [label]="'businessCard.reset' | translate"
+                icon="pi pi-undo"
+                severity="secondary"
+                (click)="resetCard(form)"
+                [disabled]="readonly">
+        </button>
+
       </div>
     </div>
   </div>
 </div>
 
-<div class="formAction sticky-footer mt-3" style="display: flex; justify-content: space-between; align-items: center;"
+<div class="formAction sticky-footer mt-3"
+     style="display: flex; justify-content: space-between; align-items: center;"
      *ngIf="cards.length > 1 && !isLoadingEditPage">
-  <h5 style="padding: 5px; color: var(--primary-color);">Cards Count #{{cards.length}}</h5>
-  <button pButton label="Save All" icon="pi pi-check" (click)="saveCards()" severity="info"></button>
+
+  <h5 style="padding: 5px; color: var(--primary-color);">
+    {{ 'businessCard.cardsCount' | translate:{count: cards.length} }}
+  </h5>
+
+  <button pButton
+          [label]="'businessCard.saveAll' | translate"
+          icon="pi pi-check"
+          (click)="saveCards()"
+          severity="info">
+  </button>
 </div>
-
-

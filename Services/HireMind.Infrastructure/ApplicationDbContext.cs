@@ -1,6 +1,5 @@
 ﻿using HireMind.Domain.Entities.BCMS;
 using HireMind.Domain.Entities.HireMind;
-using HireMind.Domain.Entities.Security;
 using HireMind.Domain.Entities.Shared;
 using System.Reflection;
 
@@ -29,6 +28,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<AboutUs> AboutUs { get; set; }
 
 
 

@@ -28,6 +28,7 @@ global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
+global using HireMind.Application.Queries.Content;
 global using Microsoft.IdentityModel.Tokens;
 global using System.Net.Mail;
 global using System.Text;

@@ -1,3 +1,4 @@
+using HireMind.Domain.Entities.Content;
 using HireMind.Infrastructure.SeedWork.Security;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +35,7 @@ builder.Services.AddScoped<IHiringStageRepository, HiringStageRepository>();
 builder.Services.AddScoped<IApplicationStageRepository, ApplicationStageRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IAboutUsRepository, AboutUsRepository>();
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 

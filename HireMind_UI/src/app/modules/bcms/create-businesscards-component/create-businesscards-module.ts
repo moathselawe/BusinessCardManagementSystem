@@ -13,6 +13,7 @@ import { TabsModule } from 'primeng/tabs';
 import { PaginatorModule } from 'primeng/paginator';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [CreateBusinesscardsComponent],
@@ -29,7 +30,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     TabsModule,
     PaginatorModule,
     SelectButtonModule,
-    ProgressSpinnerModule 
+    ProgressSpinnerModule,
+    TranslateModule   
   ]
 })
 export class CreateBusinesscardsModule { }

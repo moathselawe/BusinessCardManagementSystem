@@ -1,0 +1,34 @@
+<div class="layout-container"
+     [style.--sidebar-width.px]="sidebarCollapsed ? 58 : 250"
+     [style.--topbar-height.px]="60">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" [class.collapsed]="sidebarCollapsed">
+    <app-admin-side-bar [collapsed]="sidebarCollapsed"
+                       (menuSelected)="onMenuSelected($event)">
+    </app-admin-side-bar>  </div>
+
+  <!-- FLOATING TOGGLE (sits between sidebar and topbar) -->
+  <button class="sidebar-toggle-middle"
+          (click)="toggleSidebar()"
+          [attr.aria-expanded]="!sidebarCollapsed"
+          title="Toggle sidebar">
+    <i [class]="sidebarCollapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"></i>
+  </button>
+
+  <!-- RIGHT SIDE -->
+  <div class="layout-main">
+
+    <!-- TOPBAR -->
+    <app-admin-top-bar [selectedLabel]="selectedLabel"
+                      [selectedIcon]="selectedIcon"
+                      (toggleSidebar)="toggleSidebar()">
+    </app-admin-top-bar>
+    <!-- CONTENT -->
+    <div class="main-content" (click)="onContentClick()">
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+
+</div>

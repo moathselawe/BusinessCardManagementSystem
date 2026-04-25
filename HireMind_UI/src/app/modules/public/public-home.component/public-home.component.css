@@ -1,0 +1,315 @@
+/* ================= HERO ================= */
+.hero-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 420px;
+  padding: 40px;
+  border-radius: 24px;
+  overflow: hidden;
+  color: white;
+}
+
+/* background image */
+.hero-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+/* dark overlay */
+.hero-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+}
+
+/* content on top */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+}
+
+.hero-title {
+  font-size: 38px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.hero-desc {
+  font-size: 18px;
+  margin-top: 10px;
+  color: #ddd;
+}
+
+
+/* ================= FEATURES ================= */
+.feature-card {
+  position: relative;
+  height: 260px;
+  border-radius: 16px;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom:5px;
+}
+
+/* image background */
+.feature-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+  .feature-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+/* overlay */
+.feature-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+/* text */
+.feature-card h3,
+.feature-card p {
+  position: relative;
+  z-index: 2;
+  padding: 0 15px 10px;
+}
+
+
+/* ================= STEPS ================= */
+
+.steps-section {
+  padding: 60px 0;
+}
+
+/* wrapper line */
+.steps-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-top: 40px;
+}
+
+  /* connecting line */
+  .steps-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 25px;
+    left: 5%;
+    width: 90%;
+    height: 3px;
+    background: #e5e7eb;
+    z-index: 0;
+  }
+
+/* each step */
+.step-item {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  z-index: 1;
+}
+
+/* circle number */
+.step-circle {
+  width: 50px;
+  height: 50px;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-weight: bold;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(59,130,246,0.4);
+}
+
+/* content */
+.step-content i {
+  font-size: 22px;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.step-content p {
+  font-size: 14px;
+  color: var(--primary-color);
+  max-width: 120px;
+  margin: 0 auto;
+}
+
+/* hover effect */
+.step-item:hover .step-circle {
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .steps-wrapper {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+    .steps-wrapper::before {
+      display: none;
+    }
+}
+
+
+
+
+/* ================= INTEGRATION ================= */
+.integration-card-wide {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  color: white;
+}
+
+/* background image */
+.integration-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+  .integration-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+/* overlay */
+.integration-card-wide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1;
+}
+
+/* content */
+.integration-content {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+}
+
+
+/* ================= PARTNERS ================= */
+
+.partners-section {
+  padding: 40px 0;
+}
+
+  /* force one clean horizontal row */
+  .partners-section .flex {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 10px;
+  }
+
+/* square cards */
+.partner-card {
+  width: 200px;
+  height: 160px;
+  min-width: 120px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: 0.3s ease;
+  margin: 5px;
+}
+
+  /* make images fit nicely inside square */
+  .partner-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* fills entire square */
+    border-radius: 16px; /* match card */
+  }
+
+  /* hover effect (pro look) */
+  .partner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  }
+
+/* ================= TITLES ================= */
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1f3b8a;
+}
+
+/* scroll track */
+::ng-deep .p-virtualscroller::-webkit-scrollbar {
+  height: 8px;
+}
+
+/* track background */
+::ng-deep .p-virtualscroller::-webkit-scrollbar-track {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+
+/* thumb (your primary color) */
+::ng-deep .p-virtualscroller::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+   /* primary color */
+  border-radius: 10px;
+}
+
+  /* hover effect */
+  ::ng-deep .p-virtualscroller::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+  }
+
+::ng-deep .p-tablist .p-tab.p-tab-active {
+  color: var(--primary-color);
+}
+
+::ng-deep .p-tablist .p-tablist-active-bar {
+  background: var(--primary-color);
+}
+
+::ng-deep .p-carousel-indicator-active .p-carousel-indicator-button {
+  background: var(--primary-color);
+}

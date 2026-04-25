@@ -1,0 +1,83 @@
+{
+  "businessCard": {
+    "editTitle": "Edit Business Card",
+    "createTitle": "Create Business Card",
+
+    "back": "Back",
+
+    "cardsList": "Cards List",
+    "addCard": "Add card manually",
+    "selectTheme": "Select Theme",
+
+    "card": "Card #{{index}}",
+    "cardDetails": "Card Details",
+
+    "resetCard": "Reset card",
+    "removeCard": "Remove card",
+
+    "arabicName": "Arabic Name",
+    "enterArabicName": "Enter Arabic Name",
+    "englishName": "English Name",
+    "enterEnglishName": "Enter English Name",
+    "email": "Email",
+    "enterEmail": "Enter Email Address",
+    "dob": "Date of Birth",
+    "phone": "Phone",
+    "enterPhone": "Enter Phone Number",
+    "address": "Address",
+    "enterAddress": "Enter Address",
+    "image": "Image",
+
+    "preview": "Preview",
+
+    "channelManager": "Channel Business Manager",
+
+    "save": "Save",
+    "reset": "Reset",
+    "saveAll": "Save All",
+
+    "cardsCount": "Cards Count #{{count}}",
+
+    "placeholders": {
+      "name": "Name",
+      "address": "123 Main St, City",
+      "phone": "+123 456 7890",
+      "email": "email@example.com"
+    }
+  },
+
+  "validation": {
+    "required": "This field is required.",
+    "min5": "Minimum 5 characters required.",
+    "min10": "Minimum 10 characters required.",
+    "arabicOnly": "Only Arabic letters are allowed.",
+    "englishOnly": "Only English letters are allowed.",
+    "validEmail": "Enter a valid email.",
+    "validPhone": "Enter a valid phone number (at least 7 digits).",
+    "imageSize": "Image must not exceed 1MB.",
+    "dobRequired": "Date of Birth is required."
+  },
+
+  "tooltips": {
+    "addCard": "Add card manually",
+    "resetCard": "Reset card",
+    "removeCard": "Remove card"
+  },
+
+  "errors": {
+    "title": "Validation Error",
+    "arabicName": "Arabic Name must be at least 5 characters",
+    "englishName": "English Name must be at least 5 characters",
+    "email": "Invalid email address",
+    "phone": "Invalid phone number",
+    "address": "Address must be at least 10 characters",
+    "dob": "Date of birth is required"
+  },
+
+  
+    "faq": {
+      "faqDesc": "Frequently Asked Questions",
+      "SUPPORT_MESSAGE": "Find answers to the most common questions about our services and payment gateway support."
+    }
+  
+}

@@ -19,9 +19,9 @@ public class BusinessCardsController : ApiBaseController
 
     [Authorize(Policy = PermissionConstants.BusinessCards.View)]
     [HttpGet("getAll")] 
-    public async Task<GetAllBusinessCardsResult> GetAllCards()
+    public async Task<GetAllAboutUsResult> GetAllCards()
     {
-        var result = await _sender.Send(new GetAllBusinessCardsQuery());
+        var result = await _sender.Send(new GetAllAboutUsQuery());
         return result;
     }
 

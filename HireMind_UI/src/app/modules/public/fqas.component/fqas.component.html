@@ -1,0 +1,40 @@
+<div class="container py-5">
+  <div class="row">
+
+    <div class="col-md-3">
+      <img src="./assets/images/faq-image.svg" class="w-100" />
+    </div>
+
+    <div class="col-md-9">
+
+      <h6 class="text-primary fw-bold fs-sm mb-2">
+        {{ 'faq.faqDesc' | translate }}    
+      </h6> 
+        
+      <p class="text-primary-300 fs-base mb-3">
+        {{ 'faq.SUPPORT_MESSAGE' | translate }} 
+      </p>
+
+      <!-- PrimeNG v21 Accordion -->
+      <p-accordion [value]="['0']">
+
+        <p-accordion-panel *ngFor="let item of list; let i = index"
+                           [value]="i.toString()">
+
+          <p-accordion-header>
+            {{ item.question }}   
+          </p-accordion-header>
+
+          <p-accordion-content>
+            <p class="m-0">
+              {{ item.answer }}
+            </p>
+          </p-accordion-content>
+
+        </p-accordion-panel>
+
+      </p-accordion>
+
+    </div>
+  </div>
+</div>

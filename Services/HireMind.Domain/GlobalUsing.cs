@@ -7,6 +7,8 @@ global using HireMind.Domain.SeedWork;
 global using Microsoft.AspNetCore.Http;
 global using System.Text.Json;
 global using HireMind.Domain.Dtos.Security;
+global using HireMind.Domain.Entities.Content;
+
 
 
 

@@ -1,0 +1,80 @@
+.layout-container {
+  display: flex;
+  height: 100vh;
+  position: relative;
+  /* defaults - overridden by inline style binding */
+  --sidebar-width: 250px;
+  --topbar-height: 60px;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-width);
+  transition: width 0.2s ease;
+  overflow: hidden;
+}
+
+/* RIGHT SIDE */
+.layout-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* TOPBAR */
+app-app-top-menu {
+  height: 60px;
+  flex-shrink: 0;
+}
+
+/* CONTENT */
+.main-content {
+  flex: 1;
+  padding: 1em;
+  overflow: auto;
+}
+
+/* Floating toggle button positioned on the seam between sidebar and topbar */
+/* Updated to a smaller, circular icon-style button */
+.sidebar-toggle-middle {
+  position: absolute;
+  top: calc(var(--topbar-height) / 2); /* vertical center of topbar */
+  left: calc(var(--sidebar-width)); /* at the right edge of the sidebar */
+  transform: translate(-50%, -50%); /* center the button on that seam */
+  /* Small circular icon */
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Subtle look that works on dark backgrounds */
+  background: var(--primary-color);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  /* Soft shadow, smaller than before */
+  box-shadow: 0 4px 10px rgba(2, 6, 23, 0.45);
+  z-index: 1000;
+  cursor: pointer;
+  /* Quick, smooth interactions - sync with sidebar transition */
+  transition: left 0.2s ease;
+  font-size: 14px; /* icon size */
+  line-height: 0;
+  padding: 0;
+}
+
+  .sidebar-toggle-middle i {
+    font-size: 14px;
+  }
+
+  /* Hover / active states */
+  .sidebar-toggle-middle:hover {
+    background: rgba(255, 255, 255, 0.10);
+    box-shadow: 0 6px 14px rgba(2, 6, 23, 0.55);
+    background: var(--primary-color);
+  }
+
+  .sidebar-toggle-middle:active {
+    box-shadow: 0 3px 8px rgba(2, 6, 23, 0.40);
+    background: var(--primary-color);
+  }
