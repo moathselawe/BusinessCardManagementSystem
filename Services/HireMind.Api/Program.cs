@@ -109,7 +109,7 @@ builder.Services.AddTransient(sp =>
     return new SmtpClient("smtp.gmail.com")
     {
         Port = 587,
-        Credentials = new System.Net.NetworkCredential("moathselawe12@gmail.com", "bovy vxjj dpbo zhvd"),
+        Credentials = new System.Net.NetworkCredential("moathselawe2@gmail.com", "bovy 7ff7 ddfa dpbo"),
         EnableSsl = true
     };
 });
