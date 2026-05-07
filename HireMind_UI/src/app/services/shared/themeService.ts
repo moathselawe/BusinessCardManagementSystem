@@ -19,6 +19,86 @@ export class ThemeService {
 
     document.documentElement.style.setProperty('--primary-color', hex);
 
+//    const css = `
+//:root {
+//  --primary-color: ${hex};
+//  --primary-contrast: #ffffff;
+
+//  /* generated shades */
+//  --primary-80: color-mix(in srgb, ${hex} 80%, white);
+//  --primary-60: color-mix(in srgb, ${hex} 60%, black);
+//  --primary-20: color-mix(in srgb, ${hex} 20%, white);
+//}
+
+///* ================= BUTTONS ================= */
+
+///* primary */
+//.p-button.p-button-primary {
+//  background: var(--primary-color) !important;
+//  border-color: var(--primary-color) !important;
+//  color: var(--primary-contrast) !important;
+//}
+
+///* secondary */
+//.p-button.p-button-secondary {
+//  background: var(--primary-80) !important;
+//  border-color: var(--primary-80) !important;
+//  color: var(--primary-contrast) !important;
+//}
+
+///* text */
+//.p-button.p-button-text {
+//  background: transparent !important;
+//  border: none !important;
+//  color: var(--primary-color) !important;
+//}
+
+///* icon only */
+//.p-button.p-button-icon-only {
+//  background: var(--primary-20) !important;
+//  color: var(--primary-color) !important;
+//}
+
+///* ================= TABS ================= */
+
+//.p-tablist .p-tab.p-tab-active {
+//  color: var(--primary-80) !important;
+//}
+
+//.p-tablist .p-tablist-active-bar {
+//  background: var(--primary-color) !important;
+//}
+
+///* ================= CAROUSEL ================= */
+
+//.p-carousel-indicator-active .p-carousel-indicator-button {
+//  background: var(--primary-60) !important;
+//}
+
+///* ================= OTHER COMPONENTS ================= */
+
+//.p-badge,
+//.p-tag.p-tag-info,
+//.p-paginator .p-paginator-page.p-highlight {
+//  background: var(--primary-color) !important;
+//  color: var(--primary-contrast) !important;
+//}
+
+//.p-progressbar .p-progressbar-value {
+//  background: var(--primary-color) !important;
+//}
+
+//.p-inputgroup .p-button {
+//  background: var(--primary-color) !important;
+//}
+
+///* links */
+//a, .link-primary {
+//  color: var(--primary-color) !important;
+//}
+    //`;
+
+
     const css = `
 /* global primary overrides injected by ThemeService */
 :root { --primary-color: ${hex}; --primary-contrast: #ffffff; }

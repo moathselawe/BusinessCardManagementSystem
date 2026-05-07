@@ -45,7 +45,15 @@ export class TokenService {
     }
   }
 
-  logout() {
+  logoutRequest() {
+    const refreshToken = this.getRefreshToken();
+
+    return this.httpClient.post(`${this.baseUrl}logout`, {
+      refreshToken
+    });
+  }
+
+  clearStorage() {
     localStorage.clear();
     sessionStorage.clear();
   }

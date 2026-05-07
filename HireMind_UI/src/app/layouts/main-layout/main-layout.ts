@@ -23,6 +23,13 @@ export class MainLayout implements OnInit {
     this.themeService.applyGlobalPrimary(defaultColor);
 
     this.isDark = this.themeService.isDark;
+
+    const saved = localStorage.getItem('topbarState');
+    if (saved) {
+      const state = JSON.parse(saved);
+      this.selectedLabel = state.label;
+      this.selectedIcon = state.icon;
+    }
   }
 
   toggleSidebar() {
@@ -38,5 +45,7 @@ export class MainLayout implements OnInit {
   onMenuSelected(event: { label: string; icon: string }) {
     this.selectedLabel = event.label;
     this.selectedIcon = event.icon;
+
+    localStorage.setItem('topbarState', JSON.stringify(event));
   }
 }

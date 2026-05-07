@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { LanguageService } from '../../../services/shared/language.service';
+import {  MenuItem } from 'primeng/api';
 import { ThemeService } from '../../../services/shared/themeService';
 import { THEME_COLOR_MAP, THEME_COLORS } from '../../../config/config';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+import { TokenService } from '../../../services/hiremind/token.service';
 
 @Component({
   selector: 'app-admin-top-bar',
@@ -18,18 +19,22 @@ export class AppTopMenu implements OnInit {
 
   @Input() selectedLabel: string = '';
   @Input() selectedIcon: string = '';
+  @Input() sidebarCollapsed: boolean = true;
 
   items: MenuItem[] = [];
+  profileItems: MenuItem[] = [];
 
   currentLang: 'en' | 'ar' = 'en';
   isDark = false;
 
   colors = THEME_COLORS;
   colorMap: Record<string, string> = THEME_COLOR_MAP;
-
+    
   constructor(
     private themeService: ThemeService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router,
+    private tokenService: TokenService
   ) { }
 
   ngOnInit(): void {
@@ -38,6 +43,33 @@ export class AppTopMenu implements OnInit {
 
     this.translate.use(this.currentLang);
     document.documentElement.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+
+    this.profileItems = [
+      {
+        label: 'Profile',
+        icon: 'pi pi-user',
+        command: () => {
+          this.router.navigate(['/profile']);
+        }
+      },
+      {
+        label: 'Settings',
+        icon: 'pi pi-cog',
+        command: () => {
+          this.router.navigate(['/settings']);
+        }
+      },
+      {
+        separator: true
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: () => {
+          this.handleLogout();        }
+      }
+    ];
   }
 
   toggleLanguage() {
@@ -58,5 +90,22 @@ export class AppTopMenu implements OnInit {
     const hex = this.colorMap[c] ?? c;
     this.themeService.applyGlobalPrimary(hex);
     this.op?.hide?.();
+  }
+
+  handleLogout() {
+    this.tokenService.logoutRequest().subscribe({
+      next: () => {
+        this.afterLogout();
+      },
+      error: () => {
+        // حتى لو فشل الباك، اعمل logout
+        this.afterLogout();
+      }
+    });
+  }
+
+  afterLogout() {
+    this.tokenService.clearStorage();
+    this.router.navigate(['/login']);
   }
 }

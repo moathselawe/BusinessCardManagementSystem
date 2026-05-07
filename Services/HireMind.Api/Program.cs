@@ -1,7 +1,8 @@
-using HireMind.Domain.Entities.Content;
-using HireMind.Infrastructure.SeedWork.Security;
-
 var builder = WebApplication.CreateBuilder(args);
+
+var allowedOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins") // Angular app URL
+    .Get<string[]>();
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -9,13 +10,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngular",
         policy =>
         {
-            policy.WithOrigins("http://localhost:62882")  // Angular app URL
+            policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
         });
 });
-
 
 builder.Services.AddHttpContextAccessor();
 
@@ -66,6 +66,36 @@ builder.Services.AddAuthentication(options =>
 
         ClockSkew = TimeSpan.Zero
     };
+    //options.Events = new JwtBearerEvents
+    //{
+    //    OnTokenValidated = async context =>
+    //    {
+    //        var userId = context.Principal?.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+    //        var tokenVersionClaim = context.Principal?.FindFirst("tokenVersion")?.Value;
+
+    //        if (userId == null || tokenVersionClaim == null)
+    //        {
+    //            context.Fail("Invalid token");
+    //            return;
+    //        }
+
+    //        var userRepo = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+
+    //        var user = await userRepo.GetUserById(Guid.Parse(userId), CancellationToken.None);
+
+    //        if (user == null)
+    //        {
+    //            context.Fail("User not found");
+    //            return;
+    //        }
+
+    //        if (user.TokenVersion.ToString() != tokenVersionClaim)
+    //        {
+    //            context.Fail("Token revoked");
+    //            return;
+    //        }
+    //    }
+    //};
 });
 
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();

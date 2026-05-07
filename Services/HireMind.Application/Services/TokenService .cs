@@ -33,13 +33,16 @@ public class TokenService : ITokenService
             new Claim("tokenVersion", user.TokenVersion.ToString())
         };
 
-        foreach (var role in user.UserRoles)
+        foreach (var role in user.UserRoles ?? new List<UserRole>())
         {
+            if (role.Role == null) continue;
+
             claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
 
-            // permissions
-            foreach (var permission in role.Role.RolePermissions)
+            foreach (var permission in role.Role.RolePermissions ?? new List<RolePermission>())
             {
+                if (permission.Permission == null) continue;
+
                 claims.Add(new Claim("permission", permission.Permission.Code));
             }
         }

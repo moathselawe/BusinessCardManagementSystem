@@ -29,7 +29,6 @@ import { AppTopMenu } from './menus/admin-menus/admin-top-bar/admin-top-bar';
 import { PublicTopbar } from './menus/public-top-bar/public-top-bar';
 import { TemplateTopBar } from './shared/template-top-bar/template-top-bar';
 
-
 @NgModule({
   declarations: [
     App,

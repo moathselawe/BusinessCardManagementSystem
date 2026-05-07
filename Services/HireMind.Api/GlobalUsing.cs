@@ -45,6 +45,8 @@ global using HireMind.Application.Queries.HiringStages;
 global using HireMind.Application.Queries.Seurity;
 global using HireMind.Domain.Dtos.Security;
 global using HireMind.Application.Commands.Security;
+global using HireMind.Infrastructure.SeedWork.Security;
+global using System.IdentityModel.Tokens.Jwt;
 
 
 

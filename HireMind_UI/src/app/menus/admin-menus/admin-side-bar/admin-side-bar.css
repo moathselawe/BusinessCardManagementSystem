@@ -131,3 +131,6 @@
   border-radius: 10px;
 }
 
+.menu-item .label {
+  font-size: 14px;
+}

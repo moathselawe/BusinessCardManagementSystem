@@ -26,5 +26,20 @@ public class TokenRepository : BaseRepository<RefreshToken>, ITokenRepository
     {
         _dbContext.Set<RefreshToken>().Update(token);
     }
+
+    public async Task<List<RefreshToken>> GetActiveTokensByUserDevice(
+    Guid userId,
+    string ip,
+    string userAgent,
+    CancellationToken cancellationToken)
+    {
+        return await _dbContext.Set<RefreshToken>()
+            .Where(x =>
+                x.UserId == userId &&
+                x.Ip == ip &&
+                x.UserAgent == userAgent &&
+                x.Revoked == false)
+            .ToListAsync(cancellationToken);
+    }
 }
 

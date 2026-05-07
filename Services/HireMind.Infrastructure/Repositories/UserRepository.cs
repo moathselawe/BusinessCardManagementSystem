@@ -64,13 +64,6 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     }
     public async Task<User?> GetUserByEmailWithTokens(string email, CancellationToken cancellationToken)
     {
-        //var user = await GetQuery()
-        //            .Where(u => u.Email == email)
-        //            .Include(u => u.RefreshTokens)
-        //            .FirstOrDefaultAsync(cancellationToken);
-
-        //return user;
-
         return await GetQuery()
             .Where(u => u.Email == email)
             .Include(x => x.RefreshTokens)
@@ -95,6 +88,16 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 
         return user;
+    }
+    public async Task<User> GetUserForRefreshById(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Set<User>()
+            .Where(u => u.Id == id)
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .ThenInclude(r => r.RolePermissions)
+            .ThenInclude(rp => rp.Permission)
+            .FirstOrDefaultAsync(cancellationToken);
     }
     public async Task<SearchFiltersRsDto<GetUserResponseDto>> SearchAsync(SearchFiltersRqDto filters,CancellationToken cancellationToken)
     {

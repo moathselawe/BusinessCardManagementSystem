@@ -9,11 +9,12 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, throwError, switchMap, catchError } from 'rxjs';
 import { TokenService } from '../services/hiremind/token.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private tokenService: TokenService) { }
+  constructor(private tokenService: TokenService, private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -53,7 +54,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
             catchError(err => {
 
-              this.tokenService.logout();
+              this.tokenService.clearStorage();
+
+              this.router.navigate(['/login']);
 
               return throwError(() => err);
             })

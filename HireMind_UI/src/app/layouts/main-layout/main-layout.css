@@ -29,39 +29,39 @@
 
 /* Floating toggle button positioned on the seam between sidebar and topbar */
 /* Updated to a smaller, circular icon-style button */
-.sidebar-toggle-middle {
+/*.sidebar-toggle-middle {
   position: absolute;
-  top: calc(var(--topbar-height) / 2); /* vertical center of topbar */
-  left: calc(var(--sidebar-width)); /* at the right edge of the sidebar */
-  transform: translate(-50%, -50%); /* center the button on that seam */
+  top: calc(var(--topbar-height) / 2);*/ /* vertical center of topbar */
+  /*left: calc(var(--sidebar-width));*/ /* at the right edge of the sidebar */
+  /*transform: translate(-50%, -50%);*/ /* center the button on that seam */
   /* Small circular icon */
-  width: 28px;
+  /*width: 28px;
   height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center;*/
   /* Subtle look that works on dark backgrounds */
-  background: var(--primary-color);
+  /*background: var(--primary-color);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.10);*/
   /* Soft shadow, smaller than before */
-  box-shadow: 0 4px 10px rgba(2, 6, 23, 0.45);
+  /*box-shadow: 0 4px 10px rgba(2, 6, 23, 0.45);
   z-index: 1000;
-  cursor: pointer;
+  cursor: pointer;*/
   /* Quick, smooth interactions - sync with sidebar transition */
-  transition: left 0.2s ease;
-  font-size: 14px; /* icon size */
-  line-height: 0;
+  /*transition: left 0.2s ease;
+  font-size: 14px;*/ /* icon size */
+  /*line-height: 0;
   padding: 0;
 }
 
   .sidebar-toggle-middle i {
     font-size: 14px;
-  }
+  }*/
 
   /* Hover / active states */
-  .sidebar-toggle-middle:hover {
+  /*.sidebar-toggle-middle:hover {
     background: rgba(255, 255, 255, 0.10);
     box-shadow: 0 6px 14px rgba(2, 6, 23, 0.55);
     background: var(--primary-color);
@@ -70,4 +70,4 @@
   .sidebar-toggle-middle:active {
     box-shadow: 0 3px 8px rgba(2, 6, 23, 0.40);
     background: var(--primary-color);
-  }
+  }*/

@@ -9,12 +9,12 @@
     </app-admin-side-bar>  </div>
 
   <!-- FLOATING TOGGLE (sits between sidebar and topbar) -->
-  <button class="sidebar-toggle-middle"
+  <!--<button class="sidebar-toggle-middle"
           (click)="toggleSidebar()"
           [attr.aria-expanded]="!sidebarCollapsed"
           title="Toggle sidebar">
     <i [class]="sidebarCollapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"></i>
-  </button>
+  </button>-->
 
   <!-- RIGHT SIDE -->
   <div class="layout-main">
@@ -22,6 +22,7 @@
     <!-- TOPBAR -->
     <app-admin-top-bar [selectedLabel]="selectedLabel"
                       [selectedIcon]="selectedIcon"
+                       [sidebarCollapsed]="sidebarCollapsed"
                       (toggleSidebar)="toggleSidebar()">
     </app-admin-top-bar>
     <!-- CONTENT -->

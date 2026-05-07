@@ -56,7 +56,7 @@ public class RefreshTokenHandler
                 new LoginRsDto("", "", false, "Refresh token expired"));
 
         var user = await _userRepository
-            .GetUserById(existingToken.UserId, cancellationToken);
+            .GetUserForRefreshById(existingToken.UserId, cancellationToken);
 
         if (user == null || user.IsActive == false) 
             return new RefreshTokenResult(

@@ -170,10 +170,6 @@ export class LoginComponent {
 
     this.isLoading = true;
 
-    //const payload = {
-    //  email: this.email,
-    //  password: this.password
-    //};
     const payload = {
       body: {
         email: this.email,
@@ -200,12 +196,6 @@ export class LoginComponent {
           } else {
             localStorage.removeItem('remember_login');
           }
-
-          this.toastService.showMessage({
-            messageType: 'success',
-            messageTitle: 'Login Successful',
-            messageBody: 'Welcome back!'
-          });
 
           this.router.navigate(['/BCMS/ManageBusinesscards']);
 
